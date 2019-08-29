@@ -21,7 +21,10 @@ export default function Soccer({ socket }) {
     });
     return () => {
       console.log("Unmounting!");
+      socket.removeListener("soccerUpdateGame")
+  
       socket.emit("soccerDisconnect", temporaryRoom);
+      
     };
   }, []);
 
