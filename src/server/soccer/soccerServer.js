@@ -1,7 +1,12 @@
+let getRandomInt = require("../../helpers/getRandomInt")
+
+
 const soccerGame = function(socket, sockets, rooms, soccerData) {
   console.log("this is a soccer game");
   socket.on("soccerHandleKeyPress", data => {
     // console.log("data has been received: ", data);
+    soccerData[data.room].players[socket.id].commands[data.axis]= data.dir;
+    console.log("current command is: ", soccerData[data.room].players[socket.id].commands)
   });
   socket.on("soccerInit", data => {
     console.log("A user has joined the room: ", socket.id);
@@ -12,19 +17,36 @@ const soccerGame = function(socket, sockets, rooms, soccerData) {
         interval: null,
         ball: {}
       };
-    }
+      //----Start the game----
+      setInterval(()=>{
+        updateSoccerGame(soccerData[data.room]);
+        sockets
+        .to(data.room)
+        .emit("soccerUpdateGame", allPos(soccerData, data.room));
+      }, data.config.frameDuration *1000)
+    } 
     socket.join(data.room);
     soccerData[data.room].players[socket.id] = {
-      pos: { x: data.fieldSpec.left, y: data.fieldSpec.top }
+      pos: { x: getRandomInt(data.fieldSpec.left, data.fieldSpec.left + data.fieldSpec.width), y: data.fieldSpec.top },
+      commands: {x: "", y: ""}
     };
     soccerData[data.room].ball = {
-      pos: { x: data.fieldSpec.left, y: data.fieldSpec.top }
+      //positions will need to be fixed later on... just testing out the function
+      pos: { x: getRandomInt(data.fieldSpec.left, data.fieldSpec.left + data.fieldSpec.width), y: data.fieldSpec.top }
     };
     console.log("gamedata: ", soccerData);
-    sockets
-      .to(data.room)
-      .emit("soccerUpdateGame", allPos(soccerData, data.room));
+    
   });
+
+  const updateSoccerGame = function(roomData){
+    for (let socketId in roomData.players) {
+      if (roomData.players[socketId].commands.x ==="right"){
+        roomData.players[socketId].pos.x += 5;
+      }
+    }
+  }
+
+  
 
   // ==============ALL THE DISCONNECTIONS==============================
 

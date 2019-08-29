@@ -8,12 +8,14 @@ export default function Soccer({ socket }) {
   const fieldSpec = { height: 600, width: 800, top: 150, left: 50 };
   // Both width and height are relative to the fieldSpec's width
   const ballSpec = { width: 0.05, height: 0.05 };
+  const playerSpec = {width: 0.1, height: 0.1};
+  const config = {frameDuration: 0.1}
   //----------------------
 
   const [spritePos, setSpritePos] = useState(null);
 
   useEffect(() => {
-    socket.emit("soccerInit", { room: temporaryRoom, fieldSpec });
+    socket.emit("soccerInit", { room: temporaryRoom, fieldSpec, config });
     socket.on("soccerUpdateGame", data => {
       console.log("update the game");
       console.log(data);
@@ -22,7 +24,7 @@ export default function Soccer({ socket }) {
     return () => {
       console.log("Unmounting!");
       socket.removeListener("soccerUpdateGame")
-  
+      
       socket.emit("soccerDisconnect", temporaryRoom);
       
     };
@@ -36,19 +38,21 @@ export default function Soccer({ socket }) {
   useEffect(() => {
     socket.emit("soccerHandleKeyPress", {
       axis: "x",
-      dir: a ? (d ? "" : "left") : d ? "right" : ""
+      dir: a ? (d ? "" : "left") : d ? "right" : "",
+      room: temporaryRoom
     });
   }, [a, d]);
   useEffect(() => {
     socket.emit("soccerHandleKeyPress", {
       axis: "y",
-      dir: w ? (s ? "" : "up") : s ? "down" : ""
+      dir: w ? (s ? "" : "up") : s ? "down" : "",
+      room: temporaryRoom
     });
   }, [w, s]);
 
   return (
     <>
-      <img
+      <img 
         src="assets/soccer/field.jpg"
         style={{
           height: fieldSpec.height,
@@ -70,6 +74,19 @@ export default function Soccer({ socket }) {
               left: spritePos.ball.x
             }}
           ></img>
+        {Object.keys(spritePos.players).map(socketId=> {
+return (<img key = {socketId} src ="assets/soccer/player.png" 
+        style ={{height: Math.floor(playerSpec.height * fieldSpec.width), 
+                  width: Math.floor(playerSpec.width * fieldSpec.width),
+                  top: spritePos.players[socketId].y,
+                  left: spritePos.players[socketId].x,
+                  position: 'absolute'}}>
+          
+        </img>)
+
+        })}
+
+        
         </div>
       )}
     </>
