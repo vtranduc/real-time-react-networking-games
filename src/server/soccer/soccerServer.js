@@ -1,52 +1,63 @@
-let getRandomInt = require("../../helpers/getRandomInt")
-
+let getRandomInt = require("../../helpers/getRandomInt");
 
 const soccerGame = function(socket, sockets, rooms, soccerData) {
   console.log("this is a soccer game");
   socket.on("soccerHandleKeyPress", data => {
     // console.log("data has been received: ", data);
-    soccerData[data.room].players[socket.id].commands[data.axis]= data.dir;
-    console.log("current command is: ", soccerData[data.room].players[socket.id].commands)
+    soccerData[data.room].players[socket.id].commands[data.axis] = data.dir;
+    console.log(
+      "current command is: ",
+      soccerData[data.room].players[socket.id].commands
+    );
   });
   socket.on("soccerInit", data => {
     console.log("A user has joined the room: ", socket.id);
+    socket.join(data.room);
     if (!soccerData[data.room]) {
       soccerData[data.room] = {
         config: {},
         players: {},
         interval: null,
-        ball: {}
+        ball: {
+          pos: {
+            x: getRandomInt(
+              data.fieldSpec.left,
+              data.fieldSpec.left + data.fieldSpec.width
+            ),
+            y: data.fieldSpec.top
+          }
+        }
       };
-      //----Start the game----
-      setInterval(()=>{
+      //----Start the game-------
+      soccerData[data.room].interval = setInterval(() => {
         updateSoccerGame(soccerData[data.room]);
+        console.log("updating");
         sockets
-        .to(data.room)
-        .emit("soccerUpdateGame", allPos(soccerData, data.room));
-      }, data.config.frameDuration *1000)
-    } 
-    socket.join(data.room);
+          .to(data.room)
+          .emit("soccerUpdateGame", allPos(soccerData, data.room));
+      }, data.config.frameDuration * 1000);
+      //---------------------------
+    }
+
     soccerData[data.room].players[socket.id] = {
-      pos: { x: getRandomInt(data.fieldSpec.left, data.fieldSpec.left + data.fieldSpec.width), y: data.fieldSpec.top },
-      commands: {x: "", y: ""}
+      pos: {
+        x: getRandomInt(
+          data.fieldSpec.left,
+          data.fieldSpec.left + data.fieldSpec.width
+        ),
+        y: data.fieldSpec.top
+      },
+      commands: { x: "", y: "" }
     };
-    soccerData[data.room].ball = {
-      //positions will need to be fixed later on... just testing out the function
-      pos: { x: getRandomInt(data.fieldSpec.left, data.fieldSpec.left + data.fieldSpec.width), y: data.fieldSpec.top }
-    };
-    console.log("gamedata: ", soccerData);
-    
   });
 
-  const updateSoccerGame = function(roomData){
+  const updateSoccerGame = function(roomData) {
     for (let socketId in roomData.players) {
-      if (roomData.players[socketId].commands.x ==="right"){
+      if (roomData.players[socketId].commands.x === "right") {
         roomData.players[socketId].pos.x += 5;
       }
     }
-  }
-
-  
+  };
 
   // ==============ALL THE DISCONNECTIONS==============================
 
@@ -57,6 +68,7 @@ const soccerGame = function(socket, sockets, rooms, soccerData) {
     console.log("deleted: " + socket.id + ": ", soccerData);
     console.log("Remaining users: ", Object.keys(soccerData[room].players));
     if (Object.keys(soccerData[room].players).length === 0) {
+      clearInterval(soccerData[room].interval);
       delete soccerData[room];
       console.log("Deleted the entire room!");
     }
@@ -72,10 +84,10 @@ const soccerGame = function(socket, sockets, rooms, soccerData) {
       console.log("deleted: " + socket.id + ": ", soccerData);
       console.log("Remaining users: ", Object.keys(soccerData[room].players));
       if (Object.keys(soccerData[room].players).length === 0) {
+        clearInterval(soccerData[room].interval);
         delete soccerData[room];
         console.log("Deleted the entire room!");
       }
-      
     }
   });
 };

@@ -5,11 +5,13 @@ import useKeyPress from "../../helpers/useKeyPress";
 export default function Soccer({ socket }) {
   //----------------------Literals
   const temporaryRoom = "testingSoccer";
+  // All values for this myst be integers
   const fieldSpec = { height: 600, width: 800, top: 150, left: 50 };
-  // Both width and height are relative to the fieldSpec's width
+  // Both width and height are the ratio relative to the fieldSpec's width
+  // The must be the value between 0 and 1
   const ballSpec = { width: 0.05, height: 0.05 };
-  const playerSpec = {width: 0.1, height: 0.1};
-  const config = {frameDuration: 0.1}
+  const playerSpec = { width: 0.1, height: 0.1 };
+  const config = { frameDuration: 0.1 };
   //----------------------
 
   const [spritePos, setSpritePos] = useState(null);
@@ -23,10 +25,9 @@ export default function Soccer({ socket }) {
     });
     return () => {
       console.log("Unmounting!");
-      socket.removeListener("soccerUpdateGame")
-      
+      socket.removeListener("soccerUpdateGame");
+
       socket.emit("soccerDisconnect", temporaryRoom);
-      
     };
   }, []);
 
@@ -52,7 +53,7 @@ export default function Soccer({ socket }) {
 
   return (
     <>
-      <img 
+      <img
         src="assets/soccer/field.jpg"
         style={{
           height: fieldSpec.height,
@@ -74,19 +75,21 @@ export default function Soccer({ socket }) {
               left: spritePos.ball.x
             }}
           ></img>
-        {Object.keys(spritePos.players).map(socketId=> {
-return (<img key = {socketId} src ="assets/soccer/player.png" 
-        style ={{height: Math.floor(playerSpec.height * fieldSpec.width), 
+          {Object.keys(spritePos.players).map(socketId => {
+            return (
+              <img
+                key={socketId}
+                src="assets/soccer/player.png"
+                style={{
+                  height: Math.floor(playerSpec.height * fieldSpec.width),
                   width: Math.floor(playerSpec.width * fieldSpec.width),
                   top: spritePos.players[socketId].y,
                   left: spritePos.players[socketId].x,
-                  position: 'absolute'}}>
-          
-        </img>)
-
-        })}
-
-        
+                  position: "absolute"
+                }}
+              ></img>
+            );
+          })}
         </div>
       )}
     </>
