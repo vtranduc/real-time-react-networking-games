@@ -9,6 +9,7 @@
 		"react-dom": "^16.9.0",
 		"react-router-dom": "^5.0.1",
 		"react-scripts": "3.1.1",
+		"socket.io": "^2.2.0",
 		"socket.io-client": "^2.2.0"
 	},
 	"scripts": {
@@ -16,7 +17,7 @@
 		"build": "react-scripts build",
 		"test": "react-scripts test",
 		"eject": "react-scripts eject",
-		"soccerServer": "nodemon ./src/server/soccer/soccerServer.js"
+		"server": "nodemon ./src/server/index.js"
 	},
 	"eslintConfig": {
 		"extends": "react-app"

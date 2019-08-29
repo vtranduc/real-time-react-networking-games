@@ -53,10 +53,11 @@ const soccerGame = function(socket, sockets, rooms, soccerData) {
         delete soccerData[room];
         console.log("Deleted the entire room!");
       }
+      
     }
   });
 };
-
+//tells the clients where all the players are.
 const allPos = function(soccerData, room) {
   let output = {
     ball: soccerData[room].ball.pos,
