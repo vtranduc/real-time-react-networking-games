@@ -1,7 +1,7 @@
 let getRandomInt = require("../../helpers/getRandomInt");
 
 const soccerGame = function(socket, sockets, rooms, soccerData) {
-	console.log("this is a soccer game");
+	console.log("soccer game initialized");
 	socket.on("soccerHandleKeyPress", data => {
 		// console.log("data has been received: ", data);
 		try {

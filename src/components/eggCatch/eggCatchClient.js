@@ -7,7 +7,7 @@ export default function EggCatch({ socket }) {
 	const playerSpec = { width: 0.1, height: 0.1 };
 	const background = { height: 800, width: 1000, top: 150, left: 50 };
 	//------------Game Initialization-----------
-	const [spritePos, setSpritePos] = useState();
+	const [spritePos, setSpritePos] = useState(null);
 
 	//console.log('eggcatch client initialized')
 	useEffect(() => {
@@ -19,8 +19,8 @@ export default function EggCatch({ socket }) {
 		});
 		socket.on("eggCatchGetPlayerPosition", data => {
 			setSpritePos(data);
-			// console.log(data);
-			// console.log(spritePos, "HERERHERERER");
+			//console.log(data);
+			//console.log(spritePos, "HERERHERERER");
 		});
 		return () => {
 			console.log("Unmonting egg game");
@@ -42,14 +42,21 @@ export default function EggCatch({ socket }) {
 
 	return (
 		<>
-			{spritePos && (
-				<img
-					key={socket.id}
-					src="assets/eggCatch/chansey.png"
-					// top={spritePos.players[socket.id].y}
-					// left={spritePos.players[socket.id].x}
-				></img>
-			)}
+			{spritePos &&
+				Object.keys(spritePos.players).map(socketId => {
+					return (
+						<img
+							key={socketId}
+							src="assets/eggCatch/chansey.png"
+							style={{
+								height: Math.floor(playerSpec.height * background.width),
+								width: Math.floor(playerSpec.width * background.width),
+								left: spritePos.players[socketId].x,
+								position: "absolute"
+							}}
+						></img>
+					);
+				})}
 		</>
 	);
 }
