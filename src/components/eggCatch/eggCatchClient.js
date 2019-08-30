@@ -6,7 +6,7 @@ export default function EggCatch({ socket }) {
 	const eggSpec = { width: 0.07, height: 0.07 };
 	const playerSpec = { width: 0.1, height: 0.1 };
 
-	const background = { height: 800, width: 1000, top: 150, left: 50 };
+	const background = { height: 800, width: 1000, top: 200, left: 50 };
 	//------------Game Initialization-----------
 	const [spritePos, setSpritePos] = useState(null);
 
@@ -43,6 +43,16 @@ export default function EggCatch({ socket }) {
 
 	return (
 		<>
+			<img
+				src="assets/eggCatch/background.jpg"
+				style={{
+					height: background.height,
+					width: background.width,
+					position: "absolute",
+					top: background.top,
+					left: background.left
+				}}
+			></img>
 			{spritePos &&
 				Object.keys(spritePos.players).map(socketId => {
 					return (
@@ -53,7 +63,7 @@ export default function EggCatch({ socket }) {
 								height: Math.floor(playerSpec.height * background.width),
 								width: Math.floor(playerSpec.width * background.width),
 								left: spritePos.players[socketId].x,
-								top: 400,
+								top: 880,
 								position: "absolute"
 							}}
 						></img>

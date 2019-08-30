@@ -1,6 +1,6 @@
 let getRandomInt = require("../../helpers/getRandomInt");
 let playerCount = 0;
-const playerPosition = [];
+let intervalCount = 0;
 const eggCatch = function(socket, sockets, rooms, gameData) {
 	socket.on("updatEggPlayerDirection", data => {
 		// console.log("data has been received: ", data);
@@ -48,6 +48,10 @@ const eggCatch = function(socket, sockets, rooms, gameData) {
 		console.log(socket.id, " has been added to database");
 		//------Start the game------------
 		gameData[data.room].interval = setInterval(() => {
+			intervalCount++;
+			if (playerCount == 4) {
+				dropEggs();
+			}
 			updatePlayerPositions(gameData[data.room]);
 			//console.log("setInterval server egg")
 			//console.log(getPos(gameData, data.room));
@@ -55,7 +59,7 @@ const eggCatch = function(socket, sockets, rooms, gameData) {
 			sockets
 				.to(data.room)
 				.emit("eggCatchGetPlayerPosition", getPos(gameData, data.room));
-		}, gameData[data.room].config.frameDuration * 1000);
+		}, gameData[data.room].config.frameDuration * 100);
 		//----------------------------------
 	});
 
@@ -94,48 +98,53 @@ function updatePlayerPositions(roomData) {
 			case 1:
 				if (roomData.players[socketId].commands.x == "left") {
 					console.log(`player 1 has held the left button`);
-					roomData.players[socketId].pos.x = 100;
+					roomData.players[socketId].pos.x = 50;
 				} else if (roomData.players[socketId].commands.x == "right") {
 					console.log(`player 1 has held the right button`);
-					roomData.players[socketId].pos.x = 300;
+					roomData.players[socketId].pos.x = 250;
 				} else {
-					roomData.players[socketId].pos.x = 200;
+					roomData.players[socketId].pos.x = 150;
 				}
 				break;
 			case 2:
 				if (roomData.players[socketId].commands.x == "left") {
 					console.log(`player 2 has held the left button`);
-					roomData.players[socketId].pos.x = 300;
+					roomData.players[socketId].pos.x = 250;
 				} else if (roomData.players[socketId].commands.x == "right") {
 					console.log(`player 2 has held the right button`);
-					roomData.players[socketId].pos.x = 500;
+					roomData.players[socketId].pos.x = 450;
 				} else {
-					roomData.players[socketId].pos.x = 400;
+					roomData.players[socketId].pos.x = 350;
 				}
 				break;
 			case 3:
 				if (roomData.players[socketId].commands.x == "left") {
 					console.log(`player 3 has held the left button`);
-					roomData.players[socketId].pos.x = 500;
+					roomData.players[socketId].pos.x = 450;
 				} else if (roomData.players[socketId].commands.x == "right") {
 					console.log(`player 3 has held the right button`);
-					roomData.players[socketId].pos.x = 700;
+					roomData.players[socketId].pos.x = 650;
 				} else {
-					roomData.players[socketId].pos.x = 600;
+					roomData.players[socketId].pos.x = 550;
 				}
 				break;
 			case 4:
 				if (roomData.players[socketId].commands.x == "left") {
 					console.log(`player 4 has held the left button`);
-					roomData.players[socketId].pos.x = 700;
+					roomData.players[socketId].pos.x = 650;
 				} else if (roomData.players[socketId].commands.x == "right") {
 					console.log(`player 4 has held the right button`);
-					roomData.players[socketId].pos.x = 900;
+					roomData.players[socketId].pos.x = 850;
 				} else {
-					roomData.players[socketId].pos.x = 800;
+					roomData.players[socketId].pos.x = 750;
 				}
 				break;
 		}
+	}
+}
+
+function dropEggs(difficultyRank) {
+	if (intervalCount % difficultyRank == 0) {
 	}
 }
 
