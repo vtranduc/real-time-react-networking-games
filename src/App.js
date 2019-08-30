@@ -5,7 +5,7 @@ import NavBar from "./components/nav";
 import Lobby from "./components/Lobby";
 import About from "./components/About";
 import Soccer from "./components/soccer/Soccer";
-
+import EggCatchGame from "./components/eggCatch/eggCatchClient"
 import Home from "./components/Home";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
@@ -53,6 +53,13 @@ function App() {
           exact
           render={() => {
             return <Soccer socket={socket} />;
+          }}
+        />
+        <Route
+          path="/chansey"
+          exact
+          render={() => {
+            return <EggCatchGame socket={socket} />;
           }}
         />
       </Switch>

@@ -20,6 +20,9 @@ const nav = () => {
         <Link to="/soccer">
           <li>Soccer</li>
         </Link>
+        <Link to="/chansey">
+          <li>Chansey</li>
+        </Link>
       </ul>
     </nav>
   );

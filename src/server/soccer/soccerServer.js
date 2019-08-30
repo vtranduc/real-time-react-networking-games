@@ -69,7 +69,7 @@ const soccerGame = function(socket, sockets, rooms, soccerData) {
 		if (Object.keys(soccerData[room].players).length === 0) {
 			clearInterval(soccerData[room].interval);
 			delete soccerData[room];
-			console.log("Deleted the entire room!");
+			console.log("Deleted soccer room!");
 		}
 		// }
 	});
