@@ -3,7 +3,7 @@ const http = require("http").createServer(app);
 const io = require("socket.io")(http);
 const PORT = 3001;
 const soccerGame = require("./soccer/index");
-const eggCatchGame = require("./eggCatch/eggCatchServer");
+const eggCatchGame = require("./eggCatch/index");
 // app.get("/", (req, res) => {
 //   res.send("<h1>Hellow World</h1>");
 // });
