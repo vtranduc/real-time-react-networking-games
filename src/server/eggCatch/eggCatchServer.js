@@ -1,6 +1,10 @@
 let getRandomInt = require("../../helpers/getRandomInt");
 let playerCount = 0;
 let intervalCount = 0;
+let playerPosDefault = 200;
+
+
+
 const eggCatch = function(socket, sockets, rooms, gameData) {
 	socket.on("updatEggPlayerDirection", data => {
 		// console.log("data has been received: ", data);
@@ -25,8 +29,9 @@ const eggCatch = function(socket, sockets, rooms, gameData) {
 				config: { frameDuration: 0.1 },
 				players: {},
 
-				interval: null,
-				egg: {
+                interval: null,
+                eggs: {
+				egg1: {
 					pos: {
 						x: getRandomInt(
 							data.background.left,
@@ -34,8 +39,28 @@ const eggCatch = function(socket, sockets, rooms, gameData) {
 						),
 						y: data.background.top
 					}
-				}
-			};
+                }
+            }
+            };
+            //------Start the game------------
+		gameData[data.room].interval = setInterval(() => {
+            
+            intervalCount++;
+
+            console.log(gameData[data.room].eggs.egg1.pos)
+			// if (playerCount == 4) {
+                
+			// 	dropEggs();
+			// }
+			updatePlayerPositions(gameData[data.room]);
+			//console.log("setInterval server egg")
+			//console.log(getPos(gameData, data.room));
+			// console.log(data.room)
+			sockets
+				.to(data.room)
+				.emit("eggCatchGetPlayerPosition", getPos(gameData, data.room));
+		}, gameData[data.room].config.frameDuration * 1000);
+		//----------------------------------
 		}
 		gameData[data.room].players[socket.id] = {
 			playerNumber: playerCount,
@@ -46,21 +71,7 @@ const eggCatch = function(socket, sockets, rooms, gameData) {
 			commands: { x: "", y: "" }
 		};
 		console.log(socket.id, " has been added to database");
-		//------Start the game------------
-		gameData[data.room].interval = setInterval(() => {
-			intervalCount++;
-			if (playerCount == 4) {
-				dropEggs();
-			}
-			updatePlayerPositions(gameData[data.room]);
-			//console.log("setInterval server egg")
-			//console.log(getPos(gameData, data.room));
-			// console.log(data.room)
-			sockets
-				.to(data.room)
-				.emit("eggCatchGetPlayerPosition", getPos(gameData, data.room));
-		}, gameData[data.room].config.frameDuration * 100);
-		//----------------------------------
+		
 	});
 
 	socket.on("eggGameDisconnect", room => {
@@ -74,7 +85,8 @@ const eggCatch = function(socket, sockets, rooms, gameData) {
 				delete gameData[room];
 				console.log("deleted entire egg room");
 			}
-		}
+        }
+        //playerCount --
 	});
 
 	socket.on("disconnect", () => {
@@ -82,75 +94,83 @@ const eggCatch = function(socket, sockets, rooms, gameData) {
 		const room = "eggCatchTest";
 		//------------literals
 		if (gameData[room] && gameData[room].players[socket.id]) {
-			delete gameData[room].players[socket.id];
-			if (Object.keys(gameData[room].players.length === 0)) {
+            
+            delete gameData[room].players[socket.id];
+            
+			if (Object.keys(gameData[room].players).length === 0) {
 				clearInterval(gameData[room].interval);
 				delete gameData[room];
 				console.log("deleted eggRoom");
 			}
-		}
+        }
+        //playerCount --
 	});
 };
 
 function updatePlayerPositions(roomData) {
-	for (let socketId in roomData.players) {
+    
+         for (let socketId in roomData.players) {
+        
 		switch (roomData.players[socketId].playerNumber) {
 			case 1:
 				if (roomData.players[socketId].commands.x == "left") {
 					console.log(`player 1 has held the left button`);
-					roomData.players[socketId].pos.x = 50;
+					roomData.players[socketId].pos.x = playerPosDefault -50;
 				} else if (roomData.players[socketId].commands.x == "right") {
 					console.log(`player 1 has held the right button`);
-					roomData.players[socketId].pos.x = 250;
+					roomData.players[socketId].pos.x = playerPosDefault + 50;
 				} else {
-					roomData.players[socketId].pos.x = 150;
+					roomData.players[socketId].pos.x = playerPosDefault ;
 				}
 				break;
 			case 2:
 				if (roomData.players[socketId].commands.x == "left") {
 					console.log(`player 2 has held the left button`);
-					roomData.players[socketId].pos.x = 250;
+					roomData.players[socketId].pos.x = playerPosDefault + 150;
 				} else if (roomData.players[socketId].commands.x == "right") {
 					console.log(`player 2 has held the right button`);
-					roomData.players[socketId].pos.x = 450;
+					roomData.players[socketId].pos.x = playerPosDefault + 250;
 				} else {
-					roomData.players[socketId].pos.x = 350;
+					roomData.players[socketId].pos.x = playerPosDefault + 200;
 				}
 				break;
 			case 3:
 				if (roomData.players[socketId].commands.x == "left") {
 					console.log(`player 3 has held the left button`);
-					roomData.players[socketId].pos.x = 450;
+					roomData.players[socketId].pos.x = playerPosDefault + 350;
 				} else if (roomData.players[socketId].commands.x == "right") {
 					console.log(`player 3 has held the right button`);
-					roomData.players[socketId].pos.x = 650;
+					roomData.players[socketId].pos.x = playerPosDefault + 450;
 				} else {
-					roomData.players[socketId].pos.x = 550;
+					roomData.players[socketId].pos.x = playerPosDefault + 400;
 				}
 				break;
 			case 4:
 				if (roomData.players[socketId].commands.x == "left") {
 					console.log(`player 4 has held the left button`);
-					roomData.players[socketId].pos.x = 650;
+					roomData.players[socketId].pos.x = playerPosDefault + 550;
 				} else if (roomData.players[socketId].commands.x == "right") {
 					console.log(`player 4 has held the right button`);
-					roomData.players[socketId].pos.x = 850;
+					roomData.players[socketId].pos.x =playerPosDefault + 650;
 				} else {
-					roomData.players[socketId].pos.x = 750;
+					roomData.players[socketId].pos.x = playerPosDefault + 600;
 				}
 				break;
 		}
-	}
-}
+        }
+	}   
+	
 
-function dropEggs(difficultyRank) {
+
+function dropEggs(difficultyRank, egg) {
 	if (intervalCount % difficultyRank == 0) {
+        
 	}
 }
 
 function getPos(gameData, room) {
 	let output = {
-		egg: gameData[room].egg.pos,
+		eggs: {egg1: gameData[room].eggs.egg1.pos},
 		players: {}
 	};
 	for (let socketId in gameData[room].players) {

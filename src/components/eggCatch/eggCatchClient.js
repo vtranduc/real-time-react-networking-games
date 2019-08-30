@@ -19,7 +19,8 @@ export default function EggCatch({ socket }) {
 			eggSpec
 		});
 		socket.on("eggCatchGetPlayerPosition", data => {
-			setSpritePos(data);
+            setSpritePos(data);
+            
 			//console.log(data);
 			//console.log(spritePos, "HERERHERERER");
 		});
