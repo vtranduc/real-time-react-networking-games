@@ -61,17 +61,17 @@ const soccerGame = function(socket, sockets, rooms, soccerData) {
 	// ==============ALL THE DISCONNECTIONS==============================
 
 	socket.on("soccerDisconnect", room => {
-		// if (soccerData[room] && soccerData[room].players[socket.id]) {
-		socket.leave(room);
-		delete soccerData[room].players[socket.id];
-		console.log("deleted: " + socket.id + ": ", soccerData);
-		console.log("Remaining users: ", Object.keys(soccerData[room].players));
-		if (Object.keys(soccerData[room].players).length === 0) {
-			clearInterval(soccerData[room].interval);
-			delete soccerData[room];
-			console.log("Deleted soccer room!");
+		if (soccerData[room] && soccerData[room].players[socket.id]) {
+			socket.leave(room);
+			delete soccerData[room].players[socket.id];
+			console.log("deleted: " + socket.id + ": ", soccerData);
+			console.log("Remaining users: ", Object.keys(soccerData[room].players));
+			if (Object.keys(soccerData[room].players).length === 0) {
+				clearInterval(soccerData[room].interval);
+				delete soccerData[room];
+				console.log("Deleted soccer room!");
+			}
 		}
-		// }
 	});
 
 	socket.on("disconnect", () => {
