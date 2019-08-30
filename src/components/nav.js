@@ -17,6 +17,9 @@ const nav = () => {
         <Link to="/lobby">
           <li>Game</li>
         </Link>
+        <Link to="/world">
+          <li>World</li>
+        </Link>
         <Link to="/soccer">
           <li>Soccer</li>
         </Link>

@@ -4,8 +4,9 @@ import "./App.css";
 import NavBar from "./components/nav";
 import Lobby from "./components/Lobby";
 import About from "./components/About";
+import World from "./components/world/World";
 import Soccer from "./components/soccer/Soccer";
-import EggCatchGame from "./components/eggCatch/eggCatchClient"
+import EggCatchGame from "./components/eggCatch/eggCatchClient";
 import Home from "./components/Home";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
@@ -60,6 +61,13 @@ function App() {
           exact
           render={() => {
             return <EggCatchGame socket={socket} />;
+          }}
+        />
+        <Route
+          path="/world"
+          exact
+          render={() => {
+            return <World socket={socket} />;
           }}
         />
       </Switch>
