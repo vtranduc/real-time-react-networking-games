@@ -19,6 +19,6 @@ export default function useKeyPress(targetKey) {
       window.removeEventListener("keydown", downHandler);
       window.addEventListener("keyup", upHandler);
     };
-  }, []);
+  }, [downHandler, upHandler]);
   return key;
 }

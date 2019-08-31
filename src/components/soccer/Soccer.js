@@ -1,27 +1,27 @@
 import React, { useEffect, useState } from "react";
 import useKeyPressMultiple from "../../helpers/useKeyPressMultiple";
-// const useKeyPress = require("../../helpers/useKeyPress");
 
 export default function Soccer({ socket }) {
   //----------------------Literals
   const temporaryRoom = "testingSoccer";
   // All values for this myst be integers
-  const fieldSpec = { height: 600, width: 800, top: 150, left: 50 };
+  const fieldSpec = { height: 600, width: 800, top: 170, left: 50 };
   // Both width and height are the ratio relative to the fieldSpec's width
   // The MUST be the value between 0 and 1
   const ballSpec = { width: 0.05, height: 0.05 };
-  const playerSpec = { width: 0.09, height: 0.12 };
-  const config = { frameDuration: 0.05, negligibleVel: { x: 0.05, y: 0.05 } };
+  const playerSpec = { width: 0.045, height: 0.06 };
+  const config = { frameDuration: 0.07 };
   const playerPhysics = {
+    maxVel: { x: 0.5, y: 0.5 }, // Ratio to the field width. Per second
     accel: { x: 1.2, y: 1.2 }, // Ratio to the field width. Per second
     reverseAccel: { x: 6, y: 6 }, // Ratio to the field width. Per second
     resistance: { x: 1.2, y: 1.2 }, // Ratio to the field width. Per second
-    wallBounce: 0.7, // Speed reduced upon collision with the wall
+    wallBounce: 0.5, // Speed reduced upon collision with the wall
     ballToPlayerMassRatio: 0.3
   };
   const ballPhysics = {
-    resistance: { x: 0.5, y: 0.5 }, // Ratio to the field width. Per second
-    wallBounce: 0.7 // Speed reduced upon collision with the wall
+    resistance: { x: 0.2, y: 0.2 }, // Ratio to the field width. Per second
+    wallBounce: 0.9 // Speed reduced upon collision with the wall
   };
   //----------------------
 
@@ -38,8 +38,6 @@ export default function Soccer({ socket }) {
       ballPhysics
     });
     socket.on("soccerUpdateGame", data => {
-      // console.log("update the game");
-      // console.log(data);
       setSpritePos(data);
     });
     return () => {

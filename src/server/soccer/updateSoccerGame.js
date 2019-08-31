@@ -1,3 +1,18 @@
+// const {
+//   moveItem,
+//   updataItemBottomRight,
+//   handleItemOutsideRange,
+//   moveItemWithCommand,
+//   handleItemsCollision,
+//   elasticCollision,
+//   collisionDetector,
+//   displacement
+// } = require("../gameEngine/physics2D");
+
+// const { moveItem } = require("../gameEngine/physics2D");
+
+let testStop = false;
+
 const updateSoccerGame = function(roomData) {
   moveBall(roomData.ball, roomData.config.frameDuration);
   handleBallOutsidePlayField(
@@ -10,6 +25,10 @@ const updateSoccerGame = function(roomData) {
     handlePlayerOutsidePlayField(roomData, socketId);
     updatePlayerBottomRight(roomData, socketId);
     handleBallPlayerCollision(roomData, socketId);
+  }
+  if (testStop) {
+    console.log("hello");
+    throw new Error("just stop now");
   }
 };
 
@@ -76,13 +95,8 @@ const handleBallOutsidePlayField = function(
 const movePlayer = function(roomData, socketId) {
   if (roomData.players[socketId].commands.x === "") {
     if (roomData.players[socketId].vel.x !== 0) {
-      if (
-        Math.abs(roomData.players[socketId].vel.x) <=
-        roomData.config.negligibleVel.x
-      ) {
-        roomData.players[socketId].vel.x = 0;
-      } else if (roomData.players[socketId].vel.x > 0) {
-        roomData.players[socketId].pos.x += displacement(
+      if (roomData.players[socketId].vel.x > 0) {
+        const disp = displacement(
           roomData.players[socketId].vel.x,
           -roomData.players[socketId].resistance.x,
           roomData.config.frameDuration
@@ -90,8 +104,13 @@ const movePlayer = function(roomData, socketId) {
         roomData.players[socketId].vel.x -=
           roomData.players[socketId].resistance.x *
           roomData.config.frameDuration;
+        if (disp < 0 || roomData.players[socketId].vel.x < 0) {
+          roomData.players[socketId].vel.x = 0;
+        } else {
+          roomData.players[socketId].pos.x += disp;
+        }
       } else if (roomData.players[socketId].vel.x < 0) {
-        roomData.players[socketId].pos.x += displacement(
+        const disp = displacement(
           roomData.players[socketId].vel.x,
           roomData.players[socketId].resistance.x,
           roomData.config.frameDuration
@@ -99,6 +118,11 @@ const movePlayer = function(roomData, socketId) {
         roomData.players[socketId].vel.x +=
           roomData.players[socketId].resistance.x *
           roomData.config.frameDuration;
+        if (disp > 0 || roomData.players[socketId].vel.x > 0) {
+          roomData.players[socketId].vel.x = 0;
+        } else {
+          roomData.players[socketId].pos.x += disp;
+        }
       }
     }
   } else {
@@ -121,13 +145,8 @@ const movePlayer = function(roomData, socketId) {
   }
   if (roomData.players[socketId].commands.y === "") {
     if (roomData.players[socketId].vel.y !== 0) {
-      if (
-        Math.abs(roomData.players[socketId].vel.y) <=
-        roomData.config.negligibleVel.y
-      ) {
-        roomData.players[socketId].vel.y = 0;
-      } else if (roomData.players[socketId].vel.y > 0) {
-        roomData.players[socketId].pos.y += displacement(
+      if (roomData.players[socketId].vel.y > 0) {
+        const disp = displacement(
           roomData.players[socketId].vel.y,
           -roomData.players[socketId].resistance.y,
           roomData.config.frameDuration
@@ -135,8 +154,13 @@ const movePlayer = function(roomData, socketId) {
         roomData.players[socketId].vel.y -=
           roomData.players[socketId].resistance.y *
           roomData.config.frameDuration;
+        if (disp < 0 || roomData.players[socketId].vel.y < 0) {
+          roomData.players[socketId].vel.y = 0;
+        } else {
+          roomData.players[socketId].pos.y += disp;
+        }
       } else if (roomData.players[socketId].vel.y < 0) {
-        roomData.players[socketId].pos.y += displacement(
+        const disp = displacement(
           roomData.players[socketId].vel.y,
           roomData.players[socketId].resistance.y,
           roomData.config.frameDuration
@@ -144,6 +168,11 @@ const movePlayer = function(roomData, socketId) {
         roomData.players[socketId].vel.y +=
           roomData.players[socketId].resistance.y *
           roomData.config.frameDuration;
+        if (roomData.players[socketId].vel.y > 0) {
+          roomData.players[socketId].vel.y = 0;
+        } else {
+          roomData.players[socketId].pos.y += disp;
+        }
       }
     }
   } else {

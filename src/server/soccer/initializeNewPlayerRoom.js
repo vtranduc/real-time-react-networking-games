@@ -4,10 +4,6 @@ const roomInitialSetUp = function(data) {
   return {
     config: {
       frameDuration: data.config.frameDuration,
-      negligibleVel: {
-        x: Math.floor(data.fieldSpec.width * data.config.negligibleVel.x),
-        y: Math.floor(data.fieldSpec.width * data.config.negligibleVel.y)
-      },
       size: {
         ball: {
           width: Math.floor(data.fieldSpec.width * data.ballSpec.width),
