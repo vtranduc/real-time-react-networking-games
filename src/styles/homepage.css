@@ -62,3 +62,10 @@ body,
 	letter-spacing: 8px;
 	text-transform: uppercase;
 }
+.route-link {
+	color: rgb(226, 226, 226);
+	text-decoration: none;
+	letter-spacing: 5px;
+	font-weight: bold;
+	font-size: 14px;
+}

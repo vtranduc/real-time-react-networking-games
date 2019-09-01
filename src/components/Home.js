@@ -7,7 +7,7 @@ function Home() {
 			<div className="pimg1">
 				<div className="ptext">
 					<span className="border">
-						<h2>Custom Games</h2>
+						<h2>Welcome</h2>
 					</span>
 				</div>
 			</div>
@@ -34,8 +34,8 @@ function Home() {
 			<div className="pimg2">
 				<div className="ptext">
 					<span className="border">
-						<Link className="routeLink" to="/soccer">
-							Anime Soccer
+						<Link className="route-link" to="/soccer">
+							<h1>Anime Soccer</h1>
 						</Link>
 					</span>
 				</div>
@@ -63,8 +63,8 @@ function Home() {
 			<div className="pimg3">
 				<div className="ptext">
 					<span className="border">
-						<Link className="routeLink" to="/lobby">
-							Lobby
+						<Link className="route-link" to="/lobby">
+							<h1>Lobby</h1>
 						</Link>
 					</span>
 				</div>
@@ -92,8 +92,8 @@ function Home() {
 			<div className="pimg4">
 				<div className="ptext">
 					<span className="border">
-						<Link className="routeLink" to="/about">
-							About
+						<Link className="route-link" to="/about">
+							<h1>About</h1>
 						</Link>
 					</span>
 				</div>

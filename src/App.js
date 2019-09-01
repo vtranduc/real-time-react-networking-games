@@ -1,7 +1,7 @@
 import React from "react";
 import logo from "./logo.svg";
 import "./App.css";
-import NavBar from "./components/nav";
+import NavBar from "./components/NavControl";
 import Lobby from "./components/Lobby";
 import About from "./components/About";
 import Soccer from "./components/soccer/Soccer";
@@ -42,9 +42,7 @@ function App() {
 	return (
 		<Router>
 			<NavBar />
-			{/* <Button variant="contained" claNavBar />
-        Hello gaafasfd
-      </Button> */}
+
 			<Switch>
 				<Route path="/" exact component={Home} />
 
