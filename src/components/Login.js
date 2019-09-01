@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-
+import "../styles/login.css";
 function Login() {
 	const [user, setUser] = useState({ username: null, password: null });
 
@@ -26,16 +26,18 @@ function Login() {
 	}
 
 	return (
-		<div>
+		<div id="login-main">
 			<form onSubmit={handleSubmit}>
 				Email:
+				<br />
 				<input
 					name="email"
 					value={user.username}
 					onChange={updateInput}
 				></input>
-				<br></br>
+				<br />
 				Password:
+				<br />
 				<input
 					name="password"
 					value={user.password}

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-
+import "../styles/register.css";
 function Register() {
 	const [user, setUser] = useState({
 		firstName: null,
@@ -54,9 +54,10 @@ function Register() {
 		}
 	}
 	return (
-		<div>
+		<div className="main">
 			<form onSubmit={handleSubmit}>
 				First Name:
+				<br />
 				<input
 					name="firstName"
 					value={user.firstName}
@@ -64,6 +65,7 @@ function Register() {
 				></input>
 				<br></br>
 				Last Name:
+				<br />
 				<input
 					name="lastName"
 					value={user.lastName}
@@ -71,9 +73,11 @@ function Register() {
 				></input>
 				<br></br>
 				Email:
+				<br />
 				<input name="email" value={user.email} onChange={updateInput}></input>
 				<br></br>
 				Username:
+				<br />
 				<input
 					name="username"
 					value={user.username}
@@ -81,6 +85,7 @@ function Register() {
 				></input>
 				<br></br>
 				Password:
+				<br />
 				<input
 					name="password"
 					value={user.password}
@@ -88,6 +93,7 @@ function Register() {
 				></input>
 				<br></br>
 				Confirm password:
+				<br />
 				<input
 					name="confirmPassword"
 					value={user.confirmPassword}

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import logo from "./logo.svg";
 import "./App.css";
 import NavBar from "./components/NavList";
@@ -19,27 +19,9 @@ import Button from "@material-ui/core/Button";
 // import { Socket } from "net";
 const serverPORT = 3001;
 
-const useStyles = makeStyles(theme => ({
-	button: {
-		margin: theme.spacing(1)
-	},
-	input: {
-		display: "block"
-	}
-}));
-
-// let socket;
 function App() {
 	let socket = io(`:${serverPORT}`);
 	console.log("initializing app");
-	// const classes = useStyles();
-	// if (!socket) {
-	//   console.log("initializing socket.io from client");
-	//   socket = io(`:${serverPORT}`);NavBar />
-	// <Button variant="contained" className={classes.button}>
-	//   Hello gaafasfd
-	// </Button>;
-	// }
 
 	return (
 		<Router>
