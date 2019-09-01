@@ -2,6 +2,8 @@ const getRandomInt = require("../../helpers/getRandomInt");
 
 const roomInitialSetUp = function(data) {
   return {
+    score: { A: 0, B: 0 },
+    timeRemaining: data.config.gameTime,
     config: {
       frameDuration: data.config.frameDuration,
       size: {
@@ -59,10 +61,14 @@ const roomInitialSetUp = function(data) {
         )
       },
       vel: { x: 0, y: 0 },
+      speed: 0,
       resistance: {
+        // DELETE THIS!
         x: Math.floor(data.ballPhysics.resistance.x * data.fieldSpec.width),
         y: Math.floor(data.ballPhysics.resistance.y * data.fieldSpec.width)
       },
+      accelAbs: 0.01,
+      accelFrictional: { x: 0, y: 0 },
       wallBounce: data.ballPhysics.wallBounce,
       bottomRight: { x: null, y: null }
     }
@@ -84,6 +90,10 @@ const initializeNewPlayer = function(data) {
       )
     },
     vel: { x: 0, y: 0 },
+    maxAbsVel: {
+      x: Math.floor(data.playerPhysics.maxAbsVel.x * data.fieldSpec.width),
+      y: Math.floor(data.playerPhysics.maxAbsVel.y * data.fieldSpec.width)
+    },
     accel: {
       x: Math.floor(data.playerPhysics.accel.x * data.fieldSpec.width),
       y: Math.floor(data.playerPhysics.accel.y * data.fieldSpec.width)

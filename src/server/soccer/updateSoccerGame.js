@@ -9,9 +9,7 @@
 //   displacement
 // } = require("../gameEngine/physics2D");
 
-// const { moveItem } = require("../gameEngine/physics2D");
-
-let testStop = false;
+const { moveItemWithFriction } = require("../gameEngine/physics2D");
 
 const updateSoccerGame = function(roomData) {
   moveBall(roomData.ball, roomData.config.frameDuration);
@@ -25,10 +23,6 @@ const updateSoccerGame = function(roomData) {
     handlePlayerOutsidePlayField(roomData, socketId);
     updatePlayerBottomRight(roomData, socketId);
     handleBallPlayerCollision(roomData, socketId);
-  }
-  if (testStop) {
-    console.log("hello");
-    throw new Error("just stop now");
   }
 };
 
@@ -126,13 +120,21 @@ const movePlayer = function(roomData, socketId) {
       }
     }
   } else {
+    // Max speed is only loosely implemented!
+    // Actual max speed may still be slightly higher!
     const acceleration =
       roomData.players[socketId].commands.x === "right"
         ? roomData.players[socketId].vel.x >= 0
-          ? roomData.players[socketId].accel.x
+          ? roomData.players[socketId].vel.x >=
+            roomData.players[socketId].maxAbsVel.x
+            ? 0
+            : roomData.players[socketId].accel.x
           : roomData.players[socketId].reverseAccel.x
         : roomData.players[socketId].vel.x <= 0
-        ? -roomData.players[socketId].accel.x
+        ? -roomData.players[socketId].vel.x >=
+          roomData.players[socketId].maxAbsVel.x
+          ? 0
+          : -roomData.players[socketId].accel.x
         : -roomData.players[socketId].reverseAccel.x;
 
     roomData.players[socketId].pos.x += displacement(
@@ -176,13 +178,21 @@ const movePlayer = function(roomData, socketId) {
       }
     }
   } else {
+    // Max speed is only loosely implemented!
+    // Actual max speed may still be slightly higher!
     const acceleration =
       roomData.players[socketId].commands.y === "down"
         ? roomData.players[socketId].vel.y >= 0
-          ? roomData.players[socketId].accel.y
+          ? roomData.players[socketId].vel.y >=
+            roomData.players[socketId].maxAbsVel.y
+            ? 0
+            : roomData.players[socketId].accel.y
           : roomData.players[socketId].reverseAccel.y
         : roomData.players[socketId].vel.y <= 0
-        ? -roomData.players[socketId].accel.y
+        ? -roomData.players[socketId].vel.y >=
+          roomData.players[socketId].maxAbsVel.y
+          ? 0
+          : -roomData.players[socketId].accel.y
         : -roomData.players[socketId].reverseAccel.y;
 
     roomData.players[socketId].pos.y += displacement(
@@ -251,6 +261,9 @@ const handleBallPlayerCollision = function(roomData, socketId) {
       elasticCollision(roomData.ball, roomData.players[socketId]);
       roomData.players[socketId].kickReady = false;
     }
+    // } else {
+    //   console.log("oops! player and ball are not separating!");
+    // }
   } else if (!roomData.players[socketId].kickReady) {
     roomData.players[socketId].kickReady = true;
   }
