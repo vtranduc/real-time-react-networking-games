@@ -1,7 +1,7 @@
 import React from "react";
 import logo from "./logo.svg";
 import "./App.css";
-import NavBar from "./components/NavControl";
+import NavBar from "./components/NavList";
 import Lobby from "./components/Lobby";
 import About from "./components/About";
 import Soccer from "./components/soccer/Soccer";
