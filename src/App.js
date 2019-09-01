@@ -4,6 +4,8 @@ import "./App.css";
 import NavBar from "./components/NavList";
 import Lobby from "./components/Lobby";
 import About from "./components/About";
+import Login from "./components/Login";
+import Register from "./components/Register";
 import Soccer from "./components/soccer/Soccer";
 import EggCatchGame from "./components/eggCatch/eggCatchClient";
 import Home from "./components/Home";
@@ -48,6 +50,8 @@ function App() {
 
 				<Route path="/about" exact component={About} />
 				<Route path="/lobby" exact component={Lobby} />
+				<Route path="/login" exact component={Login} />
+				<Route path="/register" exact component={Register} />
 				<Route
 					path="/soccer"
 					exact

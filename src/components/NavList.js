@@ -1,12 +1,12 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import "../styles/navbar.css";
+import { Icon } from "@material-ui/core";
 function NavList() {
 	return (
 		<nav>
-			<div>
-				<h3>Games</h3>
-			</div>
+			<h3>Games</h3>
+
 			<div>
 				<div className="logo">
 					<ul className="nav-links">
@@ -17,13 +17,13 @@ function NavList() {
 							<li>About</li>
 						</Link>
 						<Link to="/lobby">
-							<li>Game</li>
+							<li>Game Lobby</li>
 						</Link>
-						<Link to="/soccer">
-							<li>Soccer</li>
+						<Link to="/Login">
+							<li>Login</li>
 						</Link>
-						<Link to="/chansey">
-							<li>Chansey</li>
+						<Link to="/Register">
+							<li>Register</li>
 						</Link>
 					</ul>
 				</div>
