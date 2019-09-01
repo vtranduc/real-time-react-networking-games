@@ -4,7 +4,7 @@ import "../styles/navbar.css";
 import { Icon } from "@material-ui/core";
 function NavList() {
 	const [pageName, setPageName] = useState("The Best Website in the World");
-	const [user, setUser] = useState(false);
+	const [user, setUser] = useState(true);
 	return (
 		<nav>
 			{!user && (
@@ -35,7 +35,7 @@ function NavList() {
 										setPageName("Games Lobby");
 									}}
 								>
-									<li>Game Lobby</li>
+									<li>Lobby</li>
 								</Link>
 								<Link
 									to="/Login"
@@ -65,6 +65,14 @@ function NavList() {
 						<div className="logo">
 							<ul className="nav-links">
 								<Link
+									to="/profile"
+									onClick={() => {
+										setPageName("User Profile");
+									}}
+								>
+									<li>Profile</li>
+								</Link>
+								<Link
 									to="/"
 									onClick={() => {
 										setPageName("The Best Website in the World");
@@ -88,6 +96,13 @@ function NavList() {
 								>
 									<li>Game Lobby</li>
 								</Link>
+								<text
+									onClick={() => {
+										setUser(!user);
+									}}
+								>
+									Logout
+								</text>
 							</ul>
 						</div>
 					</div>

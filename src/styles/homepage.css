@@ -11,7 +11,8 @@ body,
 .pimg1,
 .pimg2,
 .pimg3,
-.pimg4 {
+.pimg4,
+.pimg5 {
 	position: relative;
 	opacity: 0.7;
 	background-position: center;
@@ -36,7 +37,11 @@ body,
 }
 .pimg4 {
 	background-image: url("/assets/HomePage/background4.jpg");
-	min-height: 800px;
+	min-height: 400px;
+}
+.pimg5 {
+	background-image: url("/assets/HomePage/background5.jpg");
+	min-height: 400px;
 }
 
 .section {

@@ -9,6 +9,8 @@ import Register from "./components/Register";
 import Soccer from "./components/soccer/Soccer";
 import EggCatchGame from "./components/eggCatch/eggCatchClient";
 import Home from "./components/Home";
+import Profile from "./components/Profile";
+import Phaser from "./components/Phaser";
 
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
@@ -29,7 +31,7 @@ function App() {
 
 			<Switch>
 				<Route path="/" exact component={Home} />
-
+				<Route path="/profile" exact component={Profile} />
 				<Route path="/about" exact component={About} />
 				<Route path="/lobby" exact component={Lobby} />
 				<Route path="/login" exact component={Login} />
@@ -48,6 +50,7 @@ function App() {
 						return <EggCatchGame socket={socket} />;
 					}}
 				/>
+				<Route path="/phaser-game" exact component={Phaser} />
 			</Switch>
 		</Router>
 	);
