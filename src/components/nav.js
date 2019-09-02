@@ -6,9 +6,9 @@ function NavBar() {
 	const [pageName, setPageName] = useState("The Best Website in the World");
 	const [user, setUser] = useState(true);
 	return (
-		<nav>
+		<div >
 			{!user && (
-				<>
+				<nav>
 					<h3>{pageName}</h3>
 					<div>
 						<div className="logo">
@@ -56,10 +56,10 @@ function NavBar() {
 							</ul>
 						</div>
 					</div>
-				</>
+				</nav>
 			)}
 			{user && (
-				<>
+				<nav>
 					<h3>{pageName}</h3>
 					<div>
 						<div className="logo">
@@ -96,19 +96,21 @@ function NavBar() {
 								>
 									<li>Game Lobby</li>
 								</Link>
-								<text
+								<Link
+									to="/"
 									onClick={() => {
-										setUser(!user);
+										setPageName("Home");
+										setUser(!user)
 									}}
 								>
-									Logout
-								</text>
+									<li>Logout</li>
+								</Link>
 							</ul>
 						</div>
 					</div>
-				</>
+				</nav>
 			)}
-		</nav>
+		</div>
 	);
 }
 

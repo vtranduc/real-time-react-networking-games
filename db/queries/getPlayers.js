@@ -1,15 +1,23 @@
 
 const {Pool} = require("pg");
-const dbParams = require("../lib/db.js");
-const pool  = new Pool(dbParams);
+//const dbParams = require("../lib/db.js");
+const pool  = new Pool({
+user: 'JJ',
+host: 'localhost',
+database:'gamefinal',
+password: 123
+
+});
 pool.connect();
 
 const getUsers = function(){
     return pool.query(`SELECT *
-    FROM users`)
+    FROM users WHERE first_name like 'a'`)
     .then(res => res.rows)
-    .catch(err => console.error(null, err.stack));
-};
+}    
 
 
-console.log(getUsers());
+getUsers().then(
+console.log);
+
+

@@ -16,9 +16,12 @@ nav {
 	background-color: grey;
 }
 .logo {
+	display: flex;
+	justify-content: space-evenly;
 	color: white;
 	text-transform: uppercase;
 	letter-spacing: 5px;
+
 	font-size: 20px;
 }
 .nav-links {
@@ -32,6 +35,7 @@ nav {
 .nav-links a {
 	color: rgb(226, 226, 226);
 	text-decoration: none;
+	margin: 20px;
 	letter-spacing: 5px;
 	font-weight: bold;
 	font-size: 14px;
