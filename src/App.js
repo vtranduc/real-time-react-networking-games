@@ -10,7 +10,7 @@ import Soccer from "./components/soccer/Soccer";
 import EggCatchGame from "./components/eggCatch/eggCatchClient";
 import Home from "./components/Home";
 import Profile from "./components/Profile";
-import Phaser from "./components/Phaser";
+import PhaserGame from "./components/PhaserGame";
 
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
@@ -50,7 +50,7 @@ function App() {
 						return <EggCatchGame socket={socket} />;
 					}}
 				/>
-				<Route path="/phaser-game" exact component={Phaser} />
+				<Route path="/phaser-game" exact component={PhaserGame} />
 			</Switch>
 		</Router>
 	);
