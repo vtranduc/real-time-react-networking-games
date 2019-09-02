@@ -17,7 +17,7 @@ export default function useKeyPress(targetKeys) {
     window.addEventListener("keyup", upHandler);
     return () => {
       window.removeEventListener("keydown", downHandler);
-      window.addEventListener("keyup", upHandler);
+      window.removeEventListener("keyup", upHandler);
     };
   }, [downHandler, upHandler]);
   return key;

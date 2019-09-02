@@ -9,55 +9,64 @@
 //   displacement
 // } = require("../gameEngine/physics2D");
 
-const { moveItemWithFriction } = require("../gameEngine/physics2D");
+const {
+  moveItemWithFriction,
+  handleItemOutsideRange,
+  moveItemWithCommands,
+  getSpeed,
+  getUnitVector
+} = require("../gameEngine/physics2D");
 
-const updateSoccerGame = function(roomData) {
-  moveBall(roomData.ball, roomData.config.frameDuration);
-  handleBallOutsidePlayField(
-    roomData.ball,
-    roomData.config.permittedRange.ball
-  );
+const updateSoccerGame = function(roomData, io) {
+  moveItemWithFriction(roomData.ball, roomData.config.frameDuration);
+  handleItemOutsideRange(roomData.ball, roomData.config.permittedRange.ball);
   updateBallBottomRight(roomData);
   for (let socketId in roomData.players) {
-    movePlayer(roomData, socketId);
+    // movePlayer(roomData, socketId);
+    moveItemWithCommands(
+      roomData.players[socketId],
+      roomData.config.frameDuration,
+      roomData.ball
+    );
     handlePlayerOutsidePlayField(roomData, socketId);
     updatePlayerBottomRight(roomData, socketId);
-    handleBallPlayerCollision(roomData, socketId);
+    handleBallPlayerCollision(roomData, socketId, io);
+    roomData.players[socketId].speed = getSpeed(roomData.players[socketId].vel);
   }
 };
 
-const moveBall = function(ball, frameDuration) {
-  if (ball.vel.x !== 0) {
-    if (ball.vel.x < 0) {
-      ball.pos.x += displacement(ball.vel.x, ball.resistance.x, frameDuration);
-      ball.vel.x += ball.resistance.x * frameDuration;
-      if (ball.vel.x > 0) {
-        ball.vel.x = 0;
-      }
-    } else if (ball.vel.x > 0) {
-      ball.pos.x += displacement(ball.vel.x, -ball.resistance.x, frameDuration);
-      ball.vel.x -= ball.resistance.x * frameDuration;
-      if (ball.vel.x < 0) {
-        ball.vel.x = 0;
-      }
-    }
-  }
-  if (ball.vel.y !== 0) {
-    if (ball.vel.y < 0) {
-      ball.pos.y += displacement(ball.vel.y, ball.resistance.y, frameDuration);
-      ball.vel.y += ball.resistance.y * frameDuration;
-      if (ball.vel.y > 0) {
-        ball.vel.y = 0;
-      }
-    } else if (ball.vel.y > 0) {
-      ball.pos.y += displacement(ball.vel.y, -ball.resistance.y, frameDuration);
-      ball.vel.y -= ball.resistance.y * frameDuration;
-      if (ball.vel.y < 0) {
-        ball.vel.y = 0;
-      }
-    }
-  }
-};
+// const moveBall = function(ball, frameDuration) {
+//   if (ball.vel.x !== 0) {
+//     if (ball.vel.x < 0) {
+//       ball.pos.x += displacement(ball.vel.x, ball.resistance.x, frameDuration);
+//       ball.vel.x += ball.resistance.x * frameDuration;
+//       if (ball.vel.x > 0) {
+//         ball.vel.x = 0;
+//       }
+//     } else if (ball.vel.x > 0) {
+//       ball.pos.x += displacement(ball.vel.x, -ball.resistance.x, frameDuration);
+//       ball.vel.x -= ball.resistance.x * frameDuration;
+//       if (ball.vel.x < 0) {
+//         ball.vel.x = 0;
+//       }
+//     }
+//   }
+//   if (ball.vel.y !== 0) {
+//     if (ball.vel.y < 0) {
+//       ball.pos.y += displacement(ball.vel.y, ball.resistance.y, frameDuration);
+//       ball.vel.y += ball.resistance.y * frameDuration;
+//       if (ball.vel.y > 0) {
+//         ball.vel.y = 0;
+//       }
+//     } else if (ball.vel.y > 0) {
+//       ball.pos.y += displacement(ball.vel.y, -ball.resistance.y, frameDuration);
+//       ball.vel.y -= ball.resistance.y * frameDuration;
+//       if (ball.vel.y < 0) {
+//         ball.vel.y = 0;
+//       }
+//     }
+//   }
+// };
 
 const updateBallBottomRight = function(roomData) {
   roomData.ball.bottomRight.y =
@@ -66,144 +75,144 @@ const updateBallBottomRight = function(roomData) {
     roomData.ball.pos.x + roomData.config.size.ball.width;
 };
 
-const handleBallOutsidePlayField = function(
-  { pos, vel, wallBounce },
-  { top, left, bottom, right }
-) {
-  if (pos.x < left) {
-    pos.x = left;
-    vel.x = -vel.x * wallBounce;
-  } else if (pos.x > right) {
-    pos.x = right;
-    vel.x = -vel.x * wallBounce;
-  }
-  if (pos.y > bottom) {
-    pos.y = bottom;
-    vel.y = -vel.y * wallBounce;
-  } else if (pos.y < top) {
-    pos.y = top;
-    vel.y = -vel.y * wallBounce;
-  }
-};
+// const handleBallOutsidePlayField = function(
+//   { pos, vel, wallBounce },
+//   { top, left, bottom, right }
+// ) {
+//   if (pos.x < left) {
+//     pos.x = left;
+//     vel.x = -vel.x * wallBounce;
+//   } else if (pos.x > right) {
+//     pos.x = right;
+//     vel.x = -vel.x * wallBounce;
+//   }
+//   if (pos.y > bottom) {
+//     pos.y = bottom;
+//     vel.y = -vel.y * wallBounce;
+//   } else if (pos.y < top) {
+//     pos.y = top;
+//     vel.y = -vel.y * wallBounce;
+//   }
+// };
 
-const movePlayer = function(roomData, socketId) {
-  if (roomData.players[socketId].commands.x === "") {
-    if (roomData.players[socketId].vel.x !== 0) {
-      if (roomData.players[socketId].vel.x > 0) {
-        const disp = displacement(
-          roomData.players[socketId].vel.x,
-          -roomData.players[socketId].resistance.x,
-          roomData.config.frameDuration
-        );
-        roomData.players[socketId].vel.x -=
-          roomData.players[socketId].resistance.x *
-          roomData.config.frameDuration;
-        if (disp < 0 || roomData.players[socketId].vel.x < 0) {
-          roomData.players[socketId].vel.x = 0;
-        } else {
-          roomData.players[socketId].pos.x += disp;
-        }
-      } else if (roomData.players[socketId].vel.x < 0) {
-        const disp = displacement(
-          roomData.players[socketId].vel.x,
-          roomData.players[socketId].resistance.x,
-          roomData.config.frameDuration
-        );
-        roomData.players[socketId].vel.x +=
-          roomData.players[socketId].resistance.x *
-          roomData.config.frameDuration;
-        if (disp > 0 || roomData.players[socketId].vel.x > 0) {
-          roomData.players[socketId].vel.x = 0;
-        } else {
-          roomData.players[socketId].pos.x += disp;
-        }
-      }
-    }
-  } else {
-    // Max speed is only loosely implemented!
-    // Actual max speed may still be slightly higher!
-    const acceleration =
-      roomData.players[socketId].commands.x === "right"
-        ? roomData.players[socketId].vel.x >= 0
-          ? roomData.players[socketId].vel.x >=
-            roomData.players[socketId].maxAbsVel.x
-            ? 0
-            : roomData.players[socketId].accel.x
-          : roomData.players[socketId].reverseAccel.x
-        : roomData.players[socketId].vel.x <= 0
-        ? -roomData.players[socketId].vel.x >=
-          roomData.players[socketId].maxAbsVel.x
-          ? 0
-          : -roomData.players[socketId].accel.x
-        : -roomData.players[socketId].reverseAccel.x;
+// const movePlayer = function(roomData, socketId) {
+//   if (roomData.players[socketId].commands.x === "") {
+//     if (roomData.players[socketId].vel.x !== 0) {
+//       if (roomData.players[socketId].vel.x > 0) {
+//         const disp = displacement(
+//           roomData.players[socketId].vel.x,
+//           -roomData.players[socketId].resistance.x,
+//           roomData.config.frameDuration
+//         );
+//         roomData.players[socketId].vel.x -=
+//           roomData.players[socketId].resistance.x *
+//           roomData.config.frameDuration;
+//         if (disp < 0 || roomData.players[socketId].vel.x < 0) {
+//           roomData.players[socketId].vel.x = 0;
+//         } else {
+//           roomData.players[socketId].pos.x += disp;
+//         }
+//       } else if (roomData.players[socketId].vel.x < 0) {
+//         const disp = displacement(
+//           roomData.players[socketId].vel.x,
+//           roomData.players[socketId].resistance.x,
+//           roomData.config.frameDuration
+//         );
+//         roomData.players[socketId].vel.x +=
+//           roomData.players[socketId].resistance.x *
+//           roomData.config.frameDuration;
+//         if (disp > 0 || roomData.players[socketId].vel.x > 0) {
+//           roomData.players[socketId].vel.x = 0;
+//         } else {
+//           roomData.players[socketId].pos.x += disp;
+//         }
+//       }
+//     }
+//   } else {
+//     // Max speed is only loosely implemented!
+//     // Actual max speed may still be slightly higher!
+//     const acceleration =
+//       roomData.players[socketId].commands.x === "right"
+//         ? roomData.players[socketId].vel.x >= 0
+//           ? roomData.players[socketId].vel.x >=
+//             roomData.players[socketId].maxAbsVel.x
+//             ? 0
+//             : roomData.players[socketId].accel.x
+//           : roomData.players[socketId].reverseAccel.x
+//         : roomData.players[socketId].vel.x <= 0
+//         ? -roomData.players[socketId].vel.x >=
+//           roomData.players[socketId].maxAbsVel.x
+//           ? 0
+//           : -roomData.players[socketId].accel.x
+//         : -roomData.players[socketId].reverseAccel.x;
 
-    roomData.players[socketId].pos.x += displacement(
-      roomData.players[socketId].vel.x,
-      acceleration,
-      roomData.config.frameDuration
-    );
-    roomData.players[socketId].vel.x +=
-      acceleration * roomData.config.frameDuration;
-  }
-  if (roomData.players[socketId].commands.y === "") {
-    if (roomData.players[socketId].vel.y !== 0) {
-      if (roomData.players[socketId].vel.y > 0) {
-        const disp = displacement(
-          roomData.players[socketId].vel.y,
-          -roomData.players[socketId].resistance.y,
-          roomData.config.frameDuration
-        );
-        roomData.players[socketId].vel.y -=
-          roomData.players[socketId].resistance.y *
-          roomData.config.frameDuration;
-        if (disp < 0 || roomData.players[socketId].vel.y < 0) {
-          roomData.players[socketId].vel.y = 0;
-        } else {
-          roomData.players[socketId].pos.y += disp;
-        }
-      } else if (roomData.players[socketId].vel.y < 0) {
-        const disp = displacement(
-          roomData.players[socketId].vel.y,
-          roomData.players[socketId].resistance.y,
-          roomData.config.frameDuration
-        );
-        roomData.players[socketId].vel.y +=
-          roomData.players[socketId].resistance.y *
-          roomData.config.frameDuration;
-        if (roomData.players[socketId].vel.y > 0) {
-          roomData.players[socketId].vel.y = 0;
-        } else {
-          roomData.players[socketId].pos.y += disp;
-        }
-      }
-    }
-  } else {
-    // Max speed is only loosely implemented!
-    // Actual max speed may still be slightly higher!
-    const acceleration =
-      roomData.players[socketId].commands.y === "down"
-        ? roomData.players[socketId].vel.y >= 0
-          ? roomData.players[socketId].vel.y >=
-            roomData.players[socketId].maxAbsVel.y
-            ? 0
-            : roomData.players[socketId].accel.y
-          : roomData.players[socketId].reverseAccel.y
-        : roomData.players[socketId].vel.y <= 0
-        ? -roomData.players[socketId].vel.y >=
-          roomData.players[socketId].maxAbsVel.y
-          ? 0
-          : -roomData.players[socketId].accel.y
-        : -roomData.players[socketId].reverseAccel.y;
+//     roomData.players[socketId].pos.x += displacement(
+//       roomData.players[socketId].vel.x,
+//       acceleration,
+//       roomData.config.frameDuration
+//     );
+//     roomData.players[socketId].vel.x +=
+//       acceleration * roomData.config.frameDuration;
+//   }
+//   if (roomData.players[socketId].commands.y === "") {
+//     if (roomData.players[socketId].vel.y !== 0) {
+//       if (roomData.players[socketId].vel.y > 0) {
+//         const disp = displacement(
+//           roomData.players[socketId].vel.y,
+//           -roomData.players[socketId].resistance.y,
+//           roomData.config.frameDuration
+//         );
+//         roomData.players[socketId].vel.y -=
+//           roomData.players[socketId].resistance.y *
+//           roomData.config.frameDuration;
+//         if (disp < 0 || roomData.players[socketId].vel.y < 0) {
+//           roomData.players[socketId].vel.y = 0;
+//         } else {
+//           roomData.players[socketId].pos.y += disp;
+//         }
+//       } else if (roomData.players[socketId].vel.y < 0) {
+//         const disp = displacement(
+//           roomData.players[socketId].vel.y,
+//           roomData.players[socketId].resistance.y,
+//           roomData.config.frameDuration
+//         );
+//         roomData.players[socketId].vel.y +=
+//           roomData.players[socketId].resistance.y *
+//           roomData.config.frameDuration;
+//         if (roomData.players[socketId].vel.y > 0) {
+//           roomData.players[socketId].vel.y = 0;
+//         } else {
+//           roomData.players[socketId].pos.y += disp;
+//         }
+//       }
+//     }
+//   } else {
+//     // Max speed is only loosely implemented!
+//     // Actual max speed may still be slightly higher!
+//     const acceleration =
+//       roomData.players[socketId].commands.y === "down"
+//         ? roomData.players[socketId].vel.y >= 0
+//           ? roomData.players[socketId].vel.y >=
+//             roomData.players[socketId].maxAbsVel.y
+//             ? 0
+//             : roomData.players[socketId].accel.y
+//           : roomData.players[socketId].reverseAccel.y
+//         : roomData.players[socketId].vel.y <= 0
+//         ? -roomData.players[socketId].vel.y >=
+//           roomData.players[socketId].maxAbsVel.y
+//           ? 0
+//           : -roomData.players[socketId].accel.y
+//         : -roomData.players[socketId].reverseAccel.y;
 
-    roomData.players[socketId].pos.y += displacement(
-      roomData.players[socketId].vel.y,
-      acceleration,
-      roomData.config.frameDuration
-    );
-    roomData.players[socketId].vel.y +=
-      acceleration * roomData.config.frameDuration;
-  }
-};
+//     roomData.players[socketId].pos.y += displacement(
+//       roomData.players[socketId].vel.y,
+//       acceleration,
+//       roomData.config.frameDuration
+//     );
+//     roomData.players[socketId].vel.y +=
+//       acceleration * roomData.config.frameDuration;
+//   }
+// };
 
 const handlePlayerOutsidePlayField = function(roomData, socketId) {
   if (
@@ -248,7 +257,7 @@ const updatePlayerBottomRight = function(roomData, socketId) {
     roomData.players[socketId].pos.y + roomData.config.size.player.height;
 };
 
-const handleBallPlayerCollision = function(roomData, socketId) {
+const handleBallPlayerCollision = function(roomData, socketId, io) {
   if (
     collisionDetector(
       roomData.ball.pos,
@@ -258,14 +267,39 @@ const handleBallPlayerCollision = function(roomData, socketId) {
     )
   ) {
     if (roomData.players[socketId].kickReady) {
-      elasticCollision(roomData.ball, roomData.players[socketId]);
-      roomData.players[socketId].kickReady = false;
+      if (roomData.players[socketId].aim) {
+        target = {
+          x:
+            roomData.players[socketId].aim.x -
+            roomData.ball.radius -
+            roomData.ball.pos.x,
+          y:
+            roomData.players[socketId].aim.y -
+            roomData.ball.radius -
+            roomData.ball.pos.y
+        };
+        // const speed = getSpeed(target);
+        const unitTarget = getUnitVector(target);
+        // roomData.players[socketId].vel.x =
+        //   roomData.players[socketId].aim.x / speed;
+        // console.log("AIM HERE NOW", target, power);
+        console.log("baking company: ", roomData.players[socketId].kickPower);
+        roomData.ball.vel.x =
+          unitTarget.x * roomData.players[socketId].kickPower;
+        roomData.ball.vel.y =
+          unitTarget.y * roomData.players[socketId].kickPower;
+        // elasticCollision(roomData.ball, roomData.players[socketId]);
+        roomData.players[socketId].aim = null;
+        roomData.players[socketId].kickReady = false;
+        // console.log("have kicked the ball!", roomData.ball.vel);
+        io.to(socketId).emit("soccerRemoveFlag");
+      } else {
+        elasticCollision(roomData.ball, roomData.players[socketId]);
+        roomData.players[socketId].kickReady = false;
+      }
+    } else if (!roomData.players[socketId].kickReady) {
+      roomData.players[socketId].kickReady = true;
     }
-    // } else {
-    //   console.log("oops! player and ball are not separating!");
-    // }
-  } else if (!roomData.players[socketId].kickReady) {
-    roomData.players[socketId].kickReady = true;
   }
 };
 
@@ -300,8 +334,8 @@ const collisionDetector = function(
     : true;
 };
 
-const displacement = function(vi, accel, time) {
-  return vi * time + 0.5 * accel * time * time;
-};
+// const displacement = function(vi, accel, time) {
+//   return vi * time + 0.5 * accel * time * time;
+// };
 
 module.exports = updateSoccerGame;

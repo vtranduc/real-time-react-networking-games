@@ -62,12 +62,15 @@ const roomInitialSetUp = function(data) {
       },
       vel: { x: 0, y: 0 },
       speed: 0,
-      resistance: {
-        // DELETE THIS!
-        x: Math.floor(data.ballPhysics.resistance.x * data.fieldSpec.width),
-        y: Math.floor(data.ballPhysics.resistance.y * data.fieldSpec.width)
-      },
-      accelAbs: 0.01,
+      radius: Math.floor((data.fieldSpec.width * data.ballSpec.width) / 2),
+      // resistance: {
+      //   // DELETE THIS!
+      //   x: Math.floor(data.ballPhysics.resistance.x * data.fieldSpec.width),
+      //   y: Math.floor(data.ballPhysics.resistance.y * data.fieldSpec.width)
+      // },
+      accelFrictionalMag: Math.floor(
+        data.ballPhysics.friction * data.fieldSpec.width
+      ),
       accelFrictional: { x: 0, y: 0 },
       wallBounce: data.ballPhysics.wallBounce,
       bottomRight: { x: null, y: null }
@@ -90,22 +93,36 @@ const initializeNewPlayer = function(data) {
       )
     },
     vel: { x: 0, y: 0 },
-    maxAbsVel: {
-      x: Math.floor(data.playerPhysics.maxAbsVel.x * data.fieldSpec.width),
-      y: Math.floor(data.playerPhysics.maxAbsVel.y * data.fieldSpec.width)
-    },
+    // maxAbsVel: {
+    //   x: Math.floor(data.playerPhysics.maxAbsVel.x * data.fieldSpec.width),
+    //   y: Math.floor(data.playerPhysics.maxAbsVel.y * data.fieldSpec.width)
+    // },
+    //------
     accel: {
-      x: Math.floor(data.playerPhysics.accel.x * data.fieldSpec.width),
-      y: Math.floor(data.playerPhysics.accel.y * data.fieldSpec.width)
+      x: 0,
+      y: 0
     },
-    reverseAccel: {
-      x: Math.floor(data.playerPhysics.reverseAccel.x * data.fieldSpec.width),
-      y: Math.floor(data.playerPhysics.reverseAccel.y * data.fieldSpec.width)
-    },
-    resistance: {
-      x: Math.floor(data.playerPhysics.resistance.x * data.fieldSpec.width),
-      y: Math.floor(data.playerPhysics.resistance.y * data.fieldSpec.width)
-    },
+    accelMag: Math.floor(data.playerPhysics.accelMag * data.fieldSpec.width),
+    accelFrictionalMag: Math.floor(0.8 * data.fieldSpec.width),
+    speed: 0,
+    accelReverseMag: Math.floor(
+      data.playerPhysics.accelReverseMag * data.fieldSpec.width
+    ),
+    accelFrictional: { x: 0, y: 0 },
+    maxSpeed: Math.floor(data.playerPhysics.maxSpeed * data.fieldSpec.width),
+    brake: false,
+    chase: false,
+    aim: null,
+    //----
+    // reverseAccel: {
+    //   x: Math.floor(data.playerPhysics.reverseAccel.x * data.fieldSpec.width),
+    //   y: Math.floor(data.playerPhysics.reverseAccel.y * data.fieldSpec.width)
+    // },
+    // resistance: {
+    //   x: Math.floor(data.playerPhysics.resistance.x * data.fieldSpec.width),
+    //   y: Math.floor(data.playerPhysics.resistance.y * data.fieldSpec.width)
+    // },
+    kickPower: Math.floor(data.playerPhysics.kickPower * data.fieldSpec.width),
     wallBounce: data.playerPhysics.wallBounce,
     commands: { x: "", y: "" },
     bottomRight: { x: null, y: null },
