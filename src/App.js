@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import logo from "./logo.svg";
 import "./App.css";
-import NavBar from "./components/NavList";
+import NavBar from "./components/Nav";
 import Lobby from "./components/Lobby";
 import About from "./components/About";
 import Login from "./components/Login";

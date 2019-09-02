@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import "../styles/navbar.css";
-import { Icon } from "@material-ui/core";
-function NavList() {
+
+function NavBar() {
 	const [pageName, setPageName] = useState("The Best Website in the World");
 	const [user, setUser] = useState(true);
 	return (
@@ -112,4 +112,4 @@ function NavList() {
 	);
 }
 
-export default NavList;
+export default NavBar;
