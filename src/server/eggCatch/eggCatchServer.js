@@ -148,6 +148,13 @@ function dropEggs(difficultyRank) {
 	}
 }
 
+// function generateEggs(){
+//     let eggBatch = [];
+//     for (let i = 0; i < 100 ; i ++){
+
+//     }
+// }
+
 function getPos(gameData, room) {
 	let output = {
 		egg: gameData[room].egg.pos,
