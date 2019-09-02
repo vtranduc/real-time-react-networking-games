@@ -1,9 +1,9 @@
 const updateSoccerGame = require("./updateSoccerGame");
 
-const startGame = function(soccerData, data, sockets) {
+const startGame = function(soccerData, data, sockets, io) {
   soccerData[data.room].interval = setInterval(() => {
-    updateSoccerGame(soccerData[data.room]);
-    // soccerData[data.room].timeRemaining -= data.config.frameDuration;
+    updateSoccerGame(soccerData[data.room], io);
+    soccerData[data.room].timeRemaining -= data.config.frameDuration;
     sockets
       .to(data.room)
       .emit("soccerUpdateGame", allStat(soccerData[data.room]));

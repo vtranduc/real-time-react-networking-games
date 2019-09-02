@@ -4,7 +4,7 @@ const {
 } = require("./initializeNewPlayerRoom");
 const startGame = require("./startGame");
 
-const soccerGame = function(socket, sockets, rooms, soccerData) {
+const soccerGame = function(socket, sockets, rooms, soccerData, io) {
   console.log("this is a soccer game");
   socket.on("soccerHandleKeyPress", data => {
     // console.log("data has been received: ", data);
@@ -26,9 +26,36 @@ const soccerGame = function(socket, sockets, rooms, soccerData) {
     if (!soccerData[data.room]) {
       soccerData[data.room] = roomInitialSetUp(data);
       // --- Start the game here ---
-      startGame(soccerData, data, sockets);
+      startGame(soccerData, data, sockets, io);
     }
     soccerData[data.room].players[socket.id] = initializeNewPlayer(data);
+  });
+
+  socket.on("soccerApplyBrake", data => {
+    console.log("applying");
+    if (soccerData[data.room]) {
+      soccerData[data.room].players[socket.id].brake = data.brake;
+    } else {
+      console.log("Room not ready!");
+    }
+  });
+
+  socket.on("soccerChaseBall", data => {
+    if (soccerData[data.room]) {
+      soccerData[data.room].players[socket.id].chase = data.chase;
+    } else {
+      console.log("Room not ready!");
+    }
+  });
+
+  socket.on("soccerAim", data => {
+    console.log("say huh");
+    console.log(data);
+    if (soccerData[data.room]) {
+      soccerData[data.room].players[socket.id].aim = data.aim;
+    } else {
+      console.log("Room not ready!");
+    }
   });
 
   // ==============ALL THE DISCONNECTIONS==============================

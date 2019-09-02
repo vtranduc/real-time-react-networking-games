@@ -33,6 +33,6 @@ io.on("connection", socket => {
     console.log(onlinePlayers);
   });
   world(socket, io.sockets, io.sockets.adapter.rooms, gameData.world);
-  soccerGame(socket, io.sockets, io.sockets.adapter.rooms, gameData.soccer);
+  soccerGame(socket, io.sockets, io.sockets.adapter.rooms, gameData.soccer, io);
   eggCatchGame(socket, io.sockets, io.sockets.adapter.rooms, gameData.eggCatch);
 });
