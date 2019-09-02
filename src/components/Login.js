@@ -1,23 +1,32 @@
 import React, { useState } from "react";
 import "../styles/login.css";
+import axios from "axios";
+
+
 function Login() {
-	const [user, setUser] = useState({ username: null, password: null });
+	const [user, setUser] = useState({ email: "", password: "" });
 
 	function handleSubmit(event) {
-		console.log("submit handled");
-		alert(`${user.username} ${user.password}`);
+		// console.log("submit handled");
 		event.preventDefault();
+		//alert(`${user.username} ${user.password}`);
+
+
+		axios.post('http://localhost:3001/login', {email: user.email, password: user.password}).then((response)=>{
+			console.log("success response!", response)
+		}).catch((err)=>{
+			console.log("error: ", err);
+		})
+		
 	}
 	function updateInput(event) {
 		switch (event.target.name) {
 			case "email":
-				console.log("updated username");
-				console.log(event.target);
-				setUser({ ...user, username: event.target.value });
+				
+				setUser({ ...user, email: event.target.value });
 				break;
 			case "password":
-				console.log("updated password");
-				console.log(user);
+				
 				setUser({ ...user, password: event.target.value });
 				break;
 			default:
@@ -32,7 +41,7 @@ function Login() {
 				<br />
 				<input
 					name="email"
-					value={user.username}
+					value={user.email}
 					onChange={updateInput}
 				></input>
 				<br />
