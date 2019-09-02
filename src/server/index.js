@@ -2,8 +2,9 @@ const app = require("express")();
 const http = require("http").createServer(app);
 const io = require("socket.io")(http);
 const PORT = 3001;
-const soccerGame = require("./soccer/soccerServer");
-const eggCatchGame = require("./eggCatch/eggCatchServer")
+const soccerGame = require("./soccer/index");
+const eggCatchGame = require("./eggCatch/index");
+const world = require("./world/index");
 // app.get("/", (req, res) => {
 //   res.send("<h1>Hellow World</h1>");
 // });
@@ -19,8 +20,7 @@ const defaultPlayerDataTest = {
 };
 
 const onlinePlayers = {};
-const gameData = { soccer: {},
-eggCatch:{} };
+const gameData = { soccer: {}, eggCatch: {}, world };
 
 io.on("connection", socket => {
   ///////////////////////////
@@ -32,7 +32,7 @@ io.on("connection", socket => {
     delete onlinePlayers[socket.id];
     console.log(onlinePlayers);
   });
+  world(socket, io.sockets, io.sockets.adapter.rooms, gameData.world);
   soccerGame(socket, io.sockets, io.sockets.adapter.rooms, gameData.soccer);
-  eggCatchGame(socket, io.sockets, io.sockets.adapter.rooms, gameData.eggCatch)
-
+  eggCatchGame(socket, io.sockets, io.sockets.adapter.rooms, gameData.eggCatch);
 });
