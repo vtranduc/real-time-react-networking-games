@@ -1,0 +1,6 @@
+DROP TABLE IF EXISTS game_room CASCADE;
+
+CREATE TABLE game_room (
+game_to_room_id INTEGER REFERENCES game(id) ON DELETE CASCADE,
+room_to_game_id INTEGER REFERENCES room(id) ON DELETE CASCADE
+);
