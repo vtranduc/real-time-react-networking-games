@@ -283,7 +283,7 @@ const handleBallPlayerCollision = function(roomData, socketId, io) {
         // roomData.players[socketId].vel.x =
         //   roomData.players[socketId].aim.x / speed;
         // console.log("AIM HERE NOW", target, power);
-        console.log("baking company: ", roomData.players[socketId].kickPower);
+        // console.log("baking company: ", roomData.players[socketId].kickPower);
         roomData.ball.vel.x =
           unitTarget.x * roomData.players[socketId].kickPower;
         roomData.ball.vel.y =

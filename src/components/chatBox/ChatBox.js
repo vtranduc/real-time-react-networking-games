@@ -19,6 +19,9 @@ export default function ChatBox(props) {
         <h1>This is chatbox</h1>
         <div style={{ background: "white", opacity: 0.5 }}>
           <TextField
+            onFocus={() => {
+              console.log("focussed now");
+            }}
             label="Send a chat!"
             onFocus={() => {
               console.log("it is being focused now");

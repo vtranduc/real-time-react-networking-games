@@ -5,7 +5,7 @@ const {
 const startGame = require("./startGame");
 
 const soccerGame = function(socket, sockets, rooms, soccerData, io) {
-  console.log("this is a soccer game");
+  // console.log("this is a soccer game");
   socket.on("soccerHandleKeyPress", data => {
     // console.log("data has been received: ", data);
     try {
@@ -32,7 +32,7 @@ const soccerGame = function(socket, sockets, rooms, soccerData, io) {
   });
 
   socket.on("soccerApplyBrake", data => {
-    console.log("applying");
+    // console.log("applying");
     if (soccerData[data.room]) {
       soccerData[data.room].players[socket.id].brake = data.brake;
     } else {
@@ -49,8 +49,8 @@ const soccerGame = function(socket, sockets, rooms, soccerData, io) {
   });
 
   socket.on("soccerAim", data => {
-    console.log("say huh");
-    console.log(data);
+    // console.log("say huh");
+    // console.log(data);
     if (soccerData[data.room]) {
       soccerData[data.room].players[socket.id].aim = data.aim;
     } else {

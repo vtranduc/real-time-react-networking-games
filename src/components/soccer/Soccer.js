@@ -38,6 +38,8 @@ export default function Soccer({ socket }) {
   const [gameStat, setGameStat] = useState(null);
   const [flagged, setFlagged] = useState(true);
 
+  const [chatMode, setChatMode] = useState(false);
+
   useEffect(() => {
     socket.emit("soccerInit", {
       room: temporaryRoom,
@@ -71,12 +73,13 @@ export default function Soccer({ socket }) {
 
   useEffect(() => {
     // console.log("sagi", document.activeElement);
-
-    socket.emit("soccerHandleKeyPress", {
-      axis: "x",
-      dir: a ? (d ? "" : "left") : d ? "right" : "",
-      room: temporaryRoom
-    });
+    if (chatMode) {
+      socket.emit("soccerHandleKeyPress", {
+        axis: "x",
+        dir: a ? (d ? "" : "left") : d ? "right" : "",
+        room: temporaryRoom
+      });
+    }
   }, [a, d]);
   useEffect(() => {
     socket.emit("soccerHandleKeyPress", {
@@ -113,6 +116,7 @@ export default function Soccer({ socket }) {
     //   console.log("being a target now");
     // }}
     >
+      {/* <button onClick={() => setChatMode(true)}>click me</button> */}
       <img
         src="assets/soccer/field.png"
         style={{
@@ -138,16 +142,18 @@ export default function Soccer({ socket }) {
               left: fieldSpec.left + fieldSpec.width / 3
             }}
           >
-            {gameStat.timeRemaining > 0 ? (
-              <h3>
-                Score: {gameStat.score.A} - {gameStat.score.A} Time remaining:{" "}
-                {gameStat.timeRemaining} s
-              </h3>
-            ) : (
-              <h3>
-                Score: {gameStat.score.A} - {gameStat.score.A} Game Over
-              </h3>
-            )}
+            <div>
+              {gameStat.timeRemaining > 0 ? (
+                <h3>
+                  Score: {gameStat.score.A} - {gameStat.score.A} Time remaining:{" "}
+                  {gameStat.timeRemaining} s
+                </h3>
+              ) : (
+                <h3>
+                  Score: {gameStat.score.A} - {gameStat.score.A} Game Over
+                </h3>
+              )}
+            </div>
           </div>
 
           {Object.keys(gameStat.players).map(socketId => {
