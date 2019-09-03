@@ -9,8 +9,10 @@ function PhaserGame() {
 	let cursors;
 	let score = 0;
 	let gameOver = false;
+	let ground;
 	let scoreText;
 	let background;
+	let p1, p2, p3;
 	let downFlag = false;
 
 	let w, a, s, d, spacebar, shift, m, n;
@@ -23,10 +25,7 @@ function PhaserGame() {
 			physics: {
 				default: "arcade",
 				parent: "phaser",
-				arcade: {
-					gravity: { y: 1000 },
-					debug: true
-				}
+				arcade: { debug: true, fps: 100, gravity: { y: 600 } }
 			},
 			parent: "phaser",
 			scene: { preload, create, update }
@@ -72,6 +71,10 @@ function PhaserGame() {
 		function preload() {
 			this.load.image("sky", "assets/dodgingBullets/sky.png");
 			this.load.image("ground", "assets/dodgingBullets/platform.png");
+			this.load.image(
+				"shortplatform",
+				"assets/dodgingBullets/shortplatform.png"
+			);
 			this.load.image("star", "assets/dodgingBullets/star.png");
 			this.load.image("bomb", "assets/dodgingBullets/bomb.png");
 			this.load.spritesheet("dude", "assets/dodgingBullets/dude.png", {
@@ -106,17 +109,23 @@ function PhaserGame() {
 			});
 			//---------------------------------------------------------
 			//------------------------Platforms-------------------------
-			platforms = this.physics.add.staticGroup();
+			// platforms = this.physics.add.staticGroup();
+			// platforms.create(600, 400, "shortplatform");
+			// platforms.create(50, 250, "shortplatform");
+			// platforms.create(750, 220, "shortplatform");
+			p1 = this.physics.add.image(600, 400, "shortplatform").setImmovable(true);
+			p2 = this.physics.add.image(50, 250, "shortplatform").setImmovable(true);
+			p3 = this.physics.add.image(750, 220, "shortplatform").setImmovable(true);
+			ground = this.physics.add.image(400, 568, "ground").setImmovable(true);
 
-			platforms
-				.create(400, 568, "ground")
-				.setScale(2)
-				.refreshBody();
-
+			ground.body.setAllowGravity(false);
+			p1.body.setAllowGravity(false);
+			p2.body.setAllowGravity(false);
+			p3.body.setAllowGravity(false);
 			//------------------------------------------------------------
 			//----------------------bombs---------------------------------
 			bombs = this.physics.add.group();
-
+			//console.log(platforms, "LOOK HERE");
 			//------------------------------------------------------------
 			//----------------------playerSetup---------------------------
 			player = this.physics.add.sprite(100, 450, "dude");
@@ -143,6 +152,18 @@ function PhaserGame() {
 				repeat: -1
 			});
 			//-------------------------------------------------------------
+			console.log("ground.body", ground.body);
+			this.tweens.timeline({
+				targets: ground.body.velocity,
+				loop: -1,
+				tweens: [
+					{ x: 500, y: 0, duration: 1000, ease: "Stepped" },
+					{ x: 0, y: 0, duration: 1000, ease: "Stepped" },
+					{ x: -500, y: 0, duration: 1000, ease: "Stepped" },
+					{ x: 0, y: 0, duration: 1000, ease: "Stepped" }
+					// { x: 300, y: 0, duration: 1000, ease: "Stepped" }
+				]
+			});
 			//------------------------stars--------------------------------
 			stars = this.physics.add.group({
 				key: "star",
@@ -159,7 +180,7 @@ function PhaserGame() {
 			this.physics.add.collider(stars, platforms);
 			this.physics.add.overlap(player, stars, collectStar, null, this);
 			this.physics.add.collider(bombs, platforms);
-
+			this.physics.add.collider(player, ground);
 			this.physics.add.collider(player, bombs, hitBomb, null, this);
 			//-------------------------------------------------------------
 		}
