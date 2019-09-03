@@ -2,13 +2,13 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import "../styles/navbar.css";
 
-function NavBar() {
+function NavBar({loginStatus, setLoginStatus}) {
 	const [pageName, setPageName] = useState("The Best Website in the World");
-	const [user, setUser] = useState(true);
+	
 	return (
-		<nav>
-			{!user && (
-				<>
+		<div >
+			{!loginStatus && (
+				<nav>
 					<h3>{pageName}</h3>
 					<div>
 						<div className="logo">
@@ -24,6 +24,7 @@ function NavBar() {
 								<Link
 									to="/about"
 									onClick={() => {
+
 										setPageName("About Me and My Love Viet");
 									}}
 								>
@@ -56,10 +57,10 @@ function NavBar() {
 							</ul>
 						</div>
 					</div>
-				</>
+				</nav>
 			)}
-			{user && (
-				<>
+			{loginStatus && (
+				<nav>
 					<h3>{pageName}</h3>
 					<div>
 						<div className="logo">
@@ -96,19 +97,21 @@ function NavBar() {
 								>
 									<li>Game Lobby</li>
 								</Link>
-								<text
+								<Link
+									to="/"
 									onClick={() => {
-										setUser(!user);
+										setPageName("Home");
+										setLoginStatus(false)
 									}}
 								>
-									Logout
-								</text>
+									<li>Logout</li>
+								</Link>
 							</ul>
 						</div>
 					</div>
-				</>
+				</nav>
 			)}
-		</nav>
+		</div>
 	);
 }
 

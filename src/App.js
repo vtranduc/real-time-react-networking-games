@@ -22,70 +22,80 @@ import Button from "@material-ui/core/Button";
 const serverPORT = 3001;
 
 function App() {
+  //--------------------global states----------------------
+  const [loginStatus, setLoginStatus] = useState(false);
+  const [room, setRoom] = useState("testingSoccer");
+  //-------------------------------------------------------
 
-//--------------------global states----------------------
-const [loginStatus, setLoginStatus] = useState(false);
-//-------------------------------------------------------
+  let socket = io(`:${serverPORT}`);
+  console.log("initializing app");
 
+  return (
+    <Router>
+      <NavBar loginStatus={loginStatus} setLoginStatus={setLoginStatus} />
 
-	let socket = io(`:${serverPORT}`);
-	console.log("initializing app");
+      <Switch>
+        <Route path="/" exact component={Home} />
+        <Route path="/profile" exact component={Profile} />
+        <Route path="/about" exact component={About} />
+        <Route
+          path="/lobby"
+          exact
+          render={() => {
+            return <Lobby socket={socket} setRoom={setRoom} />;
+          }}
+        />
+        <Route
+          path="/login"
+          exact
+          render={() => {
+            return (
+              <Login
+                loginStatus={loginStatus}
+                setLoginStatus={setLoginStatus}
+              />
+            );
+          }}
+        />
 
-	return (
-		<Router>
-			<NavBar loginStatus =  {loginStatus} setLoginStatus= {setLoginStatus}/>
+        <Route path="/register" exact component={Register} />
+        <Route
+          path="/soccer"
+          exact
+          render={() => {
+            return <Soccer socket={socket} room={room} />;
+          }}
+        />
+        <Route
+          path="/chansey"
+          exact
+          render={() => {
+            return <EggCatchGame socket={socket} />;
+          }}
+        />
+        <Route path="/phaser-game" exact component={PhaserGame} />
+      </Switch>
+    </Router>
+  );
 
-			<Switch>
-				<Route path="/" exact component={Home} />
-				<Route path="/profile" exact component={Profile} />
-				<Route path="/about" exact component={About} />
-				<Route path="/lobby" exact component={Lobby} />
-				<Route
-					path="/login"
-					exact
-					render={() => {
-						return <Login loginStatus = {loginStatus} setLoginStatus ={setLoginStatus}/>;
-					}}
-				/>
-				
-				<Route path="/register" exact component={Register} />
-				<Route
-					path="/soccer"
-					exact
-					render={() => {
-						return <Soccer socket={socket} />;
-					}}
-				/>
-				<Route
-					path="/chansey"
-					exact
-					render={() => {
-						return <EggCatchGame socket={socket} />;
-					}}
-				/>
-				<Route path="/phaser-game" exact component={PhaserGame} />
-			</Switch>
-		</Router>
-	);
-
-	// return (
-	//   <div className="App">
-	//     <header className="App-header">
-	//       <img src={logo} className="App-logo" alt="logo" />
-	//       <p>
-	//         Edit <code>src/App.js</code> and save to reload.
-	//       </p>
-	//       <a
-	//         className="App-link"
-	//         href="https://reactjs.org"
-	//         target="_blank"
-	//         rel="noopener noreferrer"
-	//       >
-	//         Learn React
-	//       </a>
-	//     </header>
-	//   </div>
-	// );
+  // return (
+  //   <div className="App">
+  //     <header className="App-header">
+  //       <img src={logo} className="App-logo" alt="logo" />
+  //       <p>
+  //         Edit <code>src/App.js</code> and save to reload.
+  //       </p>
+  //       <a
+  //         className="App-link"
+  //         href="https://reactjs.org"
+  //         target="_blank"
+  //         rel="noopener noreferrer"
+  //       >
+  //         Learn React
+  //       </a>
+  //     </header>
+  //   </div>
+  // );
 }
 
 export default App;

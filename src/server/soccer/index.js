@@ -5,7 +5,7 @@ const {
 const startGame = require("./startGame");
 
 const soccerGame = function(socket, sockets, rooms, soccerData, io) {
-  console.log("this is a soccer game");
+  // console.log("this is a soccer game");
   socket.on("soccerHandleKeyPress", data => {
     try {
       soccerData[data.room].players[socket.id].commands[data.axis] = data.dir;
@@ -22,7 +22,10 @@ const soccerGame = function(socket, sockets, rooms, soccerData, io) {
   socket.on("soccerInit", data => {
     console.log("A user has joined the room: ", socket.id);
     socket.join(data.room);
-    if (!soccerData[data.room]) {
+    if (
+      !soccerData[data.room] ||
+      Object.keys(soccerData[data.room]).length === 0
+    ) {
       soccerData[data.room] = roomInitialSetUp(data);
       // --- Start the game here ---
       startGame(soccerData, data, sockets, io);

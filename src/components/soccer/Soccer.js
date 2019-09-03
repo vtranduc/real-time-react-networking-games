@@ -3,10 +3,10 @@ import useKeyPressMultiple from "../../helpers/useKeyPressMultiple";
 import useKeyPress from "../../helpers/useKeyPress";
 import ChatBox from "../chatBox/ChatBox";
 
-export default function Soccer({ socket }) {
+export default function Soccer({ socket, room }) {
   //----------------------Literals
   const soccerGameTextId = "soccerGameTextId";
-  const temporaryRoom = "testingSoccer";
+  // const temporaryRoom = "testingSoccer";
   // All values for this myst be integers
   // goalSize is realtive to height
   const fieldSpec = {
@@ -50,7 +50,7 @@ export default function Soccer({ socket }) {
 
   useEffect(() => {
     socket.emit("soccerInit", {
-      room: temporaryRoom,
+      room: room,
       fieldSpec,
       config,
       playerPhysics,
@@ -74,7 +74,7 @@ export default function Soccer({ socket }) {
       socket.removeListener("soccerUpdateGame");
       socket.removeListener("soccerRemoveFlag");
 
-      socket.emit("soccerDisconnect", temporaryRoom);
+      socket.emit("soccerDisconnect", room);
     };
   }, []);
 
@@ -88,7 +88,7 @@ export default function Soccer({ socket }) {
       socket.emit("soccerHandleKeyPress", {
         axis: "x",
         dir: a ? (d ? "" : "left") : d ? "right" : "",
-        room: temporaryRoom
+        room: room
       });
     }
   }, [a, d]);
@@ -97,7 +97,7 @@ export default function Soccer({ socket }) {
       socket.emit("soccerHandleKeyPress", {
         axis: "y",
         dir: w ? (s ? "" : "up") : s ? "down" : "",
-        room: temporaryRoom
+        room: room
       });
     }
   }, [w, s]);
@@ -106,12 +106,12 @@ export default function Soccer({ socket }) {
   const Shift = useKeyPress("Shift");
   useEffect(() => {
     if (!pause) {
-      socket.emit("soccerChaseBall", { chase: spaceBar, room: temporaryRoom });
+      socket.emit("soccerChaseBall", { chase: spaceBar, room: room });
     }
   }, [spaceBar]);
   useEffect(() => {
     if (!pause) {
-      socket.emit("soccerApplyBrake", { brake: Shift, room: temporaryRoom });
+      socket.emit("soccerApplyBrake", { brake: Shift, room: room });
     }
   }, [Shift]);
 
@@ -119,10 +119,10 @@ export default function Soccer({ socket }) {
   useEffect(() => {
     if (!pause) {
       if (flagged) {
-        socket.emit("soccerAim", { room: temporaryRoom, aim: null });
+        socket.emit("soccerAim", { room: room, aim: null });
         setFlagged(false);
       } else {
-        socket.emit("soccerAim", { room: temporaryRoom, aim: mousing });
+        socket.emit("soccerAim", { room: room, aim: mousing });
         setFlagged(true);
       }
     }
@@ -130,7 +130,7 @@ export default function Soccer({ socket }) {
 
   useEffect(() => {
     if (entry.inQueue) {
-      socket.emit("soccerReceiveChat", { room: temporaryRoom, msg: entry.msg });
+      socket.emit("soccerReceiveChat", { room: room, msg: entry.msg });
       setEntry({ inQueue: false, msg: "" });
     }
   }, [entry.inQueue]);
