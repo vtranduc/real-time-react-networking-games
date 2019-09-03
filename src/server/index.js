@@ -56,7 +56,13 @@ app.get("/users", (req, res)=>{
 })
 
 app.post("/login", (req, res)=>{
-  console.log("FORM VALUES:", req.body)
+  //console.log("FORM VALUES:", req.body)
+  getUser(req.body.email, req.body.password).then((result)=>{
+    console.log("recieved response")
+    res.send(result)
+  });
+  
+  
 })
 
 app.get("/jj", (req, res) => {

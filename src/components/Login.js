@@ -3,17 +3,24 @@ import "../styles/login.css";
 import axios from "axios";
 
 
-function Login() {
-	const [user, setUser] = useState({ email: "", password: "" });
+function Login({loginStatus, setLoginStatus}) {
 
+	const [userInfo, setUserInfo] = useState({ email: "", password: "" });
+console.log(loginStatus)
 	function handleSubmit(event) {
 		// console.log("submit handled");
 		event.preventDefault();
 		//alert(`${user.username} ${user.password}`);
 
 
-		axios.post('http://localhost:3001/login', {email: user.email, password: user.password}).then((response)=>{
-			console.log("success response!", response)
+		axios.post('http://localhost:3001/login', {email: userInfo.email, password: userInfo.password}).then((response)=>{
+			if(response.data.length){
+				setLoginStatus(true)
+				console.log(loginStatus)
+				console.log("this is right")
+				
+			}
+			console.log("success response!", response.data)
 		}).catch((err)=>{
 			console.log("error: ", err);
 		})
@@ -23,11 +30,11 @@ function Login() {
 		switch (event.target.name) {
 			case "email":
 				
-				setUser({ ...user, email: event.target.value });
+				setUserInfo({ ...userInfo, email: event.target.value });
 				break;
 			case "password":
 				
-				setUser({ ...user, password: event.target.value });
+				setUserInfo({ ...userInfo, password: event.target.value });
 				break;
 			default:
 				console.log("not working", event.target);
@@ -41,7 +48,7 @@ function Login() {
 				<br />
 				<input
 					name="email"
-					value={user.email}
+					value={userInfo.email}
 					onChange={updateInput}
 				></input>
 				<br />
@@ -49,7 +56,7 @@ function Login() {
 				<br />
 				<input
 					name="password"
-					value={user.password}
+					value={userInfo.password}
 					onChange={updateInput}
 				></input>
 				<br></br>
