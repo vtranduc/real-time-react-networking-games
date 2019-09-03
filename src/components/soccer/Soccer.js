@@ -59,21 +59,22 @@ export default function Soccer({ socket, room }) {
       ballPhysics
     });
 
-    socket.on("soccerUpdateGame", data => {
-      // console.log(data);
+    const soccerUpdateGameCallback = function(data) {
       setGameStat(data);
-    });
-    socket.on("soccerRemoveFlag", () => {
-      console.log("Have kicked the ball!");
+    };
+    socket.on("soccerUpdateGame", soccerUpdateGameCallback);
+    const soccerRemoveFlagCallback = function() {
       setFlagged(false);
-    });
-    socket.on("soccerGetChat", data => {
+    };
+    socket.on("soccerRemoveFlag", soccerRemoveFlagCallback);
+    const soccerGetChatCallback = function(data) {
       setChats(data);
-    });
+    };
+    socket.on("soccerGetChat", soccerGetChatCallback);
     return () => {
-      socket.removeListener("soccerUpdateGame");
-      socket.removeListener("soccerRemoveFlag");
-
+      socket.removeListener("soccerUpdateGame", soccerUpdateGameCallback);
+      socket.removeListener("soccerRemoveFlag", soccerRemoveFlagCallback);
+      socket.removeListener("soccerRemoveFlag", soccerGetChatCallback);
       socket.emit("soccerDisconnect", room);
     };
   }, []);

@@ -4,6 +4,7 @@ const roomInitialSetUp = function(data) {
   return {
     score: { A: 0, B: 0 },
     timeRemaining: data.config.gameTime,
+    status: "inProgress",
     chats: [],
     config: {
       frameDuration: data.config.frameDuration,
