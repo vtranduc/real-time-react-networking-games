@@ -100,50 +100,77 @@ const defaultPlayerDataTest = {
 const onlinePlayers = {};
 
 //------------------------------------------------------------------------
+
 const gameData = {
   soccer: {
-    soccertest1: {
-      players: { Thilina: {}, Sarah: {}, Anchen: {}, Selin: {} },
-      status: "recruiting",
-      chats: [
-        { key: ";czvxzc", user: "Good duke", msg: "Hello all" },
-        { key: ";bvxcb", user: "Bad duke", msg: "Hello all" }
-      ]
-    },
-    soccertest2: {
-      players: { Thilina: {}, Sarah: {}, Anchen: {}, Selin: {} },
-      status: "recruiting",
-      chats: [
-        { key: ";pfdzzzzzzzzsAsaj", user: "Good duke", msg: "Hello all" },
-        { key: ";pfdsbbaj", user: "Bad duke", msg: "Hello all" }
-      ]
-    },
-    soccertest3: {
-      players: { Thilina: {}, Sarah: {}, Anchen: {}, Selin: {} },
-      status: "recruiting",
-      chats: [
-        { key: ";pfFADSFADSdsaj", user: "Good duke", msg: "Hello all" },
-        { key: ";pfFDASFDASCVCZVCZdsaj", user: "Bad duke", msg: "Hello all" }
-      ]
+    lobby: {
+      soccerRoom1: {
+        status: "open",
+        players: {},
+        chats: [
+          { key: ";czvxzc", user: "Good duke", msg: "Hello all" },
+          { key: ";bvxcb", user: "Bad duke", msg: "Hello all" },
+          { key: "sfsaf,.dsj", user: "No one", msg: "Hello none" }
+        ]
+      },
+      soccerRoom2: {
+        status: "open",
+        players: { jayjay: {}, sarah: {} },
+        chats: [
+          { key: ";pfdzzzzzzzzsAsaj", user: "Jayjay", msg: "I wanna eat" },
+          { key: ";pfdsbbaj", user: "Sarah", msg: "Ok!" }
+        ]
+      }
     }
   },
-  eggCatch: {
-    eggCatchYaminoma: {
-      players: { jayjay: {}, Sarah: {}, Anchen: {}, Selin: {} },
-      status: "recruiting",
-      chats: [{ key: ";CC", user: "Evil duke", msg: "Hello all" }]
-    },
-    eggCatchYaminoma2: {
-      players: { Thilina: {}, Sarah: {}, Anchen: {}, Selin: {} },
-      status: "recruiting",
-      chats: [
-        { key: ";pfdsaj", user: "Good duke", msg: "Hello all" },
-        { key: ";DFA", user: "Bad duke", msg: "Hello all" }
-      ]
-    }
-  },
-  world: {}
+  eggCatch: { lobby: {} },
+  world: { lobby: {} }
 };
+
+// const gameData = {
+//   soccer: {
+//     soccertest1: {
+//       players: { Thilina: {}, Sarah: {}, Anchen: {}, Selin: {} },
+//       status: "recruiting",
+//       chats: [
+//         { key: ";czvxzc", user: "Good duke", msg: "Hello all" },
+//         { key: ";bvxcb", user: "Bad duke", msg: "Hello all" }
+//       ]
+//     },
+//     soccertest2: {
+//       players: { Thilina: {}, Sarah: {}, Anchen: {}, Selin: {} },
+//       status: "recruiting",
+//       chats: [
+//         { key: ";pfdzzzzzzzzsAsaj", user: "Good duke", msg: "Hello all" },
+//         { key: ";pfdsbbaj", user: "Bad duke", msg: "Hello all" }
+//       ]
+//     },
+//     soccertest3: {
+//       players: { Thilina: {}, Sarah: {}, Anchen: {}, Selin: {} },
+//       status: "recruiting",
+//       chats: [
+//         { key: ";pfFADSFADSdsaj", user: "Good duke", msg: "Hello all" },
+//         { key: ";pfFDASFDASCVCZVCZdsaj", user: "Bad duke", msg: "Hello all" }
+//       ]
+//     }
+//   },
+//   eggCatch: {
+//     eggCatchYaminoma: {
+//       players: { jayjay: {}, Sarah: {}, Anchen: {}, Selin: {} },
+//       status: "recruiting",
+//       chats: [{ key: ";CC", user: "Evil duke", msg: "Hello all" }]
+//     },
+//     eggCatchYaminoma2: {
+//       players: { Thilina: {}, Sarah: {}, Anchen: {}, Selin: {} },
+//       status: "recruiting",
+//       chats: [
+//         { key: ";pfdsaj", user: "Good duke", msg: "Hello all" },
+//         { key: ";DFA", user: "Bad duke", msg: "Hello all" }
+//       ]
+//     }
+//   },
+//   world: {}
+// };
 //------------------------------------------------------------------------
 
 io.on("connection", socket => {
