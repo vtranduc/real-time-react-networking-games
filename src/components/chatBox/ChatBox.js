@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
@@ -12,27 +12,50 @@ export default function ChatBox(props) {
         left: props.left,
         border: "solid",
         width: props.width,
-        height: props.height
+        height: props.height,
+        background: "white",
+        opacity: 0.8
       }}
     >
       <div style={{ margin: "1em" }}>
-        <h1>This is chatbox</h1>
-        <div style={{ background: "white", opacity: 0.5 }}>
-          <TextField
-            label="Send a chat!"
-            onFocus={() => {
-              console.log("it is being focused now");
-            }}
-            onChange={e => {
-              console.log("hello: ", e.target.value);
-            }}
-          >
-            Hello
-          </TextField>
-          <Button variant="contained" color="primary">
-            Send
-          </Button>
+        {/* <div style={{ display: "flex" }}> */}
+        <TextField
+          id={props.id}
+          label="Send a chat!"
+          onFocus={props.handleFocus}
+          onBlur={props.handleBlur}
+          onChange={props.handleOnChange}
+          value={props.entry}
+          style={{ border: "none", width: "85%" }}
+        >
+          Hello
+        </TextField>
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={props.handleOnClick}
+          // style={{ position: "absolute", right: 0 }}
+        >
+          Send
+        </Button>
+        {/* </div> */}
+        <p></p>
+        {/* <div style={{ height: props.height }}> */}
+        <div
+          style={{
+            overflow: "auto",
+            height: props.height * 0.85
+          }}
+        >
+          {props.chats.map(entry => {
+            return (
+              <p key={entry.key}>
+                {entry.user}: {entry.msg}
+              </p>
+            );
+          })}
         </div>
+        {/* </div> */}
       </div>
     </div>
   );

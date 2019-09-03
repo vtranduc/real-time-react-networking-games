@@ -4,8 +4,37 @@ const roomInitialSetUp = function(data) {
   return {
     score: { A: 0, B: 0 },
     timeRemaining: data.config.gameTime,
+    chats: [],
     config: {
       frameDuration: data.config.frameDuration,
+      goalPos: {
+        top: Math.floor(
+          ((1 - data.fieldSpec.goalSize) / 2) * data.fieldSpec.height +
+            data.fieldSpec.top
+        ),
+        bottom: Math.floor(
+          (data.fieldSpec.height * (1 + data.fieldSpec.goalSize)) / 2 +
+            data.fieldSpec.top
+        ),
+        teamA: data.fieldSpec.left,
+        teamB:
+          data.fieldSpec.left +
+          data.fieldSpec.width -
+          Math.floor(data.fieldSpec.width * data.ballSpec.width)
+      },
+      midField: Math.floor(data.fieldSpec.width / 2 + data.fieldSpec.left),
+      ballResetPos: {
+        x: Math.floor(
+          data.fieldSpec.left +
+            data.fieldSpec.width / 2 -
+            (data.fieldSpec.width * data.ballSpec.width) / 2
+        ),
+        y: Math.floor(
+          data.fieldSpec.top +
+            data.fieldSpec.height / 2 -
+            (data.fieldSpec.width * data.ballSpec.height) / 2
+        )
+      },
       size: {
         ball: {
           width: Math.floor(data.fieldSpec.width * data.ballSpec.width),
@@ -63,11 +92,6 @@ const roomInitialSetUp = function(data) {
       vel: { x: 0, y: 0 },
       speed: 0,
       radius: Math.floor((data.fieldSpec.width * data.ballSpec.width) / 2),
-      // resistance: {
-      //   // DELETE THIS!
-      //   x: Math.floor(data.ballPhysics.resistance.x * data.fieldSpec.width),
-      //   y: Math.floor(data.ballPhysics.resistance.y * data.fieldSpec.width)
-      // },
       accelFrictionalMag: Math.floor(
         data.ballPhysics.friction * data.fieldSpec.width
       ),
@@ -78,13 +102,22 @@ const roomInitialSetUp = function(data) {
   };
 };
 
-const initializeNewPlayer = function(data) {
+const initializeNewPlayer = function(data, team, midField) {
   return {
     pos: {
-      x: getRandomInt(
-        data.fieldSpec.left,
-        data.fieldSpec.left + data.fieldSpec.width
-      ),
+      // x: getRandomInt(
+      //   data.fieldSpec.left,
+      //   data.fieldSpec.left + data.fieldSpec.width
+      // ),
+      x:
+        team === "A"
+          ? getRandomInt(
+              data.fieldSpec.left,
+              Math.floor(
+                midField - (data.playerSpec.width * data.fieldSpec.width) / 2
+              )
+            )
+          : getRandomInt(midField, data.fieldSpec.left + data.fieldSpec.width),
       y: getRandomInt(
         data.fieldSpec.top,
         data.fieldSpec.top +
@@ -92,12 +125,8 @@ const initializeNewPlayer = function(data) {
           Math.floor(data.fieldSpec.width * data.playerSpec.height)
       )
     },
+    team: team,
     vel: { x: 0, y: 0 },
-    // maxAbsVel: {
-    //   x: Math.floor(data.playerPhysics.maxAbsVel.x * data.fieldSpec.width),
-    //   y: Math.floor(data.playerPhysics.maxAbsVel.y * data.fieldSpec.width)
-    // },
-    //------
     accel: {
       x: 0,
       y: 0
@@ -113,15 +142,6 @@ const initializeNewPlayer = function(data) {
     brake: false,
     chase: false,
     aim: null,
-    //----
-    // reverseAccel: {
-    //   x: Math.floor(data.playerPhysics.reverseAccel.x * data.fieldSpec.width),
-    //   y: Math.floor(data.playerPhysics.reverseAccel.y * data.fieldSpec.width)
-    // },
-    // resistance: {
-    //   x: Math.floor(data.playerPhysics.resistance.x * data.fieldSpec.width),
-    //   y: Math.floor(data.playerPhysics.resistance.y * data.fieldSpec.width)
-    // },
     kickPower: Math.floor(data.playerPhysics.kickPower * data.fieldSpec.width),
     wallBounce: data.playerPhysics.wallBounce,
     commands: { x: "", y: "" },

@@ -5,7 +5,7 @@ const moveItemWithCommands = function(item, time, chasedItem) {
     applyBrake(item, time);
     item.speed = getSpeed(item.vel);
   } else {
-    let commandDir;
+    let commandDir = null;
     if (item.chase) {
       commandDir = {
         x: chasedItem.pos.x - item.pos.x,
