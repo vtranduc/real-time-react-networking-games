@@ -3,24 +3,31 @@ import useKeyPressMultiple from "../../helpers/useKeyPressMultiple";
 import useKeyPress from "../../helpers/useKeyPress";
 import ChatBox from "../chatBox/ChatBox";
 
-// const ReactDOM = require("react-dom");
-
 export default function Soccer({ socket }) {
   //----------------------Literals
+  const soccerGameTextId = "soccerGameTextId";
   const temporaryRoom = "testingSoccer";
   // All values for this myst be integers
-  const fieldSpec = { height: 700, width: 1100, top: 250, left: 70 };
+  // goalSize is realtive to height
+  const fieldSpec = {
+    height: 700,
+    width: 1100,
+    top: 150,
+    left: 70,
+    goalSize: 0.25
+  };
   // Both width and height are the ratio relative to the fieldSpec's width
   // The MUST be the value between 0 and 1
   const ballSpec = { width: 0.05, height: 0.05 };
-  const playerSpec = { width: 0.045, height: 0.09 };
+  const playerSpec = { width: 0.06, height: 0.09, team: null };
   const config = { frameDuration: 0.07, gameTime: 30 };
+  // const goalSize = 0.25;
   const playerPhysics = {
     reverseAccel: { x: 2, y: 2 }, // Ratio to the field width. Per second
     wallBounce: 0.5, // Speed reduced upon collision with the wall
     ballToPlayerMassRatio: 1,
     accelMag: 0.8,
-    maxSpeed: 0.2,
+    maxSpeed: 0.3,
     accelReverseMag: 1.7,
     kickPower: 0.7
   };
@@ -37,6 +44,9 @@ export default function Soccer({ socket }) {
 
   const [gameStat, setGameStat] = useState(null);
   const [flagged, setFlagged] = useState(true);
+  const [pause, setPause] = useState(false);
+  const [chats, setChats] = useState([]);
+  const [entry, setEntry] = useState({ inQueue: false, msg: "" });
 
   useEffect(() => {
     socket.emit("soccerInit", {
@@ -48,15 +58,19 @@ export default function Soccer({ socket }) {
       ballSpec,
       ballPhysics
     });
+
     socket.on("soccerUpdateGame", data => {
+      // console.log(data);
       setGameStat(data);
     });
     socket.on("soccerRemoveFlag", () => {
       console.log("Have kicked the ball!");
       setFlagged(false);
     });
+    socket.on("soccerGetChat", data => {
+      setChats(data);
+    });
     return () => {
-      console.log("Unmounting!");
       socket.removeListener("soccerUpdateGame");
       socket.removeListener("soccerRemoveFlag");
 
@@ -70,51 +84,79 @@ export default function Soccer({ socket }) {
   const s = useKeyPressMultiple(["s", "S", "ArrowDown"]);
 
   useEffect(() => {
-    // console.log("sagi", document.activeElement);
-
-    socket.emit("soccerHandleKeyPress", {
-      axis: "x",
-      dir: a ? (d ? "" : "left") : d ? "right" : "",
-      room: temporaryRoom
-    });
+    if (!pause) {
+      socket.emit("soccerHandleKeyPress", {
+        axis: "x",
+        dir: a ? (d ? "" : "left") : d ? "right" : "",
+        room: temporaryRoom
+      });
+    }
   }, [a, d]);
   useEffect(() => {
-    socket.emit("soccerHandleKeyPress", {
-      axis: "y",
-      dir: w ? (s ? "" : "up") : s ? "down" : "",
-      room: temporaryRoom
-    });
+    if (!pause) {
+      socket.emit("soccerHandleKeyPress", {
+        axis: "y",
+        dir: w ? (s ? "" : "up") : s ? "down" : "",
+        room: temporaryRoom
+      });
+    }
   }, [w, s]);
 
   const spaceBar = useKeyPress(" ");
   const Shift = useKeyPress("Shift");
   useEffect(() => {
-    socket.emit("soccerChaseBall", { chase: spaceBar, room: temporaryRoom });
+    if (!pause) {
+      socket.emit("soccerChaseBall", { chase: spaceBar, room: temporaryRoom });
+    }
   }, [spaceBar]);
   useEffect(() => {
-    // console.log("braking HEREEEEEEEEEEEEEEEEfffff", f);
-    socket.emit("soccerApplyBrake", { brake: Shift, room: temporaryRoom });
+    if (!pause) {
+      socket.emit("soccerApplyBrake", { brake: Shift, room: temporaryRoom });
+    }
   }, [Shift]);
 
   const mousing = useMouseClick(fieldSpec);
   useEffect(() => {
-    if (flagged) {
-      socket.emit("soccerAim", { room: temporaryRoom, aim: null });
-      setFlagged(false);
-    } else {
-      socket.emit("soccerAim", { room: temporaryRoom, aim: mousing });
-      setFlagged(true);
+    if (!pause) {
+      if (flagged) {
+        socket.emit("soccerAim", { room: temporaryRoom, aim: null });
+        setFlagged(false);
+      } else {
+        socket.emit("soccerAim", { room: temporaryRoom, aim: mousing });
+        setFlagged(true);
+      }
     }
   }, [mousing]);
 
+  useEffect(() => {
+    if (entry.inQueue) {
+      socket.emit("soccerReceiveChat", { room: temporaryRoom, msg: entry.msg });
+      setEntry({ inQueue: false, msg: "" });
+    }
+  }, [entry.inQueue]);
+
+  //----------------------------------------------
+  const Enter = useKeyPress("Enter");
+  useEffect(() => {
+    if (Enter) {
+      if (pause) {
+        if (entry.msg) {
+          setEntry({ ...entry, inQueue: true });
+          // document.getElementById(soccerGameTextId).blur();
+        } else {
+          document.getElementById(soccerGameTextId).blur();
+        }
+      } else {
+        document.getElementById(soccerGameTextId).focus();
+      }
+    }
+  }, [Enter]);
+  //--------------------------------------------
+
   return (
-    <div
-    // onFocus={() => {
-    //   console.log("being a target now");
-    // }}
-    >
+    <div>
       <img
-        src="assets/soccer/field.png"
+        src="assets/soccer/fieldTopView.png"
         style={{
           height: fieldSpec.height,
           width: fieldSpec.width,
@@ -124,6 +166,25 @@ export default function Soccer({ socket }) {
         }}
       ></img>
       <ChatBox
+        id={soccerGameTextId}
+        entry={entry.msg}
+        chats={chats}
+        handleOnClick={() => {
+          if (entry.msg) {
+            setEntry({ ...entry, inQueue: true });
+          }
+        }}
+        handleOnChange={e => {
+          setEntry({ ...entry, msg: e.target.value });
+        }}
+        handleFocus={() => {
+          console.log("pause the game");
+          setPause(true);
+        }}
+        handleBlur={() => {
+          console.log("resume the game");
+          setPause(false);
+        }}
         left={fieldSpec.left + fieldSpec.width + 20}
         top={fieldSpec.top}
         height={fieldSpec.height}
@@ -135,17 +196,19 @@ export default function Soccer({ socket }) {
             style={{
               position: "absolute",
               top: fieldSpec.top - 50,
-              left: fieldSpec.left + fieldSpec.width / 3
+              left: fieldSpec.left + fieldSpec.width / 3,
+              background: "white",
+              width: "25em"
             }}
           >
             {gameStat.timeRemaining > 0 ? (
               <h3>
-                Score: {gameStat.score.A} - {gameStat.score.A} Time remaining:{" "}
+                Score: {gameStat.score.A} - {gameStat.score.B} Time remaining:{" "}
                 {gameStat.timeRemaining} s
               </h3>
             ) : (
               <h3>
-                Score: {gameStat.score.A} - {gameStat.score.A} Game Over
+                Score: {gameStat.score.A} - {gameStat.score.B} Game Over
               </h3>
             )}
           </div>
@@ -154,13 +217,14 @@ export default function Soccer({ socket }) {
             return (
               <img
                 key={socketId}
-                src="assets/soccer/nozomi.png"
+                src={`assets/soccer/player${gameStat.players[socketId].team}.png`}
                 style={{
                   height: Math.floor(playerSpec.height * fieldSpec.width),
                   width: Math.floor(playerSpec.width * fieldSpec.width),
-                  top: gameStat.players[socketId].y,
-                  left: gameStat.players[socketId].x,
-                  position: "absolute"
+                  top: gameStat.players[socketId].pos.y,
+                  left: gameStat.players[socketId].pos.x,
+                  position: "absolute",
+                  border: socket.id === socketId ? "solid" : "none"
                 }}
               ></img>
             );
@@ -175,6 +239,17 @@ export default function Soccer({ socket }) {
               left: gameStat.ball.x
             }}
           ></img>
+          {/* <img
+            src="assets/soccer/ANIME.png"
+            style={{
+              position: "absolute",
+              top: Math.floor(
+                ((1 - goalSize) / 2) * fieldSpec.height + fieldSpec.top
+              ),
+              left: fieldSpec.left + fieldSpec.width,
+              height: Math.floor(goalSize * fieldSpec.height)
+            }}
+          ></img> */}
           {flagged && (
             <img
               src="assets/soccer/pin.png"
@@ -201,19 +276,17 @@ const useMouseClick = function(fieldSpec) {
   const [mousing, setMousing] = useState({ x: null, y: null });
   const handleMouseUp = function(event) {
     if (
-      event.clientX >= fieldSpec.left &&
-      event.clientX <= fieldSpec.left + fieldSpec.width &&
-      event.clientY >= fieldSpec.top &&
-      event.clientY <= fieldSpec.top + fieldSpec.height
+      event.pageX >= fieldSpec.left &&
+      event.pageX <= fieldSpec.left + fieldSpec.width &&
+      event.pageY >= fieldSpec.top &&
+      event.pageY <= fieldSpec.top + fieldSpec.height
     ) {
-      setMousing({ x: event.clientX, y: event.clientY });
+      setMousing({ x: event.pageX, y: event.pageY });
     }
   };
   useEffect(() => {
-    // window.addEventListener("mousedown", handleMouseDown);
     window.addEventListener("mouseup", handleMouseUp);
     return () => {
-      // window.removeEventListener("mousedown", handleMouseDown);
       window.removeEventListener("mouseup", handleMouseUp);
     };
   }, []);

@@ -12,6 +12,7 @@ export default function useKeyPress(targetKey) {
       setKey(false);
     }
   };
+
   useEffect(() => {
     window.addEventListener("keydown", downHandler);
     window.addEventListener("keyup", upHandler);

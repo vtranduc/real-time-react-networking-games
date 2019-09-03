@@ -7,7 +7,6 @@ const startGame = require("./startGame");
 const soccerGame = function(socket, sockets, rooms, soccerData, io) {
   console.log("this is a soccer game");
   socket.on("soccerHandleKeyPress", data => {
-    // console.log("data has been received: ", data);
     try {
       soccerData[data.room].players[socket.id].commands[data.axis] = data.dir;
       console.log(
@@ -28,11 +27,15 @@ const soccerGame = function(socket, sockets, rooms, soccerData, io) {
       // --- Start the game here ---
       startGame(soccerData, data, sockets, io);
     }
-    soccerData[data.room].players[socket.id] = initializeNewPlayer(data);
+    soccerData[data.room].players[socket.id] = initializeNewPlayer(
+      data,
+      assignTeam(soccerData[data.room], data.playerSpec.team),
+      soccerData[data.room].config.midField
+    );
+    sockets.to(data.room).emit("soccerGetChat", soccerData[data.room].chats);
   });
 
   socket.on("soccerApplyBrake", data => {
-    console.log("applying");
     if (soccerData[data.room]) {
       soccerData[data.room].players[socket.id].brake = data.brake;
     } else {
@@ -49,10 +52,21 @@ const soccerGame = function(socket, sockets, rooms, soccerData, io) {
   });
 
   socket.on("soccerAim", data => {
-    console.log("say huh");
-    console.log(data);
     if (soccerData[data.room]) {
       soccerData[data.room].players[socket.id].aim = data.aim;
+    } else {
+      console.log("Room not ready!");
+    }
+  });
+
+  socket.on("soccerReceiveChat", data => {
+    if (soccerData[data.room]) {
+      soccerData[data.room].chats.unshift({
+        key: `soccer${data.room}${soccerData[data.room].chats.length + 1}`,
+        user: socket.id,
+        msg: data.msg
+      });
+      sockets.to(data.room).emit("soccerGetChat", soccerData[data.room].chats);
     } else {
       console.log("Room not ready!");
     }
@@ -61,7 +75,6 @@ const soccerGame = function(socket, sockets, rooms, soccerData, io) {
   // ==============ALL THE DISCONNECTIONS==============================
 
   socket.on("soccerDisconnect", room => {
-    // if (soccerData[room] && soccerData[room].players[socket.id]) {
     socket.leave(room);
     if (soccerData[room]) {
       if (soccerData[room].players[socket.id]) {
@@ -70,7 +83,6 @@ const soccerGame = function(socket, sockets, rooms, soccerData, io) {
       console.log("deleted: " + socket.id + ": ", soccerData);
       console.log("Remaining users: ", Object.keys(soccerData[room].players));
       if (Object.keys(soccerData[room].players).length === 0) {
-        // clearInterval(431241242);
         clearInterval(soccerData[room].interval);
         delete soccerData[room];
         console.log("Deleted the entire room!");
@@ -93,6 +105,18 @@ const soccerGame = function(socket, sockets, rooms, soccerData, io) {
       }
     }
   });
+};
+
+const assignTeam = function(roomData, requestedTeam) {
+  if (requestedTeam === "A" || requestedTeam === "B") {
+    return requestedTeam;
+  } else {
+    const playerCount = { A: 0, B: 0 };
+    for (let socketId in roomData.players) {
+      playerCount[roomData.players[socketId].team] += 1;
+    }
+    return playerCount.A <= playerCount.B ? "A" : "B";
+  }
 };
 
 module.exports = soccerGame;

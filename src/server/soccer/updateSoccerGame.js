@@ -17,8 +17,40 @@ const {
   getUnitVector
 } = require("../gameEngine/physics2D");
 
+const detectGoal = function(roomData) {
+  // console.log("hello dude?");
+  // console.log(roomData.ball.pos.x <= roomData.config.goalPos.teamA);
+  if (
+    roomData.ball.pos.x <= roomData.config.goalPos.teamA &&
+    roomData.ball.pos.y >= roomData.config.goalPos.top &&
+    roomData.ball.pos.y <= roomData.config.goalPos.bottom
+  ) {
+    // console.log("goal for team B!");
+    roomData.score.B += 1;
+    resetBall(roomData);
+  } else if (
+    roomData.ball.pos.x >= roomData.config.goalPos.teamB &&
+    roomData.ball.pos.y >= roomData.config.goalPos.top &&
+    roomData.ball.pos.y <= roomData.config.goalPos.bottom
+  ) {
+    // console.log("goal for team A");
+    roomData.score.A += 1;
+    resetBall(roomData);
+  }
+};
+
+const resetBall = function(roomData) {
+  roomData.ball.pos.x = roomData.config.ballResetPos.x;
+  roomData.ball.pos.y = roomData.config.ballResetPos.y;
+  roomData.ball.vel.x = 0;
+  roomData.ball.vel.y = 0;
+};
+
 const updateSoccerGame = function(roomData, io) {
   moveItemWithFriction(roomData.ball, roomData.config.frameDuration);
+  //-----
+  detectGoal(roomData);
+  //------
   handleItemOutsideRange(roomData.ball, roomData.config.permittedRange.ball);
   updateBallBottomRight(roomData);
   for (let socketId in roomData.players) {

@@ -1,7 +1,7 @@
 import React from "react";
 
 function Lobby() {
-	return <div>This is lobby</div>;
+  return <div>This is lobby</div>;
 }
 
 export default Lobby;
