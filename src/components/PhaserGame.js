@@ -1,5 +1,5 @@
 import React, {useState, useEffect } from "react";
-
+import getRandomInt from "../helpers/getRandomInt"
 import Phaser, { RIGHT } from "phaser";
 
 function PhaserGame() {
@@ -20,8 +20,9 @@ function PhaserGame() {
 	let gameOver = false;
 	let debris;
 	let ground;
-	let scoreText;
 	let background;
+	let scoreText;
+	
 	let timer = 0;
 	let limit = 100;
 	let intervalStars;
@@ -47,7 +48,7 @@ function PhaserGame() {
 			physics: {
 				default: "arcade",
 				parent: "phaser",
-				arcade: { debug: false, fps: 100, gravity: { y: 200 } }
+				arcade: { debug: true, fps: 100, gravity: { y: 200 } }
 			},
 			parent: "phaser",
 			scene: { preload, create, update }
@@ -75,7 +76,8 @@ function PhaserGame() {
 		}
 function createBomb(){
 	let bombs = physics.add.image(Math.floor(Math.random() * Math.floor(800)), 0 , 'bomb')
-				bombs.setScale(2)
+				bombs.setScale(getRandomInt(20, 35)/200) 
+				bombs.body.setCircle(150);
 				physics.add.overlap(player, bombs, hitBomb, null, this);
 }
 
@@ -133,7 +135,8 @@ function createStar(){
 			if(highscore < score){
 				setHighscore(score)
 				
-			}score = 0;
+			}
+			score = 0;
 			
 			scene.restart();
 			
@@ -145,6 +148,7 @@ function createStar(){
 			scene = this.scene;
 			physics = this.physics;
 			// this.load.image("debris", "assets/dodgingBullets/debris.png")
+			this.load.spritesheet("space", 'assets/dodgingBullets/background.png', { frameWidth: 500, frameHeight: 500});
 			this.load.image("sky", "assets/dodgingBullets/sky.png");
 			// this.load.image("ground", "assets/dodgingBullets/platform.png");
 			// this.load.image(
@@ -153,19 +157,18 @@ function createStar(){
 			// );
 			this.load.image("star", "assets/dodgingBullets/star.png");
 			this.load.image("bomb", "assets/dodgingBullets/bomb.png");
-			this.load.spritesheet("dude", "assets/dodgingBullets/dude.png", {
-				frameWidth: 32,
-				frameHeight: 48
-			});
+			this.load.image("dude", "assets/dodgingBullets/dude.png");
 			cursors = this.input.keyboard.createCursorKeys();
 			// console.log(cursors);
 			// console.log(Phaser.Input.Keyboard.KeyCodes);
 		}
 		function create() {
+			const sky = this.add.sprite(config.width/2, config.height/2, 'sky', 0)
+			//background.setScale(0.3)	
 
 			
-			console.log("TESTING CLOCK", this.time)
-			
+
+			//--
 			//----------Key Config-------------------------------------
 			spacebar = this.input.keyboard.addKey(
 				Phaser.Input.Keyboard.KeyCodes.SPACE
@@ -179,7 +182,7 @@ function createStar(){
 			shift = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SHIFT);
 			//---------------------------------------------------------
 			//----------Adding Background------------------------------
-			background = this.add.image(config.width / 2, config.height / 2, "sky");
+			//background = this.add.image(config.width / 2, config.height / 2, "sky");
 			
 			//----------------------------------------------------------
 			//-----------Score Text------------------------------------
@@ -210,29 +213,30 @@ function createStar(){
 			//console.log(platforms, "LOOK HERE");
 			//------------------------------------------------------------
 			//----------------------playerSetup---------------------------
-			player = this.physics.add.sprite(100, 450, "dude");
+			player = this.physics.add.image(100, 450, "dude");
+			player.setScale(0.12)
 player.body.setAllowGravity(false);
 			// player.setBounce(0.2);
 			//player.setCollideWorldBounds(true);
-			this.anims.create({
-				key: "left",
-				frames: this.anims.generateFrameNumbers("dude", { start: 0, end: 3 }),
-				frameRate: 10,
-				repeat: -1
-			});
+			// this.anims.create({
+			// 	key: "left",
+			// 	frames: this.anims.generateFrameNumbers("dude", { start: 0, end: 3 }),
+			// 	frameRate: 10,
+			// 	repeat: -1
+			// });
 
-			this.anims.create({
-				key: "turn",
-				frames: [{ key: "dude", frame: 4 }],
-				frameRate: 20
-			});
+			// this.anims.create({
+			// 	key: "turn",
+			// 	frames: [{ key: "dude", frame: 4 }],
+			// 	frameRate: 20
+			// });
 
-			this.anims.create({
-				key: "right",
-				frames: this.anims.generateFrameNumbers("dude", { start: 5, end: 8 }),
-				frameRate: 10,
-				repeat: -1
-			});
+			// this.anims.create({
+			// 	key: "right",
+			// 	frames: this.anims.generateFrameNumbers("dude", { start: 5, end: 8 }),
+			// 	frameRate: 10,
+			// 	repeat: -1
+			// });
 			//-------------------------------------------------------------
 			// console.log("ground.body", ground.body);
 			// this.tweens.timeline({
