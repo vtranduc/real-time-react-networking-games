@@ -38,8 +38,15 @@ const lobby = function(socket, sockets, rooms, gameData, io) {
       // sockets.to("lobby").emit("lobbyUpdate", getLobbyStatus(gameData));
       gameData[data.game].lobby[data.room] = initializeLobbyRoom(data.passcode);
       // sockets.to("lobby").emit("lobbyRoomCreation", getLobbyStatus(gameData));
-      io.to(socket.id).emit("lobbyRoomCreation", true);
-      sockets.to("lobby").emit("lobbyUpdate", getLobbyStatus(gameData));
+      // io.to(socket.id).emit("lobbyRoomCreation", true);
+      // sockets.to("lobby").emit("lobbyUpdate", getLobbyStatus(gameData));
+      const lobbyStat = getLobbyStatus(gameData);
+      socket.broadcast.to("lobby").emit("lobbyUpdate", lobbyStat);
+      io.to(socket.id).emit("lobbyRoomCreation", {
+        lobbyStat: lobbyStat,
+        room: data.room,
+        game: data.game
+      });
     } else {
       io.to(socket.id).emit("lobbyRoomCreation", false);
     }
@@ -58,24 +65,19 @@ const lobby = function(socket, sockets, rooms, gameData, io) {
     sockets.to("lobby").emit("lobbyUpdate", getLobbyStatus(gameData));
   });
 
-  ////////WHERE I LEFT OFF///////////////////////////////////////
-
   socket.on("lobbyValidatePasscode", data => {
-    console.log("start validation: ", data);
     if (data.passcode === gameData[data.game].lobby[data.room].status) {
-      //Attempt to join the room here
-      // io.to(socket.id).emit();
       try {
         gameData[data.game].lobby[data.room].players[socket.id] = {
           ready: false
         };
-        io.to(socket.id).emit("lobbyPasscodeValidation", data.room);
+        io.to(socket.id).emit("lobbyPasscodeValidation", {
+          game: data.game,
+          room: data.room
+        });
         sockets.to("lobby").emit("lobbyUpdate", getLobbyStatus(gameData));
-      } catch (err) {
-        console.log("Have failed to join the room!", err);
-      }
+      } catch (err) {}
     } else {
-      console.log("wrong one dude");
       io.to(socket.id).emit("lobbyPasscodeValidation", false);
     }
   });
@@ -133,6 +135,12 @@ const leaveAllRooms = function(gameData, socketId) {
     for (let room in gameData[game].lobby) {
       if (Object.keys(gameData[game].lobby[room].players).includes(socketId)) {
         delete gameData[game].lobby[room].players[socketId];
+        if (
+          Object.keys(gameData[game].lobby[room].players).length === 0 &&
+          gameData[game].lobby[room].status
+        ) {
+          gameData[game].lobby[room].status = "";
+        }
       }
     }
   }
