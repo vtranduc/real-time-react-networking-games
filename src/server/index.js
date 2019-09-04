@@ -51,9 +51,7 @@ const getUser = function(email, password) {
     .then(res => res.rows);
 };
 
-getUser("jayjay_ting@hotmail.com", "hello").then(result => {
-  console.log(result, "look heree!!");
-});
+
 //----------------------------------------------------
 
 //-------------------router requests-------------------------
