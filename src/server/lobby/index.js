@@ -1,7 +1,7 @@
 // const getLobbyStatus = require("../helpers/getRooms");
 
 const lobby = function(socket, sockets, rooms, gameData, io) {
-  console.log("initializing lobby");
+  // console.log("initializing lobby");
 
   socket.on("lobbyConnect", () => {
     socket.join("lobby");
@@ -9,12 +9,75 @@ const lobby = function(socket, sockets, rooms, gameData, io) {
   });
 
   socket.on("lobbyJoinLeaveRoom", data => {
-    console.log("A user has joined the room!", data);
+    // console.log("A user has joined the room!", data);
     leaveAllRooms(gameData, socket.id);
     if (data) {
-      gameData[data.game].lobby[data.room].players[socket.id] = {};
+      gameData[data.game].lobby[data.room].players[socket.id] = {
+        ready: false
+      };
     }
     sockets.to("lobby").emit("lobbyUpdate", getLobbyStatus(gameData));
+  });
+
+  socket.on("lobbyReceiveChat", data => {
+    // console.log("has reived herEEEEEEEEEEEEEEEEee", data);
+    gameData[data.game].lobby[data.room].chats.unshift({
+      key: `${data.game}${data.room}${gameData[data.game].lobby[data.room].chats
+        .length + 1}`,
+      user: socket.id,
+      msg: data.msg
+    });
+    sockets.to("lobby").emit("lobbyUpdate", getLobbyStatus(gameData));
+  });
+
+  socket.on("lobbyCreateRoom", data => {
+    // console.log("Someone is attempting to create a room!", data);
+    // console.log(checkRoomAvaibility(gameData, data.room));
+    // console.log(Object.keys(rooms));
+    if (checkRoomAvaibility(gameData, data.room)) {
+      // sockets.to("lobby").emit("lobbyUpdate", getLobbyStatus(gameData));
+      gameData[data.game].lobby[data.room] = initializeLobbyRoom(data.passcode);
+      // sockets.to("lobby").emit("lobbyRoomCreation", getLobbyStatus(gameData));
+      io.to(socket.id).emit("lobbyRoomCreation", true);
+      sockets.to("lobby").emit("lobbyUpdate", getLobbyStatus(gameData));
+    } else {
+      io.to(socket.id).emit("lobbyRoomCreation", false);
+    }
+  });
+
+  socket.on("lobbyDeleteRoom", data => {
+    console.log("DELETE THIS: ", data);
+    delete gameData[data.game].lobby[data.room];
+    sockets.to("lobby").emit("lobbyUpdate", getLobbyStatus(gameData));
+  });
+
+  socket.on("lobbySetReady", data => {
+    // console.log("aladeen");
+    // console.log(gameData[data.game].lobby[data.room].players[socket.id]);
+    gameData[data.game].lobby[data.room].players[socket.id].ready = true;
+    sockets.to("lobby").emit("lobbyUpdate", getLobbyStatus(gameData));
+  });
+
+  ////////WHERE I LEFT OFF///////////////////////////////////////
+
+  socket.on("lobbyValidatePasscode", data => {
+    console.log("start validation: ", data);
+    if (data.passcode === gameData[data.game].lobby[data.room].status) {
+      //Attempt to join the room here
+      // io.to(socket.id).emit();
+      try {
+        gameData[data.game].lobby[data.room].players[socket.id] = {
+          ready: false
+        };
+        io.to(socket.id).emit("lobbyPasscodeValidation", data.room);
+        sockets.to("lobby").emit("lobbyUpdate", getLobbyStatus(gameData));
+      } catch (err) {
+        console.log("Have failed to join the room!", err);
+      }
+    } else {
+      console.log("wrong one dude");
+      io.to(socket.id).emit("lobbyPasscodeValidation", false);
+    }
   });
 
   //========================================
@@ -34,10 +97,33 @@ const lobby = function(socket, sockets, rooms, gameData, io) {
 
 module.exports = lobby;
 
+const initializeLobbyRoom = function(passcode) {
+  return { status: passcode, players: {}, chats: [] };
+};
+
+const checkRoomAvaibility = function(gameData, requestedName) {
+  for (let game in gameData) {
+    if (Object.keys(gameData[game].lobby).includes(requestedName)) {
+      return false;
+    }
+    if (Object.keys(gameData[game]).includes(`${game}-${requestedName}`)) {
+      return false;
+    }
+  }
+  return true;
+};
+
 const getLobbyStatus = function(gameData) {
   let output = {};
   for (let game in gameData) {
-    output[game] = gameData[game].lobby;
+    // output[game] = gameData[game].lobby;
+    output[game] = {};
+    for (let room in gameData[game].lobby) {
+      output[game][room] = {
+        ...gameData[game].lobby[room],
+        status: gameData[game].lobby[room].status ? "closed" : "open"
+      };
+    }
   }
   return output;
 };
