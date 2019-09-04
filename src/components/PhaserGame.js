@@ -153,14 +153,15 @@ function PhaserGame() {
 			});
 			//-------------------------------------------------------------
 			console.log("ground.body", ground.body);
+			this.tweens.timeScale = 2;
 			this.tweens.timeline({
 				targets: ground.body.velocity,
 				loop: -1,
 				tweens: [
-					{ x: 500, y: 0, duration: 1000, ease: "Stepped" },
-					{ x: 0, y: 0, duration: 1000, ease: "Stepped" },
-					{ x: -500, y: 0, duration: 1000, ease: "Stepped" },
-					{ x: 0, y: 0, duration: 1000, ease: "Stepped" }
+					{ x: 500, y: 0, timeScale: 0.5, ease: "Stepped" },
+					{ x: 0, y: 0, ease: "Stepped" },
+					{ x: -500, y: 0, ease: "Stepped" },
+					{ x: 0, y: 0, ease: "Stepped" }
 					// { x: 300, y: 0, duration: 1000, ease: "Stepped" }
 				]
 			});
