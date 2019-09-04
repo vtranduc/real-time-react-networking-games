@@ -227,6 +227,7 @@ export default function Lobby({ socket, setRoom }) {
                       setSelectedGame(e.target.innerText);
                       setSelectedRoom(null);
                       setCreateRoomMode(false);
+                      setPasscodeMode(false);
                       // setEntry({ ...entry, msg: "" });
                     }}
                     button
