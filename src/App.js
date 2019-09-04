@@ -24,7 +24,7 @@ const serverPORT = 3001;
 function App() {
   //--------------------global states----------------------
   const [loginStatus, setLoginStatus] = useState(false);
-  const [room, setRoom] = useState("testingSoccer");
+  const [room, setRoom] = useState("soccerHAHA");
   //-------------------------------------------------------
 
   let socket = io(`:${serverPORT}`);

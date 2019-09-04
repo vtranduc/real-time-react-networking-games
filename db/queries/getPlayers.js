@@ -16,7 +16,10 @@ const getUsers = function(){
     .then(res => res.rows)
 }    
 
-const addUser
+
+
+
+//const addUser
 
 const userLogin = function(email, password){
     return pool.query({

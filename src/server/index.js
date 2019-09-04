@@ -103,7 +103,7 @@ const gameData = {
   soccer: {
     lobby: {
       soccerRoom1: {
-        status: "open",
+        status: "",
         players: {},
         chats: [
           { key: ";czvxzc", user: "Good duke", msg: "Hello all" },
@@ -112,8 +112,8 @@ const gameData = {
         ]
       },
       soccerRoom2: {
-        status: "open",
-        players: { jayjay: {}, sarah: {} },
+        status: "aaa",
+        players: { jayjay: { ready: false }, sarah: { ready: true } },
         chats: [
           { key: ";pfdzzzzzzzzsAsaj", user: "Jayjay", msg: "I wanna eat" },
           { key: ";pfdsbbaj", user: "Sarah", msg: "Ok!" }
