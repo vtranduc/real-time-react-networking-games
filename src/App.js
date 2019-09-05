@@ -25,7 +25,7 @@ const serverPORT = 3001;
 
 function App() {
 	//--------------------global states----------------------
-	const [loginStatus, setLoginStatus] = useState(false);
+	const [loginStatus, setLoginStatus] = useState(true);
 	const [room, setRoom] = useState("soccerHAHA");
 	//-------------------------------------------------------
 
