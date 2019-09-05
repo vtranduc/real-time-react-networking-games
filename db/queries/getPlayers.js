@@ -12,9 +12,15 @@ pool.connect();
 
 const getUsers = function(){
     return pool.query(`SELECT *
-    FROM users WHERE first_name like 'a'`)
+    FROM users`)
     .then(res => res.rows)
 }    
+
+const getUserId = function(username){
+    
+}
+
+
 
 
 
@@ -31,7 +37,42 @@ const userLogin = function(email, password){
     }).then((res)=>res.rows[0]).catch(err=>{console.log(err)});
 }
 
-userLogin("jayjay_ting@hotmail.com", "hello").then(console.log);
+//post message
+
+const postMessage = function (senderUsername, recieverUsername, message){
+return pool.query({
+    text: `SELECT username, id
+    FROM users 
+    WHERE username = $1 OR username = $2`,
+    values: [senderUsername, recieverUsername],
+    name: 'get_message_query'
+}).then((res =>res.rows)).then((res)=>{
+
+    let data = {};
+
+    data[res[0].username] = res[0].id;
+    data[res[1].username] = res[1].id;
+
+
+    pool.query({
+        text: `INSERT INTO user_posts(sender_id, reciever_id, sent_message)
+        VALUES($1, $2, $3)`,
+        values: [data[senderUsername], data[recieverUsername], message]
+        
+    })
+
+
+
+
+}).then(()=>{console.log("no errors")}).catch(err=>{console.log(err)})
+
+}
+
+postMessage('c', 'a', 'im a genius ')
+
+
+
+//getUsers().then(console.log);
 
 
 module.exports = {userLogin}
