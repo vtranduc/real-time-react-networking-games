@@ -24,12 +24,10 @@ import Button from "@material-ui/core/Button";
 const serverPORT = 3001;
 
 function App() {
-
-  //--------------------global states----------------------
-  const [loginStatus, setLoginStatus] = useState(false);
-  const [room, setRoom] = useState("testingSoccer");
-  //-------------------------------------------------------
-
+	//--------------------global states----------------------
+	const [loginStatus, setLoginStatus] = useState(false);
+	const [room, setRoom] = useState("soccerHAHA");
+	//-------------------------------------------------------
 
 	let socket = io(`:${serverPORT}`);
 	console.log("initializing app");
@@ -62,7 +60,6 @@ function App() {
 					}}
 				/>
 
-
 				<Route path="/register" exact component={Register} />
 				<Route
 					path="/soccer"
@@ -83,7 +80,6 @@ function App() {
 			</Switch>
 		</Router>
 	);
-
 
 	// return (
 	//   <div className="App">
