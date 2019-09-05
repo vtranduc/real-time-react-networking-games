@@ -11,6 +11,7 @@ import EggCatchGame from "./components/eggCatch/eggCatchClient";
 import Home from "./components/Home";
 import Profile from "./components/Profile";
 import PhaserGame from "./components/PhaserGame";
+import RockPaperScissors from "./components/rockPaperScissors/RockPaperScissors";
 
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
@@ -24,7 +25,7 @@ const serverPORT = 3001;
 function App() {
   //--------------------global states----------------------
   const [loginStatus, setLoginStatus] = useState(false);
-  const [room, setRoom] = useState("soccerHAHA");
+  const [room, setRoom] = useState("testingSoccer");
   //-------------------------------------------------------
 
   let socket = io(`:${serverPORT}`);
@@ -64,6 +65,13 @@ function App() {
           exact
           render={() => {
             return <Soccer socket={socket} room={room} />;
+          }}
+        />
+        <Route
+          path="/rockpaperscissors"
+          exact
+          render={() => {
+            return <RockPaperScissors socket={socket} room={room} />;
           }}
         />
         <Route

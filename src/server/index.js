@@ -5,7 +5,7 @@ const PORT = 3001;
 const soccerGame = require("./soccer/index");
 const eggCatchGame = require("./eggCatch/index");
 const world = require("./world/index");
-
+const rockPaperScissorsGame = require("./rockPaperScissors/index");
 const lobby = require("./lobby/index");
 // app.get("/", (req, res) => {
 //   res.send("<h1>Hellow World</h1>");
@@ -22,12 +22,15 @@ app.use(cors({ origin: "http://localhost:3000", credentials: true }));
 const { Pool } = require("pg");
 //const dbParams = require("../lib/db.js");
 const pool = new Pool({
-  user: "JJ",
+  user: "postgres",
   host: "localhost",
   database: "gamefinal",
   password: 123
 });
 pool.connect();
+
+console.log("mikuro san");
+// return;
 
 //-----------Helper functions
 
@@ -50,7 +53,6 @@ const getUser = function(email, password) {
     })
     .then(res => res.rows);
 };
-
 
 //----------------------------------------------------
 
@@ -122,7 +124,13 @@ const gameData = {
     }
   },
   eggCatch: { lobby: {} },
-  world: { lobby: {} }
+  world: { lobby: {} },
+  rockPaperScissors: {
+    lobby: {}
+    // testRockPaperScissors123qweasd: {
+    //   players: { JayJay: {}, Sarah: {}, Selin: {} }
+    // }
+  }
 };
 
 // const gameData = {
@@ -181,6 +189,7 @@ io.on("connection", socket => {
   });
   world(socket, io.sockets, io.sockets.adapter.rooms, gameData.world);
   soccerGame(socket, io.sockets, io.sockets.adapter.rooms, gameData.soccer, io);
+  rockPaperScissorsGame(socket, io.sockets, gameData.rockPaperScissors, io);
   eggCatchGame(socket, io.sockets, io.sockets.adapter.rooms, gameData.eggCatch);
   lobby(socket, io.sockets, io.sockets.adapter.rooms, gameData, io);
 });
