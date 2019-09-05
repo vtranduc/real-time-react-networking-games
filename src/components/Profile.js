@@ -1,65 +1,28 @@
 import React from "react";
 import "../styles/profile.css";
+import Paper from "@material-ui/core/Paper";
+import List from "@material-ui/core/List";
+import ListItem from "@material-ui/core/ListItem";
+import Chip from "@material-ui/core/Chip";
+import TextField from "@material-ui/core/TextField";
+import Button from "@material-ui/core/Button";
+import useKeyPress from "../helpers/useKeyPress";
+import Container from "@material-ui/core/Container";
 
 function Profile() {
 	return (
-		<div class="container">
-			<div class="row profile">
-				<div class="col-md-3">
-					<div class="profile-sidebar">
-						<div class="profile-userpic">
-							<img
-								src="https://static.change.org/profile-img/default-user-profile.svg"
-								class="img-responsive"
-								alt=""
-							/>
-						</div>
-
-						<div class="profile-usertitle">
-							<div class="profile-usertitle-name">Marcus Doe</div>
-							<div class="profile-usertitle-job">Developer</div>
-						</div>
-
-						<div class="profile-userbuttons">
-							<button type="button" class="btn btn-success btn-sm">
-								Follow
-							</button>
-							<button type="button" class="btn btn-danger btn-sm">
-								Message
-							</button>
-						</div>
-
-						<div class="profile-usermenu">
-							<ul class="nav">
-								<li class="active">
-									<a href="#">
-										<i class="glyphicon glyphicon-home"></i>
-										Overview{" "}
-									</a>
-								</li>
-								<li>
-									<a href="#">
-										<i class="glyphicon glyphicon-user"></i>
-										Account Settings{" "}
-									</a>
-								</li>
-								<li>
-									<a href="#" target="_blank">
-										<i class="glyphicon glyphicon-ok"></i>
-										Tasks{" "}
-									</a>
-								</li>
-								<li>
-									<a href="#">
-										<i class="glyphicon glyphicon-flag"></i>
-										Help{" "}
-									</a>
-								</li>
-							</ul>
-						</div>
-					</div>
-				</div>
-			</div>
+		<div>
+			<Container maxWidth="sm">
+				Labore nostrud reprehenderit ex anim sunt. Magna reprehenderit excepteur
+				proident ipsum. Ex Lorem laboris magna velit commodo labore voluptate
+				incididunt et laborum commodo et id Lorem. Aute magna exercitation do
+				aute adipisicing exercitation in pariatur cillum Lorem. Veniam mollit
+				aute anim nisi ut aliqua pariatur est. Ut eu ad ipsum Lorem laborum
+				aliqua culpa minim et. Elit officia velit ipsum aliqua non. Ex Lorem ex
+				et amet mollit quis consectetur reprehenderit ut esse magna nostrud. Id
+				voluptate culpa commodo adipisicing ad velit dolor et. Reprehenderit
+				aute ex voluptate occaecat anim.
+			</Container>
 		</div>
 	);
 }
