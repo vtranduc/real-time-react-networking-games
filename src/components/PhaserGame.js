@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import getRandomInt from "../helpers/getRandomInt";
 import Phaser, { RIGHT } from "phaser";
+import "../styles/phaserGame.css";
 
 function PhaserGame() {
 	const [highscore, setHighscore] = useState(0);
@@ -40,7 +41,7 @@ function PhaserGame() {
 	useEffect(() => {
 		let config = {
 			type: Phaser.AUTO,
-			width: 800,
+			width: 1200,
 			height: 600,
 			physics: {
 				default: "arcade",
@@ -48,7 +49,8 @@ function PhaserGame() {
 				arcade: { debug: false, fps: 100, gravity: { y: 200 } }
 			},
 			parent: "phaser",
-			scene: { preload, create, update }
+			scene: { preload, create, update },
+			transparent: true
 		};
 
 		let game = new Phaser.Game(config);
@@ -84,7 +86,7 @@ function PhaserGame() {
 		}
 		function createBomb() {
 			let bombs = physics.add.image(
-				Math.floor(Math.random() * Math.floor(800)),
+				Math.floor(Math.random() * Math.floor(config.width)),
 				0,
 				"bomb"
 			);
@@ -168,7 +170,7 @@ function PhaserGame() {
 				frameWidth: 500,
 				frameHeight: 500
 			});
-			this.load.image("sky", "assets/dodgingBullets/sky.png");
+			//this.load.image("sky", "assets/dodgingBullets/sky.png");
 			// this.load.image("ground", "assets/dodgingBullets/platform.png");
 			// this.load.image(
 			// 	"shortplatform",
@@ -182,12 +184,12 @@ function PhaserGame() {
 			// console.log(Phaser.Input.Keyboard.KeyCodes);
 		}
 		function create() {
-			const sky = this.add.sprite(
-				config.width / 2,
-				config.height / 2,
-				"sky",
-				0
-			);
+			// const sky = this.add.sprite(
+			// 	config.width / 2,
+			// 	config.height / 2,
+			// 	"sky",
+			// 	0
+			// );
 			//background.setScale(0.3)
 
 			//--
@@ -210,7 +212,7 @@ function PhaserGame() {
 			//-----------Score Text------------------------------------
 			scoreText = this.add.text(16, 16, "score: 0", {
 				fontSize: "32px",
-				fill: "#000"
+				fill: "#999"
 			});
 			//---------------------------------------------------------
 			//------------------------Platforms-------------------------
@@ -441,8 +443,8 @@ function PhaserGame() {
 	}, []);
 	return (
 		<div>
-			<div>HighScore: {highscore}</div>
-			<div id="phaser" style={{ height: "20vh" }}></div>;
+			<h3>HighScore: {highscore}</h3>
+			<div id="phaser"></div>;
 		</div>
 	);
 }
