@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import "../styles/profile.css";
-
+import Posts from "./Post";
 import Paper from "@material-ui/core/Paper";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
@@ -9,30 +9,36 @@ import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 import useKeyPress from "../helpers/useKeyPress";
 import Container from "@material-ui/core/Container";
+import Input from "@material-ui/core/Input";
 
 function Profile() {
+	const [userMessage, setUserMessage] = useState({
+		title: "",
+		message: ""
+	});
 	const [posts, setPosts] = useState([
-		<div className="post">
-			<h3>Post Title</h3>
-			<p>
-				Neque porro quisquam est qui dolorem ipsum quia dolor sit amet,
-				consectetur, adipisci velit.
-			</p>
-		</div>
+		<Posts title={userMessage.title} message={userMessage.message} />
 	]);
 
 	function onSubmit() {
 		let temp = [...posts];
 		temp.push(
-			<div className="post">
-				<h3>Post Title</h3>
-				<p>
-					Neque porro quisquam est qui dolorem ipsum quia dolor sit amet,
-					consectetur, adipisci velit.
-				</p>
-			</div>
+			<Posts title={userMessage.title} message={userMessage.message} />
 		);
 		setPosts(temp);
+	}
+
+	function updateInput(event) {
+		switch (event.target.name) {
+			case "title":
+				setUserMessage({ ...userMessage, title: event.target.value });
+				break;
+			case "message":
+				setUserMessage({ ...userMessage, message: event.target.value });
+				break;
+			default:
+				break;
+		}
 	}
 
 	return (
@@ -57,8 +63,20 @@ function Profile() {
 			</div>
 			<div className="right">
 				<form id="form-post">
-					<input type="text" placeholder="Title" />
-					<input type="text" placeholder="Type your tweet here!" />
+					<Input
+						onChange={updateInput}
+						name="title"
+						value={userMessage.title}
+						type="text"
+						placeholder="Title"
+					/>
+					<Input
+						onChange={updateInput}
+						name="message"
+						value={userMessage.message}
+						type="text"
+						placeholder="Add Message"
+					/>
 					<Button
 						onClick={() => {
 							onSubmit();
