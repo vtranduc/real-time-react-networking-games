@@ -12,6 +12,7 @@ import EggCatchGame from "./components/eggCatch/eggCatchClient";
 import Home from "./components/Home";
 import Profile from "./components/Profile";
 import PhaserGame from "./components/PhaserGame";
+import RockPaperScissors from "./components/rockPaperScissors/RockPaperScissors";
 
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
@@ -23,10 +24,12 @@ import Button from "@material-ui/core/Button";
 const serverPORT = 3001;
 
 function App() {
-	//--------------------global states----------------------
-	const [loginStatus, setLoginStatus] = useState(false);
-	const [room, setRoom] = useState("soccerHAHA");
-	//-------------------------------------------------------
+
+  //--------------------global states----------------------
+  const [loginStatus, setLoginStatus] = useState(false);
+  const [room, setRoom] = useState("testingSoccer");
+  //-------------------------------------------------------
+
 
 	let socket = io(`:${serverPORT}`);
 	console.log("initializing app");
@@ -59,6 +62,7 @@ function App() {
 					}}
 				/>
 
+
 				<Route path="/register" exact component={Register} />
 				<Route
 					path="/soccer"
@@ -79,6 +83,7 @@ function App() {
 			</Switch>
 		</Router>
 	);
+
 
 	// return (
 	//   <div className="App">
