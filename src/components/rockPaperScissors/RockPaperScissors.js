@@ -7,7 +7,7 @@ import { objectTypeSpreadProperty } from "@babel/types";
 export default function RockPaperScissors({ socket }) {
   //---Temporary data---
   const room = "testRockPaperScissors123qweasd";
-  const nPlayers = 3;
+  const nPlayers = 1;
   //--------------------
 
   const [rpsData, setRpsData] = useState(null);
