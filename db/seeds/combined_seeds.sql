@@ -1,11 +1,12 @@
+
+
+
+
+
 INSERT INTO history (start_time, end_time, winners)
 VALUES (CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'joe'),
 (CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'moe'),
 (CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'poe');
-
-
-
-
 
 INSERT INTO game (game_name)
 VALUES('SOCCER'),
