@@ -102,10 +102,15 @@ function Profile({ profileInfo }) {
 			<div id="left">
 				left
 				<div id="profile">
-					<img
-						src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/7e/Circle-icons-profile.svg/1024px-Circle-icons-profile.svg.png"
-						id="profile-img"
-					/>
+					{!profileInfo && (
+						<img
+							src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/7e/Circle-icons-profile.svg/1024px-Circle-icons-profile.svg.png"
+							id="profile-img"
+						/>
+					)}
+
+					{profileInfo && <img src={profileInfo.avatar} id="profile-img" />}
+
 					{profileInfo && profileInfo.username}
 					<div id="profile-button">
 						<Button>Add Friend</Button>

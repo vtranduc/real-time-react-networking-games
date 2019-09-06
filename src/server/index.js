@@ -60,13 +60,15 @@ const getAllUsers = function() {
 const getUser = function(email, password) {
 	return pool
 		.query({
-			text: `SELECT * 
+			text: `SELECT id, username, first_name, avatar 
     FROM users 
     WHERE email = $1 AND pass = $2`,
 			values: [email, password],
 			name: "get_message_query"
 		})
-		.then(res => res.rows);
+		.then(res => {
+			return res.rows;
+		});
 };
 
 //----------------------------------------------------
@@ -85,13 +87,19 @@ app.get("/getuser/:username", (req, res) => {
 });
 
 app.post("/login", (req, res) => {
-	//console.log("FORM VALUES:", req.body)
-	getUser(req.body.email, req.body.password).then(result => {
-		console.log("recieved response");
-		req.session.user_id = "123";
-		res.send(result);
-	});
+	console.log("FORM VALUES:", req.body);
+	getUser(req.body.email, req.body.password)
+		.then(result => {
+			console.log("OVER HERE", result);
+			req.session.user_id = result[0].username;
+			res.send(result);
+		})
+		.catch(err => {
+			console.log("LIDDDD");
+		});
 });
+
+app.post("register", (req, res) => {});
 
 app.get("/jj", (req, res) => {
 	getUser("jayjay_ting@hotmail.com", "hello").then(result => {
