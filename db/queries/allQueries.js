@@ -8,16 +8,15 @@ const pool = new Pool({
 });
 pool.connect();
 
-const getUsers = function() {
+const getUserProfile = function(username) {
 	return pool
-		.query(
-			`SELECT *
-    FROM users`
-		)
+		.query({
+			text: `SELECT id, username, avatar
+	FROM users WHERE username = $1`,
+			values: [username]
+		})
 		.then(res => res.rows);
 };
-
-const getUserProfile = function(username) {};
 
 //const addUser
 
