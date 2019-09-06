@@ -8,7 +8,7 @@ import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 import useKeyPress from "../../helpers/useKeyPress";
 // import ChatBox from "../chatBox/ChatBox";
-import "./rockPaperScissors.scss";
+import "./rockPaperScissors.css";
 import Chip from "@material-ui/core/Chip";
 
 const bubbleMirror = {};
