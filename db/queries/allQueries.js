@@ -35,6 +35,35 @@ const getUserData = function(email, password) {
 			console.log(err);
 		});
 };
+const getUsernameFromId = function(id) {
+	return pool
+		.query({
+			text: `SELECT username
+	FROM users 
+	WHERE id = $1`,
+			values: [id],
+			name: "get_message_query"
+		})
+		.then(res => res.rows[0].username)
+		.catch(err => {
+			console.log(err);
+		});
+};
+
+const getIdFromUsername = function(username) {
+	return pool
+		.query({
+			text: `SELECT id
+	FROM users 
+	WHERE username = $1`,
+			values: [username],
+			name: "get_message_query"
+		})
+		.then(res => res.rows[0].id)
+		.catch(err => {
+			console.log(err);
+		});
+};
 
 //post message
 
@@ -78,22 +107,41 @@ const postMessage = function(
 		});
 };
 
-postMessage("c", "a", "titleTest", "im a genius ");
+//postMessage("c", "a", "titleTest", "im a genius ");
 
-const getMessage = function(username) {
+// const getMessage = function(reciever) {
+// 	return pool
+// 		.query({
+// 			text: `SELECT sender_id ,reciever_id, message_title, sent_message, time_of_post FROM user_posts JOIN users ON reciever_id = users.id OR sender_id = users.id WHERE users.username = $1 ORDER BY time_of_post DESC`,
+// 			values: [reciever],
+// 			name: "get_message_query"
+// 		})
+// 		.then(res => {
+// 			return res.rows;
+// 		});
+// };
+
+const getMessage = function(recieverName) {
 	return pool
 		.query({
-			text: `SELECT sender_id, message_title, sent_message, time_of_post FROM user_posts JOIN users ON sender_id = users.id WHERE users.username = $1 ORDER BY time_of_post DESC`,
-			values: [username],
-			name: "get_message_query"
+			text: `SELECT users.id from users WHERE username = $1`,
+			values: [recieverName]
+		})
+		.then(res => {
+			console.log(res.rows[0].id);
+			return pool.query({
+				text: `SELECT * FROM user_posts WHERE reciever_id = $1`,
+				values: [res.rows[0].id]
+			});
 		})
 		.then(res => {
 			return res.rows;
 		});
 };
+
 //getUsers().then(console.log);
 
-//getMessage("jzizzless").then(console.log);
+//getMessage("a").then(console.log);
 module.exports = { getUserProfile, getMessage, postMessage };
 
 // const getMessages = (user, chatroom) => {
