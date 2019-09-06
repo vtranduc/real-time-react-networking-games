@@ -22,7 +22,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const bubbleMirror = {};
+// const bubbleMirror = {};
 
 export default function RockPaperScissors({ socket }) {
   //---Temporary data---
@@ -78,40 +78,34 @@ export default function RockPaperScissors({ socket }) {
 
   useEffect(() => {
     if (bubbleTrigger) {
-      const bubbleOnlyMsg = function(bubbleMirror) {
-        let output = {};
-        for (let player in bubbleMirror) {
-          output[player] = { msg: bubbleMirror[player].msg };
+      console.log("nan");
+      setBubble(oldBubble => {
+        if (
+          oldBubble[bubbleTrigger.sender] &&
+          oldBubble[bubbleTrigger.sender].interval
+        ) {
+          clearTimeout(oldBubble[bubbleTrigger.sender].interval);
         }
-        return output;
-      };
-
-      if (
-        bubbleMirror[bubbleTrigger.sender] &&
-        bubbleMirror[bubbleTrigger.sender].interval
-      ) {
-        clearTimeout(bubbleMirror[bubbleTrigger.sender].interval);
-      }
-
-      bubbleMirror[bubbleTrigger.sender] = {
-        msg: bubbleTrigger.msg,
-        interval: null
-      };
-      setBubble({
-        ...bubbleOnlyMsg(bubbleMirror),
-        [bubbleTrigger.sender]: {
-          msg: bubbleTrigger.msg
-        }
+        return {
+          ...oldBubble,
+          [bubbleTrigger.sender]: {
+            msg: bubbleTrigger.msg,
+            interval: setTimeout(() => {
+              setBubble(oldBubble => {
+                return {
+                  ...oldBubble,
+                  [bubbleTrigger.sender]: { msg: null, interval: null }
+                };
+              });
+            }, chatBubbleTimeOut)
+          }
+        };
       });
-      bubbleMirror[bubbleTrigger.sender].interval = setTimeout(() => {
-        bubbleMirror[bubbleTrigger.sender] = { msg: null, interval: null };
-        setBubble({
-          ...bubbleOnlyMsg(bubbleMirror)
-        });
-      }, chatBubbleTimeOut);
       setBubbleTrigger(null);
+
+      //=================================================
     }
-  }, [bubbleTrigger, bubble]);
+  }, [bubbleTrigger]);
 
   useEffect(() => {
     if (chatMode.inQueue) {
