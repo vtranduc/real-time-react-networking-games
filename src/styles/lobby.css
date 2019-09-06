@@ -1,0 +1,6 @@
+#paper {
+	margin: 2em;
+	display: "flex";
+	justify-content: "space-between";
+	height: "70vh";
+}

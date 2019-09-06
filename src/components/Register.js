@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import "../styles/register.css";
+import axios from "axios";
 function Register() {
 	const [user, setUser] = useState({
 		firstName: null,
@@ -9,6 +10,52 @@ function Register() {
 		password: null,
 		confirmPassword: null
 	});
+	function handleSubmit() {
+		if (
+			user.firstName &&
+			user.lastName &&
+			user.email &&
+			user.password &&
+			user.confirmPassword &&
+			user.password == user.confirmPassword
+		) {
+			axios
+				.post("http://localhost:3001/register", {
+					firstName: user.firstName,
+					lastName: user.lastName,
+					email: user.email,
+					username: user.username,
+					password: user.password
+				})
+				.then(response => {
+					if (response.data.length) {
+					}
+				});
+		}
+	}
+
+	// axios
+	// 		.post("http://localhost:3001/register", {
+	// 			if(user.)
+	// 		})
+	// 		.then(response => {
+	// 			if (response.data.length) {
+	// 				setLoginStatus(true);
+	//       //this should be set to a cookies session instead
+	// 				setProfileInfo({
+	// 					username: response.data[0].username,
+	// 					avatar: response.data[0].avatar,
+	// 					firstName: response.data[0].first_name,
+	// 					lastName: response.data[0].last_name
+	// 				});
+	// 				console.log(loginStatus);
+	// 				console.log("this is right");
+	// 			}
+	// 			console.log("success response!", response.data);
+	// 		})
+	// 		.catch(err => {
+	// 			console.log("error: ", err);
+	// 		});
 
 	function handleSubmit(event) {
 		console.log("submit handled");

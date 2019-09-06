@@ -19,7 +19,25 @@ const getUserProfile = function(username) {
 };
 
 //const addUser
-
+// const createUser = function(
+// 	username,
+// 	firstName,
+// 	lastName,
+// 	email,
+// 	password,
+// 	avatar
+// ) {
+// 	pool.query({
+// 		text: `INSERT INTO users(username, firstName, lastName, email, password, avatar)
+// VALUES($1, $2, $3, $4)`,
+// 		values: [
+// 			data[senderUsername],
+// 			data[recieverUsername],
+// 			message_title,
+// 			message
+// 		]
+// 	});
+// };
 const getUserData = function(email, password) {
 	return pool
 		.query({
