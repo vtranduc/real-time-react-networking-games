@@ -61,16 +61,14 @@ function Register() {
 				<input
 					name="firstName"
 					value={user.firstName}
-					onChange={updateInput}
-				></input>
+					onChange={updateInput}></input>
 				<br></br>
 				Last Name:
 				<br />
 				<input
 					name="lastName"
 					value={user.lastName}
-					onChange={updateInput}
-				></input>
+					onChange={updateInput}></input>
 				<br></br>
 				Email:
 				<br />
@@ -81,24 +79,21 @@ function Register() {
 				<input
 					name="username"
 					value={user.username}
-					onChange={updateInput}
-				></input>
+					onChange={updateInput}></input>
 				<br></br>
 				Password:
 				<br />
 				<input
 					name="password"
 					value={user.password}
-					onChange={updateInput}
-				></input>
+					onChange={updateInput}></input>
 				<br></br>
 				Confirm password:
 				<br />
 				<input
 					name="confirmPassword"
 					value={user.confirmPassword}
-					onChange={updateInput}
-				></input>
+					onChange={updateInput}></input>
 				<br></br>
 				<input type="submit" value="Submit" />
 			</form>

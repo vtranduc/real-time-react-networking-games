@@ -60,6 +60,7 @@ CREATE TABLE user_posts(
     id SERIAL PRIMARY KEY NOT NULL,
     sender_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
     reciever_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+    message_title TEXT NOT NULL,
     sent_message TEXT NOT NULL,
     time_of_post TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
