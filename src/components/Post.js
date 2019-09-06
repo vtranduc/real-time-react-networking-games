@@ -1,10 +1,13 @@
 import React from "react";
-
-export default function Post({ title, message }) {
+import "../styles/post.css";
+export default function Post({ title, message, sender }) {
 	return (
 		<div className="post">
-			<h3>{title}</h3>
-			<p>{message}</p>
+			<div className="post-title">
+				<h3 id="title">{title}</h3> <h4 id="sender">{sender}</h4>
+			</div>
+
+			<p id="message">{message}</p>
 		</div>
 	);
 }

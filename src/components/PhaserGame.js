@@ -22,7 +22,7 @@ function PhaserGame() {
 	let ground;
 	let background;
 	let scoreText;
-
+	let laser;
 	let timer = 0;
 	let limit = 100;
 	let intervalStars;
@@ -33,6 +33,7 @@ function PhaserGame() {
 	let p1, p2, p3;
 	let downFlag = false;
 	let scene;
+
 	let timeoutArr = [];
 	let intervalArr = [];
 	let timedEvent;
@@ -46,7 +47,7 @@ function PhaserGame() {
 			physics: {
 				default: "arcade",
 				parent: "phaser",
-				arcade: { debug: false, fps: 100, gravity: { y: 200 } }
+				arcade: { debug: true, fps: 100, gravity: { y: 200 } }
 			},
 			parent: "phaser",
 			scene: { preload, create, update },
@@ -95,6 +96,23 @@ function PhaserGame() {
 			physics.add.overlap(player, bombs, hitBomb, null, this);
 		}
 
+		function createLaser() {
+			let laser = physics.add.image(player.x, player.y - 30, "laser");
+			laser.setScale(0.04);
+			laser.body.velocity.y = -200;
+			laser.body.setAllowGravity(false);
+
+			physics.add.overlap(
+				laser,
+				bombs,
+				() => {
+					console.log("touched player");
+				},
+				null,
+				this
+			);
+		}
+
 		function createStar() {
 			let star = physics.add.image(
 				Math.floor(Math.random() * Math.floor(800)),
@@ -136,6 +154,12 @@ function PhaserGame() {
 		// 		bomb.setVelocity(Phaser.Math.Between(-200, 200), 20);
 		// 	}
 		// }
+		function destroyBomb() {
+			laser.disableBody(true, true);
+			bombs.disableBody(true, true);
+			score += 2;
+			scoreText.setText("Score: " + score);
+		}
 		function hitBomb(player, bomb) {
 			player.setTint(0xff0000);
 
@@ -170,6 +194,7 @@ function PhaserGame() {
 				frameWidth: 500,
 				frameHeight: 500
 			});
+			this.load.image("laser", "assets/dodgingBullets/PixelArt.png");
 			//this.load.image("sky", "assets/dodgingBullets/sky.png");
 			// this.load.image("ground", "assets/dodgingBullets/platform.png");
 			// this.load.image(
@@ -203,6 +228,7 @@ function PhaserGame() {
 			d = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
 			m = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.M);
 			n = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.N);
+
 			shift = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SHIFT);
 			//---------------------------------------------------------
 			//----------Adding Background------------------------------
@@ -233,7 +259,7 @@ function PhaserGame() {
 			// p3.body.setAllowGravity(false);
 			//------------------------------------------------------------
 			//----------------------bombs---------------------------------
-			bombs = this.physics.add.group();
+			//bombs = this.physics.add.group();
 			//console.log(platforms, "LOOK HERE");
 			//------------------------------------------------------------
 			//----------------------playerSetup---------------------------
@@ -375,6 +401,9 @@ function PhaserGame() {
 			}
 			if (s.isDown) {
 				player.y += movementSpeed;
+			}
+			if (Phaser.Input.Keyboard.JustDown(spacebar)) {
+				createLaser();
 			}
 
 			//--------------------handle movements------------------

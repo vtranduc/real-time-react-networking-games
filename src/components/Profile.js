@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "../styles/profile.css";
 import Posts from "./Post";
 import Paper from "@material-ui/core/Paper";
@@ -10,23 +10,76 @@ import Button from "@material-ui/core/Button";
 import useKeyPress from "../helpers/useKeyPress";
 import Container from "@material-ui/core/Container";
 import Input from "@material-ui/core/Input";
+import axios from "axios";
 
-function Profile() {
+function Profile({ profileInfo }) {
+	//axios call to get user messages
+	const [posts, setPosts] = useState(null);
+	const [postList, setPostList] = useState([]);
 	const [userMessage, setUserMessage] = useState({
 		title: "",
 		message: ""
 	});
-	const [posts, setPosts] = useState([
-		<Posts title={userMessage.title} message={userMessage.message} />
-	]);
 
-	function onSubmit() {
-		let temp = [...posts];
-		temp.push(
-			<Posts title={userMessage.title} message={userMessage.message} />
-		);
-		setPosts(temp);
+	function handleSubmit() {
+		console.log(profileInfo);
+		if (
+			profileInfo &&
+			userMessage.title.length > 1 &&
+			userMessage.message.length > 1
+		) {
+			axios
+				.post("http://localhost:3001/postmessage", {
+					title: userMessage.title,
+					message: userMessage.message,
+					sender: profileInfo.username,
+					reciever: "a"
+				})
+				.then(function(response) {
+					console.log(response);
+				})
+				.catch(function(error) {
+					console.log(error);
+				});
+		} else {
+			alert("not logged in, or empty title or message");
+		}
 	}
+
+	useEffect(() => {
+		axios
+			.get(`http://localhost:3001/getmessages/${profileInfo.username}`)
+			.then(data => {
+				setPosts(data.data);
+			});
+	}, []);
+
+	useEffect(() => {
+		let postHistory = [];
+		if (posts) {
+			for (let messageData of posts) {
+				postHistory.push(
+					<Posts
+						title={messageData.message_title}
+						message={messageData.sent_message}
+						sender={"not sure"}
+					/>
+				);
+			}
+
+			setPostList(postHistory);
+			//console.log(postList);
+		}
+	}, [posts]);
+	//getMessage("jzizzless").then(console.log);
+
+	// function onSubmit() {
+	// 	let temp = [...posts];
+	// 	temp.push(
+	// 		<Posts title={userMessage.title} message={userMessage.message} />
+	// 	);
+	// 	setPosts(temp);
+	// }
 
 	function updateInput(event) {
 		switch (event.target.name) {
@@ -50,7 +103,7 @@ function Profile() {
 						src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/7e/Circle-icons-profile.svg/1024px-Circle-icons-profile.svg.png"
 						id="profile-img"
 					/>
-					profile
+					{profileInfo.username}
 					<div id="profile-button">
 						<Button>Add Friend</Button>
 						<Button>Follow</Button>
@@ -77,15 +130,9 @@ function Profile() {
 						type="text"
 						placeholder="Add Message"
 					/>
-					<Button
-						onClick={() => {
-							onSubmit();
-						}}>
-						Submit
-					</Button>
+					<Button onClick={handleSubmit}>Submit</Button>
 				</form>
-
-				{posts}
+				{postList}
 			</div>
 		</div>
 	);
