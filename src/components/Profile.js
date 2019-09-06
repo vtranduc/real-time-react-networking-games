@@ -11,6 +11,7 @@ import useKeyPress from "../helpers/useKeyPress";
 import Container from "@material-ui/core/Container";
 import Input from "@material-ui/core/Input";
 import axios from "axios";
+import { Link } from "react-router-dom";
 
 function Profile({ profileInfo }) {
 	//axios call to get user messages
@@ -47,11 +48,13 @@ function Profile({ profileInfo }) {
 	}
 
 	useEffect(() => {
-		axios
-			.get(`http://localhost:3001/getmessages/${profileInfo.username}`)
-			.then(data => {
-				setPosts(data.data);
-			});
+		if (profileInfo) {
+			axios
+				.get(`http://localhost:3001/getmessages/${profileInfo.username}`)
+				.then(data => {
+					setPosts(data.data);
+				});
+		}
 	}, []);
 
 	useEffect(() => {
@@ -103,7 +106,7 @@ function Profile({ profileInfo }) {
 						src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/7e/Circle-icons-profile.svg/1024px-Circle-icons-profile.svg.png"
 						id="profile-img"
 					/>
-					{profileInfo.username}
+					{profileInfo && profileInfo.username}
 					<div id="profile-button">
 						<Button>Add Friend</Button>
 						<Button>Follow</Button>
@@ -130,6 +133,7 @@ function Profile({ profileInfo }) {
 						type="text"
 						placeholder="Add Message"
 					/>
+
 					<Button onClick={handleSubmit}>Submit</Button>
 				</form>
 				{postList}
