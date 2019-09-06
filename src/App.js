@@ -8,6 +8,7 @@ import About from "./components/About";
 import Login from "./components/Login";
 import Register from "./components/Register";
 import Soccer from "./components/soccer/Soccer";
+import World from "./components/world/World";
 import EggCatchGame from "./components/eggCatch/eggCatchClient";
 import Home from "./components/Home";
 import Profile from "./components/Profile";
@@ -61,6 +62,7 @@ function App() {
         />
 
         <Route path="/register" exact component={Register} />
+        <Route path="/world" exact component={World} />
         <Route
           path="/soccer"
           exact
