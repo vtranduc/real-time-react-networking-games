@@ -9,6 +9,7 @@ import Chip from "@material-ui/core/Chip";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 import useKeyPress from "../helpers/useKeyPress";
+import "../styles/lobby.css"
 //=======================================
 // import FormControl from "@material-ui/core/FormControl";
 // import InputLabel from "@material-ui/core/InputLabel";
@@ -172,7 +173,7 @@ export default function Lobby({ socket, setRoom }) {
   return (
     <>
       {lobbyData ? (
-        <Paper
+        <Paper id ="paper"
           style={{
             margin: "2em",
             display: "flex",
@@ -201,6 +202,7 @@ export default function Lobby({ socket, setRoom }) {
                 justifyContent: "center"
               }}
             >
+              
               Games
             </h3>
             <List>

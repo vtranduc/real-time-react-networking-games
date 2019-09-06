@@ -19,7 +19,7 @@ function Login({ loginStatus, setLoginStatus, setProfileInfo }) {
 			.then(response => {
 				if (response.data.length) {
 					setLoginStatus(true);
-
+					//this should be set to a cookies session instead
 					setProfileInfo({
 						username: response.data[0].username,
 						avatar: response.data[0].avatar,

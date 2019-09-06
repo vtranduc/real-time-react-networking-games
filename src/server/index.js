@@ -10,10 +10,13 @@ const lobby = require("./lobby/index");
 const cookieSession = require("cookie-session");
 
 const {
-  getMessage,
-  getUserData,
-  postMessage,
-  getUserProfile
+
+	getMessage,
+	getUserData,
+	postMessage,
+	getUserProfile,
+	createUser
+
 } = require("../../db/queries/allQueries");
 // app.get("/", (req, res) => {
 //   res.send("<h1>Hellow World</h1>");
@@ -58,15 +61,19 @@ const getAllUsers = function() {
     .then(res => res.rows);
 };
 const getUser = function(email, password) {
-  return pool
-    .query({
-      text: `SELECT * 
+
+	return pool
+		.query({
+			text: `SELECT id, username, first_name, avatar 
     FROM users 
     WHERE email = $1 AND pass = $2`,
-      values: [email, password],
-      name: "get_message_query"
-    })
-    .then(res => res.rows);
+			values: [email, password],
+			name: "get_message_query"
+		})
+		.then(res => {
+			return res.rows;
+		});
+
 };
 
 //----------------------------------------------------
@@ -85,19 +92,32 @@ app.get("/getuser/:username", (req, res) => {
 });
 
 app.post("/login", (req, res) => {
-  //console.log("FORM VALUES:", req.body)
-  getUser(req.body.email, req.body.password).then(result => {
-    console.log("recieved response");
-    req.session.user_id = "123";
-    res.send(result);
-  });
+
+	console.log("FORM VALUES:", req.body);
+	getUser(req.body.email, req.body.password)
+		.then(result => {
+			console.log("OVER HERE", result);
+			req.session.user_id = result[0].username;
+			res.send(result);
+		})
+		.catch(err => {
+			console.log("LIDDDD");
+		});
 });
 
-app.get("/jj", (req, res) => {
-  getUser("jayjay_ting@hotmail.com", "hello").then(result => {
-    return res.json(result);
-  });
+app.post("/register", (req, res) => {
+	createUser(
+		req.body.username,
+		req.body.firstName,
+		req.body.lastName,
+		req.body.email,
+		req.body.password,
+		req.body.avatar
+	);
+
 });
+
+app.get("/jj", (req, res) => {});
 
 app.get("/:id", (req, res) => {
   console.log(req.params);
