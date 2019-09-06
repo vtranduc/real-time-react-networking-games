@@ -29,27 +29,49 @@ const rockPaperScissorsGame = function(socket, sockets, rps, io) {
 
   socket.on("rpsGetReady", data => {
     // console.log("getting ready");
-    rps[data.room].players[socket.id].readyForNextGame = true;
-    if (
-      Object.keys(rps[data.room].players).length ===
-      Object.keys(rps[data.room].players).filter(
-        player => rps[data.room].players[player].readyForNextGame
-      ).length
-    ) {
-      // console.log("GO TO NEXT GAME NOW");
-      Object.keys(rps[data.room].players).forEach(player => {
-        rps[data.room].players[player].response = "";
-      });
-      rps[data.room].status.stage = "awaiting";
-      sockets.to(data.room).emit(
-        "rpsUpdate",
-        rpsGetStat({
-          ...rps[data.room],
-          status: { ...rps[data.room].status, switchStage: true }
-        })
-      );
+    if (rps[data.room]) {
+      rps[data.room].players[socket.id].readyForNextGame = true;
+      if (
+        Object.keys(rps[data.room].players).length ===
+        Object.keys(rps[data.room].players).filter(
+          player => rps[data.room].players[player].readyForNextGame
+        ).length
+      ) {
+        // console.log("GO TO NEXT GAME NOW");
+        Object.keys(rps[data.room].players).forEach(player => {
+          rps[data.room].players[player].response = "";
+        });
+        rps[data.room].status.stage = "awaiting";
+        sockets.to(data.room).emit(
+          "rpsUpdate",
+          rpsGetStat({
+            ...rps[data.room],
+            status: { ...rps[data.room].status, switchStage: true }
+          })
+        );
+      } else {
+        sockets.to(data.room).emit("rpsUpdate", rpsGetStat(rps[data.room]));
+      }
     } else {
-      sockets.to(data.room).emit("rpsUpdate", rpsGetStat(rps[data.room]));
+      console.log("Room is not ready!");
+    }
+  });
+
+  socket.on("rpsReceiveMsg", data => {
+    console.log("Data received is: ", data);
+    if (rps[data.room]) {
+      rps[data.room].chats.unshift({
+        id: `rps${data.room}${socket.id}${rps[data.room].chats.length + 1}`,
+        user: socket.id,
+        msg: data.msg
+      });
+      sockets.to(data.room).emit("rpsAddBubble", {
+        gameData: rpsGetStat(rps[data.room]),
+        bubble: data.msg,
+        sender: socket.id
+      });
+    } else {
+      console.log("Room is not ready!");
     }
   });
 
@@ -63,7 +85,7 @@ const rockPaperScissorsGame = function(socket, sockets, rps, io) {
       }
       if (Object.keys(rps[room].players).length === 0) {
         delete rps[room];
-        // console.log("the entire has been destroyed!");
+        console.log("the entire has been destroyed!");
       } else {
         // console.log("MAKINA");
         // console.log("before", rps[room].players);
@@ -82,7 +104,7 @@ const rockPaperScissorsGame = function(socket, sockets, rps, io) {
       delete rps[room].players[socket.id];
       if (Object.keys(rps[room].players).length === 0) {
         delete rps[room];
-        // console.log("Delted the entire room in Rock Paper Scissor!");
+        console.log("Deleted the entire room in Rock Paper Scissor!");
       } else {
         rpsUpdateId(rps[room].players);
         updateRpsGame(sockets, rps[room], room);
@@ -94,9 +116,6 @@ const rockPaperScissorsGame = function(socket, sockets, rps, io) {
 module.exports = rockPaperScissorsGame;
 
 const updateRpsGame = function(sockets, roomData, room) {
-  // console.log("Must update game here!");
-  // console.log(roomData);
-
   const responses = Object.keys(roomData.players).map(player => {
     return roomData.players[player].response;
   });
@@ -186,7 +205,5 @@ const rpsUpdateId = function(players) {
     players[
       Object.keys(players).find(player => players[player].id === previousId)
     ].id = newId;
-
-    // })
   }
 };

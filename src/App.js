@@ -8,6 +8,7 @@ import About from "./components/About";
 import Login from "./components/Login";
 import Register from "./components/Register";
 import Soccer from "./components/soccer/Soccer";
+import World from "./components/world/World";
 import EggCatchGame from "./components/eggCatch/eggCatchClient";
 import Home from "./components/Home";
 import Profile from "./components/Profile";
@@ -104,6 +105,55 @@ function App() {
 		</Router>
 	);
 
+
+        <Route path="/register" exact component={Register} />
+        <Route path="/world" exact component={World} />
+        <Route
+          path="/soccer"
+          exact
+          render={() => {
+            return <Soccer socket={socket} room={room} />;
+          }}
+        />
+        <Route
+          path="/rockpaperscissors"
+          exact
+          render={() => {
+            return <RockPaperScissors socket={socket} />;
+          }}
+        />
+        <Route
+          path="/chansey"
+          exact
+          render={() => {
+            return <EggCatchGame socket={socket} />;
+          }}
+        />
+        <Route path="/phaser-game" exact component={PhaserGame} />
+        <Route path="/profile" exact component={Profile} />
+      </Switch>
+    </Router>
+  );
+
+  // return (
+  //   <div className="App">
+  //     <header className="App-header">
+  //       <img src={logo} className="App-logo" alt="logo" />
+  //       <p>
+  //         Edit <code>src/App.js</code> and save to reload.
+  //       </p>
+  //       <a
+  //         className="App-link"
+  //         href="https://reactjs.org"
+  //         target="_blank"
+  //         rel="noopener noreferrer"
+  //       >
+  //         Learn React
+  //       </a>
+  //     </header>
+  //   </div>
+  // );
+
 	// return (
 	//   <div className="App">
 	//     <header className="App-header">
@@ -122,6 +172,7 @@ function App() {
 	//     </header>
 	//   </div>
 	// );
+
 }
 
 export default App;
