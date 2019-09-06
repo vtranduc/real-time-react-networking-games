@@ -10,7 +10,7 @@ function Register() {
 		password: null,
 		confirmPassword: null
 	});
-	function handleSubmit() {
+	function createUserSubmit() {
 		if (
 			user.firstName &&
 			user.lastName &&
@@ -25,7 +25,8 @@ function Register() {
 					lastName: user.lastName,
 					email: user.email,
 					username: user.username,
-					password: user.password
+					password: user.password,
+					avatar: "alsdjfalsdjfalsjf"
 				})
 				.then(response => {
 					if (response.data.length) {
@@ -63,6 +64,8 @@ function Register() {
 			`${user.firstName}${user.lastName}${user.email}${user.username}${user.password}${user.confirmPassword}`
 		);
 		event.preventDefault();
+
+		createUserSubmit();
 	}
 	function updateInput(event) {
 		switch (event.target.name) {
