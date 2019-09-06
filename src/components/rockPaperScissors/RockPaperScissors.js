@@ -1,15 +1,26 @@
-import React, { useEffect, useState, Fragment } from "react";
+import React, { useEffect, useState } from "react";
 import Paper from "@material-ui/core/Paper";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
-// import { objectTypeSpreadProperty } from "@babel/types";
 import "../../styles/chatBubble.css";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 import useKeyPress from "../../helpers/useKeyPress";
-// import ChatBox from "../chatBox/ChatBox";
 import "./rockPaperScissors.css";
 import Chip from "@material-ui/core/Chip";
+
+import Fab from "@material-ui/core/Fab";
+import NavigationIcon from "@material-ui/icons/Navigation";
+import { makeStyles } from "@material-ui/core/styles";
+
+const useStyles = makeStyles(theme => ({
+  fab: {
+    margin: theme.spacing(1)
+  },
+  extendedIcon: {
+    marginRight: theme.spacing(1)
+  }
+}));
 
 const bubbleMirror = {};
 
@@ -19,10 +30,8 @@ export default function RockPaperScissors({ socket }) {
   const nPlayers = 2;
   //--------------------
 
+  const classes = useStyles();
   const chatBubbleTimeOut = 5000;
-
-  // const interv
-
   const [rpsData, setRpsData] = useState(null);
   const [selection, setSelection] = useState("");
   const [readyNextGame, setReadyNextGame] = useState(false);
@@ -36,7 +45,6 @@ export default function RockPaperScissors({ socket }) {
   const [logMode, setLogMode] = useState(false);
 
   const handleRpsSelection = function(choice) {
-    console.log("the choice 55lFDAS: ", choice);
     setSelection(choice);
     socket.emit("rpsReceiveResponse", { room, choice });
   };
@@ -44,83 +52,20 @@ export default function RockPaperScissors({ socket }) {
   useEffect(() => {
     socket.emit("rpsInitialize", { room, nPlayers });
     const handleRpsUpdate = function(data) {
-      // console.log("Current status IS: ", rpsData);
-      // console.log("Prepaaping for setupa: ", data);
-      // if (rpsData) {
-      //   if (
-      //     rpsData.status.stage === "awaiting" &&
-      //     data.status.stage === "show"
-      //   ) {
-      //     setReadyNextGame(false);
-      //   } else if (
-      //     rpsData.status.stage === "show" &&
-      //     data.status.stage === "awaiting"
-      //   ) {
-      //     console.log("MUST COME HERE!");
-      //     setSelection("");
-      //   }
-
-      //   console.log("sage: ", rpsData.status.stage);
-      //   console.log(data.status.stage);
-      // }
-
       if (data.status.switchStage) {
-        // console.log("CHANGE STATE NOW");
-        // if (data.)
         if (data.status.stage === "show") {
           setReadyNextGame(false);
         } else if (data.status.stage === "awaiting") {
           setSelection("");
         }
       }
-
-      // console.log(
-      //   "TESTING THE SORTING STUFFS!: ",
-      //   rpsSortPlayers(data.players)
-      // );
-      // console.log("INCOMING: ", data);
       setRpsData(data);
     };
     socket.on("rpsUpdate", handleRpsUpdate);
 
     const handleRpsAddBubble = function(data) {
-      // console.log("received back :D ", data);
-
       setRpsData(data.gameData);
-      // --------------------------------------
-      console.log("BUBBLE: ", bubble);
       setBubbleTrigger({ sender: data.sender, msg: data.bubble });
-
-      // bubbleIntervals[data.sender] = { msg: data.bubble };
-
-      // if (bubbleIntervals[data.sender]) {
-      //   clearInterval(bubbleIntervals[data.sender]);
-      //   setBubble({ ...bubble, [data.sender]: { msg: null } });
-      //   delete bubbleIntervals[data.sender];
-      // }
-
-      // setBubble({ ...bubble, [data.sender]: { msg: data.bubble } });
-      // bubbleIntervals[data.sender] = setTimeout(() => {
-      //   setBubble({ ...bubble, [data.sender]: { msg: null } });
-      //   delete bubbleIntervals[data.sender];
-      // }, chatBubbleTimeOut);
-
-      // setBubble({
-      //   ...bubble,
-      //   [data.sender]: {
-      //     msg: data.bubble,
-      //     interval: setInterval(() => {
-      //       console.log("be gone!");
-      //       console.log([data.sender]);
-      //       console.log();
-      //       clearInterval(bubble[data.sender].interval);
-      //       setBubble({
-      //         ...bubble,
-      //         [data.sender]: { msg: "", interval: null }
-      //       });
-      //     }, chatBubbleTimeOut)
-      // }
-      // });
     };
     socket.on("rpsAddBubble", handleRpsAddBubble);
 
@@ -132,7 +77,6 @@ export default function RockPaperScissors({ socket }) {
   }, []);
 
   useEffect(() => {
-    console.log("trigger the bubble here");
     if (bubbleTrigger) {
       const bubbleOnlyMsg = function(bubbleMirror) {
         let output = {};
@@ -170,12 +114,8 @@ export default function RockPaperScissors({ socket }) {
   }, [bubbleTrigger, bubble]);
 
   useEffect(() => {
-    console.log("Going in");
     if (chatMode.inQueue) {
-      console.log("EMIT THE MSG TO THE SERVER HERE!");
-
       socket.emit("rpsReceiveMsg", { room: room, msg: chatMode.msg });
-
       setChatMode({ ...chatMode, inQueue: false, msg: "" });
     }
   }, [chatMode.inQueue]);
@@ -187,11 +127,9 @@ export default function RockPaperScissors({ socket }) {
         if (chatMode.msg) {
           setChatMode({ ...chatMode, inQueue: true });
         } else {
-          // setChatMode({ ...chatMode, mode: false });
           document.getElementById("rpsChatTextField").blur();
         }
       } else {
-        // setChatMode({ ...chatMode, mode: true });
         document.getElementById("rpsChatTextField").focus();
       }
     }
@@ -200,34 +138,49 @@ export default function RockPaperScissors({ socket }) {
   return (
     <>
       <Paper
+        id="rpsPaper"
         style={{
+          position: "relative",
           marginRight: "3vw",
           marginLeft: "3vw",
           marginBottom: "2vh",
-          height: "50vh",
+          height: "60vh",
           marginTop: "3vh"
         }}
       >
-        {logMode ? (
-          <div
-            style={{
-              border: "solid",
-              // margin: "2em",
-              // width: "96%",
-              height: "100%"
-              // marginLeft: "2%",
-              // marginRight: "2%",
-              // marginTop: "2%",
-              // marginBottom: "2%"
-            }}
-          >
+        <Fab
+          variant="extended"
+          aria-label="delete"
+          className={classes.fab}
+          style={{
+            zIndex: 1,
+            position: "absolute",
+            bottom: "1vh",
+            right: "1vw",
+            display: "inline-block"
+          }}
+          onClick={() => {
+            if (logMode) {
+              setLogMode(false);
+            } else {
+              setLogMode(true);
+            }
+          }}
+        >
+          <NavigationIcon className={classes.extendedIcon} />
+          Chat log
+        </Fab>
+        {rpsData && logMode ? (
+          <div style={{ overflow: "auto", maxHeight: "100%" }}>
             {rpsData && (
               <List style={{ overflow: "auto", height: "100%" }}>
                 {rpsData.chats.map(chat => {
-                  console.log("it would be goods", chat);
                   return (
-                    <ListItem>
-                      <Chip label={chat.user}></Chip>
+                    <ListItem key={chat.id}>
+                      <Chip
+                        label={chat.user}
+                        style={{ marginRight: "1em" }}
+                      ></Chip>
                       <p>{chat.msg}</p>
                     </ListItem>
                   );
@@ -236,17 +189,6 @@ export default function RockPaperScissors({ socket }) {
             )}
           </div>
         ) : (
-          //   ListItem key={chat.key} button>
-          //   <Chip
-          //     label={chat.user}
-          //     style={{
-          //       fontSize: "0.8em",
-          //       backgroundColor: "gray",
-          //       marginRight: "1em"
-          //     }}
-          //   ></Chip>
-          //   {chat.msg}
-          // </ListItem>
           <div>
             {rpsData ? (
               <div
@@ -254,19 +196,14 @@ export default function RockPaperScissors({ socket }) {
                   display: "flex",
                   flexDirection: "column",
                   justifyContent: "space-evenly",
-                  // border: "solid",
                   height: "100%"
-                  // border: "blue 3px dotted",
-                  // marginBottom: 0
                 }}
               >
                 <List
                   style={{
-                    // border: "solid",
                     display: "flex",
                     justifyContent: "space-evenly",
                     marginTop: 0
-                    // border: "red 3px dotted"
                   }}
                 >
                   {rpsSortPlayers(rpsData.players).map(player => {
@@ -292,20 +229,6 @@ export default function RockPaperScissors({ socket }) {
                               </div>
                             )}
                           </div>
-
-                          {/* <div>
-                        {bubble[player] && (
-                          <div
-                            style={{ marginBottom: "2vh", margingTop: "-60px" }}
-                          >
-                            <div className="speech-buble-wrapper">
-                              <div className="speech-bubble">
-                                <p>{bubble[player].msg}</p>
-                              </div>
-                            </div>
-                          </div>
-                        )}
-                      </div> */}
 
                           <div className="yellowBox">
                             {rpsData.players[player].response ? (
@@ -348,12 +271,6 @@ export default function RockPaperScissors({ socket }) {
                   })}
                 </List>
                 {rpsData.status.stage === "show" && (
-                  // <div
-                  //   style={{
-                  //     display: "flex",
-                  //     flexDirection: "column"
-                  //   }}
-                  // >
                   <div
                     style={{
                       display: "flex",
@@ -389,7 +306,6 @@ export default function RockPaperScissors({ socket }) {
                       ) : (
                         <button
                           onClick={() => {
-                            // console.log("getting ready here...");
                             setReadyNextGame(true);
                             socket.emit("rpsGetReady", { room });
                           }}
@@ -406,10 +322,7 @@ export default function RockPaperScissors({ socket }) {
                       <div
                         style={{
                           display: "flex",
-                          // justifyContent: "center",
                           flexDirection: "column"
-                          // paddingRight: "10vw",
-                          // paddingLeft: "10vw",
                         }}
                       >
                         <h3 style={{ margin: "auto" }}>
@@ -485,7 +398,6 @@ export default function RockPaperScissors({ socket }) {
 
       <div
         style={{
-          // border: "solid",
           marginLeft: "2vw",
           marginRight: "2vw",
           display: "flex",
@@ -505,19 +417,16 @@ export default function RockPaperScissors({ socket }) {
             setChatMode({ ...chatMode, mode: false });
           }}
           onChange={e => {
-            // console.log("jelfads", e.target.value);
             setChatMode({ ...chatMode, msg: e.target.value });
           }}
         ></TextField>
         <Button
           variant="contained"
           color="primary"
-          // button
           onClick={() => {
             if (chatMode.msg) {
               setChatMode({ ...chatMode, inQueue: true });
             }
-            // console.log("sned up teh chat for rps please");
           }}
         >
           Chat!
