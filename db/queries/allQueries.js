@@ -18,26 +18,21 @@ const getUserProfile = function(username) {
 		.then(res => res.rows);
 };
 
-//const addUser
-// const createUser = function(
-// 	username,
-// 	firstName,
-// 	lastName,
-// 	email,
-// 	password,
-// 	avatar
-// ) {
-// 	pool.query({
-// 		text: `INSERT INTO users(username, firstName, lastName, email, password, avatar)
-// VALUES($1, $2, $3, $4)`,
-// 		values: [
-// 			data[senderUsername],
-// 			data[recieverUsername],
-// 			message_title,
-// 			message
-// 		]
-// 	});
-// };
+const createUser = function(
+	username,
+	firstName,
+	lastName,
+	email,
+	password,
+	avatar
+) {
+	pool.query({
+		text: `INSERT INTO users(username, first_name, last_name, email, pass, avatar)
+VALUES($1, $2, $3, $4,$5, $6 )`,
+		values: [username, firstName, lastName, email, password, avatar]
+	});
+};
+
 const getUserData = function(email, password) {
 	return pool
 		.query({
@@ -159,7 +154,7 @@ const getMessage = function(recieverName) {
 //getUsers().then(console.log);
 
 //getMessage("a").then(console.log);
-module.exports = { getUserProfile, getMessage, postMessage };
+module.exports = { getUserProfile, getMessage, postMessage, createUser };
 
 // const getMessages = (user, chatroom) => {
 //     return pool

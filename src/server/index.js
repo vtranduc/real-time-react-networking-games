@@ -13,7 +13,8 @@ const {
 	getMessage,
 	getUserData,
 	postMessage,
-	getUserProfile
+	getUserProfile,
+	createUser
 } = require("../../db/queries/allQueries");
 // app.get("/", (req, res) => {
 //   res.send("<h1>Hellow World</h1>");
@@ -99,13 +100,18 @@ app.post("/login", (req, res) => {
 		});
 });
 
-app.post("register", (req, res) => {});
-
-app.get("/jj", (req, res) => {
-	getUser("jayjay_ting@hotmail.com", "hello").then(result => {
-		return res.json(result);
-	});
+app.post("/register", (req, res) => {
+	createUser(
+		req.body.username,
+		req.body.firstName,
+		req.body.lastName,
+		req.body.email,
+		req.body.password,
+		req.body.avatar
+	);
 });
+
+app.get("/jj", (req, res) => {});
 
 app.get("/:id", (req, res) => {
 	console.log(req.params);
