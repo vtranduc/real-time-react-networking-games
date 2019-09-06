@@ -33,11 +33,11 @@ VALUES(1, 2, false),
 (2, 3, true),
 (3, 4, true);
 
-INSERT INTO user_posts(sender_id, reciever_id, sent_message, time_of_post)
-VALUES (1, 2, 'I dont wanna close my eyeyeyeyeyeys, dont wanna see you baby cuz you feel me babe, and i dont wanna miss a thang', CURRENT_TIMESTAMP),
-(2, 3, 'you naughty boy~', CURRENT_TIMESTAMP),
-(2 ,4, 'no.... YOU are naughty~', CURRENT_TIMESTAMP),
-(1, 3, 'why dont you talk to me anymore... I wanna kill myself', CURRENT_TIMESTAMP);
+INSERT INTO user_posts(sender_id, reciever_id, message_title,sent_message, time_of_post)
+VALUES (1, 2,'song' ,'I dont wanna close my eyeyeyeyeyeys, dont wanna see you baby cuz you feel me babe, and i dont wanna miss a thang', CURRENT_TIMESTAMP),
+(2, 3, 'flirt', 'you naughty boy~', CURRENT_TIMESTAMP),
+(2 ,4, 'flirting','no.... YOU are naughty~', CURRENT_TIMESTAMP),
+(1, 3, 'emo','why dont you talk to me anymore... I wanna kill myself', CURRENT_TIMESTAMP);
 
 
 
