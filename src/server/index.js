@@ -7,10 +7,13 @@ const eggCatchGame = require("./eggCatch/index");
 const world = require("./world/index");
 const rockPaperScissorsGame = require("./rockPaperScissors/index");
 const lobby = require("./lobby/index");
+const cookieSession = require("cookie-session");
+
 const {
 	getMessage,
 	getUserData,
-	postMessage
+	postMessage,
+	getUserProfile
 } = require("../../db/queries/allQueries");
 // app.get("/", (req, res) => {
 //   res.send("<h1>Hellow World</h1>");
@@ -19,10 +22,17 @@ const {
 const cors = require("cors");
 const bodyParser = require("body-parser");
 
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(cors({ origin: "http://localhost:3000", credentials: true }));
+app.set("trust proxy", 1); // trust first proxy
 
+app.use(
+	cookieSession({
+		name: "user_id",
+		keys: ["user_id"]
+	})
+);
 //------------API ROUTEs-------------------------------
 const { Pool } = require("pg");
 //const dbParams = require("../lib/db.js");
@@ -42,7 +52,7 @@ console.log("mikuro san");
 const getAllUsers = function() {
 	return pool
 		.query(
-			`SELECT *
+			`SELECT id, username,first_name ,  avatar
   FROM users`
 		)
 		.then(res => res.rows);
@@ -68,10 +78,17 @@ app.get("/users", (req, res) => {
 	});
 });
 
+app.get("/getuser/:username", (req, res) => {
+	getUserProfile(req.params.username).then(result => {
+		res.send(result);
+	});
+});
+
 app.post("/login", (req, res) => {
 	//console.log("FORM VALUES:", req.body)
 	getUser(req.body.email, req.body.password).then(result => {
 		console.log("recieved response");
+		req.session.user_id = "123";
 		res.send(result);
 	});
 });
