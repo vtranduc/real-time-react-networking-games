@@ -20,9 +20,10 @@ function PhaserGame() {
 	let gameOver = false;
 	let debris;
 	let ground;
+	let stars;
 	let background;
 	let scoreText;
-	let laser;
+	let lasers;
 	let timer = 0;
 	let limit = 100;
 	let intervalStars;
@@ -55,19 +56,6 @@ function PhaserGame() {
 		};
 
 		let game = new Phaser.Game(config);
-		// function preload() {}
-		// function create() {}
-		// function update() {
-		// 	console.log("this is doing something");
-		// }
-
-		// function setUpLevels(){
-		// 	for(let i = 0; i < 10; i ++){
-		// 		setTimeout(()=>{
-
-		// 		}, levelTimer -= )
-		// 	}
-		// }
 
 		function levelIncrementInit() {
 			thiis.time.addEvent({
@@ -86,14 +74,15 @@ function PhaserGame() {
 			//this.time.delayedCall(5000, ()=>{this.time.addEvent({ delay: 800, callback: createBomb, callbackScope: this, loop: true })}, [], this);
 		}
 		function createBomb() {
-			let bombs = physics.add.image(
+			let bomb = physics.add.image(
 				Math.floor(Math.random() * Math.floor(config.width)),
 				0,
 				"bomb"
 			);
-			bombs.setScale(getRandomInt(20, 35) / 200);
-			bombs.body.setCircle(150);
-			physics.add.overlap(player, bombs, hitBomb, null, this);
+			bomb.setScale(getRandomInt(20, 35) / 200);
+			bomb.body.setCircle(150);
+			bombs.add(bomb);
+			physics.add.overlap(player, bomb, hitBomb, null, this);
 		}
 
 		function createLaser() {
@@ -102,15 +91,7 @@ function PhaserGame() {
 			laser.body.velocity.y = -200;
 			laser.body.setAllowGravity(false);
 
-			physics.add.overlap(
-				laser,
-				bombs,
-				() => {
-					console.log("touched player");
-				},
-				null,
-				this
-			);
+			lasers.add(laser);
 		}
 
 		function createStar() {
@@ -119,6 +100,7 @@ function PhaserGame() {
 				0,
 				"star"
 			);
+			stars.add(star);
 			physics.add.overlap(player, star, collectStar, null, this);
 		}
 
@@ -138,25 +120,10 @@ function PhaserGame() {
 			score += 10;
 			scoreText.setText("Score: " + score);
 		}
-		// 	if (stars.countActive(true) === 0) {
-		// 		stars.children.iterate(function(child) {
-		// 			child.enableBody(true, child.x, 0, true, true);
-		// 		});
 
-		// 		var x =
-		// 			player.x < 400
-		// 				? Phaser.Math.Between(400, 800)
-		// 				: Phaser.Math.Between(0, 400);
-
-		// 		var bomb = bombs.create(x, 16, "bomb");
-		// 		bomb.setBounce(1);
-		// 		bomb.setCollideWorldBounds(true);
-		// 		bomb.setVelocity(Phaser.Math.Between(-200, 200), 20);
-		// 	}
-		// }
 		function destroyBomb() {
-			laser.disableBody(true, true);
-			bombs.disableBody(true, true);
+			//lasers.disableBody(true, true);
+			//bombs.disableBody(true, true);
 			score += 2;
 			scoreText.setText("Score: " + score);
 		}
@@ -195,12 +162,7 @@ function PhaserGame() {
 				frameHeight: 500
 			});
 			this.load.image("laser", "assets/dodgingBullets/PixelArt.png");
-			//this.load.image("sky", "assets/dodgingBullets/sky.png");
-			// this.load.image("ground", "assets/dodgingBullets/platform.png");
-			// this.load.image(
-			// 	"shortplatform",
-			// 	"assets/dodgingBullets/shortplatform.png"
-			// );
+
 			this.load.image("star", "assets/dodgingBullets/star.png");
 			this.load.image("bomb", "assets/dodgingBullets/bomb.png");
 			this.load.image("dude", "assets/dodgingBullets/dude.png");
@@ -209,15 +171,10 @@ function PhaserGame() {
 			// console.log(Phaser.Input.Keyboard.KeyCodes);
 		}
 		function create() {
-			// const sky = this.add.sprite(
-			// 	config.width / 2,
-			// 	config.height / 2,
-			// 	"sky",
-			// 	0
-			// );
-			//background.setScale(0.3)
-
-			//--
+			bombs = this.add.group();
+			lasers = this.add.group();
+			stars = this.add.group();
+			this.physics.add.overlap(bombs, lasers, destroyBomb, null, this);
 			//----------Key Config-------------------------------------
 			spacebar = this.input.keyboard.addKey(
 				Phaser.Input.Keyboard.KeyCodes.SPACE
@@ -240,56 +197,13 @@ function PhaserGame() {
 				fontSize: "32px",
 				fill: "#999"
 			});
-			//---------------------------------------------------------
-			//------------------------Platforms-------------------------
-			// platforms = this.physics.add.staticGroup();
-			// platforms.create(600, 400, "shortplatform");
-			// platforms.create(50, 250, "shortplatform");
-			// platforms.create(750, 220, "shortplatform");
-			// debris = this.physics.add.image(150, 150, "debris")
-			// p1 = this.physics.add.image(600, 400, "shortplatform").setImmovable(true);
-			// p2 = this.physics.add.image(50, 250, "shortplatform").setImmovable(true);
-			// p3 = this.physics.add.image(750, 220, "shortplatform").setImmovable(true);
-			// ground = this.physics.add.image(400, 568, "ground").setImmovable(true);
-			// ground.setScale(2)
-			// debris.setScale(0.3)
-			// ground.body.setAllowGravity(false);
-			// p1.body.setAllowGravity(false);
-			// p2.body.setAllowGravity(false);
-			// p3.body.setAllowGravity(false);
-			//------------------------------------------------------------
-			//----------------------bombs---------------------------------
-			//bombs = this.physics.add.group();
-			//console.log(platforms, "LOOK HERE");
-			//------------------------------------------------------------
+
 			//----------------------playerSetup---------------------------
 			player = this.physics.add.image(100, 450, "dude");
 			player.setScale(0.12);
 			player.body.setAllowGravity(false);
 			// player.setBounce(0.2);
 			player.setCollideWorldBounds(true);
-			// this.anims.create({
-			// 	key: "left",
-			// 	frames: this.anims.generateFrameNumbers("dude", { start: 0, end: 3 }),
-			// 	frameRate: 10,
-			// 	repeat: -1
-			// });
-
-			// this.anims.create({
-			// 	key: "turn",
-			// 	frames: [{ key: "dude", frame: 4 }],
-			// 	frameRate: 20
-			// });
-
-			// this.anims.create({
-			// 	key: "right",
-			// 	frames: this.anims.generateFrameNumbers("dude", { start: 5, end: 8 }),
-			// 	frameRate: 10,
-			// 	repeat: -1
-			// });
-			//-------------------------------------------------------------
-
-			//------------------------stars--------------------------------
 
 			//=====================================INTERVALS========================================
 
@@ -307,70 +221,6 @@ function PhaserGame() {
 				callbackScope: this,
 				loop: true
 			});
-
-			//setStarInterval();
-
-			// 	intervalBombs = setInterval(()=>{
-			// 		console.log("setinterval 1")
-			// 		let bombs = this.physics.add.image(Math.floor(Math.random() * Math.floor(800)), 0 , 'bomb')
-			// 		bombs.setScale(2)
-			// 		this.physics.add.overlap(player, bombs, hitBomb, null, this);
-			// }, 1000)
-
-			// 	timeouts.push(setTimeout(()=>{
-			// 		console.log("doing something")
-			// 		clearInterval(intervalBombs)
-			// 		intervalBombs = setInterval(()=>{
-			// 			let bombs = this.physics.add.image(Math.floor(Math.random() * Math.floor(800)), 0 , 'bomb')
-			// 		bombs.setScale(2)
-			// 		this.physics.add.overlap(player, bombs, hitBomb, null, this);
-
-			// 		}, 800)
-			// 	}, 4000))
-
-			// 	timeouts.push(setTimeout(()=>{
-			// 		console.log("doing something")
-			// 		clearInterval(intervalBombs)
-			// 		intervalBombs = setInterval(()=>{
-			// 			let bombs = this.physics.add.image(Math.floor(Math.random() * Math.floor(800)), 0 , 'bomb')
-			// 		bombs.setScale(2)
-			// 		this.physics.add.overlap(player, bombs, hitBomb, null, this);
-
-			// 		}, 600)
-			// 	}, 8000))
-
-			// 	timeouts.push(setTimeout(()=>{
-			// 		console.log("doing something")
-			// 		clearInterval(intervalBombs)
-			// 		intervalBombs = setInterval(()=>{
-			// 			let bombs = this.physics.add.image(Math.floor(Math.random() * Math.floor(800)), 0 , 'bomb')
-			// 		bombs.setScale(2)
-			// 		this.physics.add.overlap(player, bombs, hitBomb, null, this);
-
-			// 		}, 400)
-			// 	}, 10000))
-
-			// 	timeouts.push(setTimeout(()=>{
-			// 		console.log("doing something")
-			// 		clearInterval(intervalBombs)
-			// 		intervalBombs = setInterval(()=>{
-			// 			let bombs = this.physics.add.image(Math.floor(Math.random() * Math.floor(800)), 0 , 'bomb')
-			// 		bombs.setScale(2)
-			// 		this.physics.add.overlap(player, bombs, hitBomb, null, this);
-
-			// 		}, 200)
-			// 	}, 12000))
-
-			// 	timeouts.push(setTimeout(()=>{
-			// 		console.log("doing something")
-			// 		clearInterval(intervalBombs)
-			// 		intervalBombs = setInterval(()=>{
-			// 			let bombs = this.physics.add.image(Math.floor(Math.random() * Math.floor(800)), 0 , 'bomb')
-			// 		bombs.setScale(2)
-			// 		this.physics.add.overlap(player, bombs, hitBomb, null, this);
-			// 		}, 50)
-			// 	}, 14000))
-			//=====================================INTERVALS========================================
 
 			//-------------------------------------------------------------
 			//------------------------collisions---------------------------
@@ -405,64 +255,6 @@ function PhaserGame() {
 			if (Phaser.Input.Keyboard.JustDown(spacebar)) {
 				createLaser();
 			}
-
-			//--------------------handle movements------------------
-			//-----------sprint---------
-			// if (a.isDown && shift.isDown) {
-			// 	player.setVelocityX(-300);
-			// 	player.anims.play("left", true);
-			// } else if (d.isDown && shift.isDown) {
-			// 	player.setVelocityX(300);
-			// 	player.anims.play("right", true);
-			// 	//---------------------------
-			// 	//-----------walk------------
-			// } else if (a.isDown) {
-			// 	player.setVelocityX(-160);
-
-			// 	player.anims.play("left", true);
-			// } else if (d.isDown) {
-			// 	player.setVelocityX(160);
-
-			// 	player.anims.play("right", true);
-			// 	//------------------------
-			// } else if (player.body.touching.down) {
-			// 	player.setVelocityX(0);
-
-			// 	player.anims.play("turn");
-			// }
-			//-------------------------------------------------------------------
-			//--------------------------------dashing------------------
-
-			// if (Phaser.Input.Keyboard.JustDown(w) && player.body.touching.down) {
-			// 	player.setVelocityY(-660);
-			// }
-			// if (Phaser.Input.Keyboard.JustDown(s)) {
-			// 	player.setVelocityY(600);
-			// }
-
-			// if (Phaser.Input.Keyboard.JustDown(m)) {
-			// 	console.log("printing m");
-			// 	player.setVelocityX(600);
-			// }
-			// if (Phaser.Input.Keyboard.JustDown(n)) {
-			// 	console.log("printing m");
-			// 	player.setVelocityX(-600);
-			// }
-			//--------------------------------------------------
-			//--------------------------------dashing------------------
-			// if (cursors.left.isDown && cursors.) {
-			// 	player.setVelocityX(-160);
-
-			// 	player.anims.play("left", true);
-			// } else if (cursors.right.isDown) {
-			// 	player.setVelocityX(160);
-
-			// 	player.anims.play("right", true);
-			// } else {
-			// 	player.setVelocityX(0);
-
-			// 	player.anims.play("turn");
-			// }
 		}
 
 		return function cleanup() {
