@@ -10,11 +10,13 @@ const lobby = require("./lobby/index");
 const cookieSession = require("cookie-session");
 
 const {
+
 	getMessage,
 	getUserData,
 	postMessage,
 	getUserProfile,
 	createUser
+
 } = require("../../db/queries/allQueries");
 // app.get("/", (req, res) => {
 //   res.send("<h1>Hellow World</h1>");
@@ -29,19 +31,19 @@ app.use(cors({ origin: "http://localhost:3000", credentials: true }));
 app.set("trust proxy", 1); // trust first proxy
 
 app.use(
-	cookieSession({
-		name: "user_id",
-		keys: ["user_id"]
-	})
+  cookieSession({
+    name: "user_id",
+    keys: ["user_id"]
+  })
 );
 //------------API ROUTEs-------------------------------
 const { Pool } = require("pg");
 //const dbParams = require("../lib/db.js");
 const pool = new Pool({
-	user: "JJ",
-	host: "localhost",
-	database: "gamefinal",
-	password: 123
+  user: "postgres",
+  host: "localhost",
+  database: "gamefinal",
+  password: 123
 });
 pool.connect();
 
@@ -51,14 +53,15 @@ console.log("mikuro san");
 //-----------Helper functions
 
 const getAllUsers = function() {
-	return pool
-		.query(
-			`SELECT id, username,first_name ,  avatar
+  return pool
+    .query(
+      `SELECT id, username,first_name ,  avatar
   FROM users`
-		)
-		.then(res => res.rows);
+    )
+    .then(res => res.rows);
 };
 const getUser = function(email, password) {
+
 	return pool
 		.query({
 			text: `SELECT id, username, first_name, avatar 
@@ -70,24 +73,26 @@ const getUser = function(email, password) {
 		.then(res => {
 			return res.rows;
 		});
+
 };
 
 //----------------------------------------------------
 
 //-------------------router requests-------------------------
 app.get("/users", (req, res) => {
-	getAllUsers().then(result => {
-		return res.json(result);
-	});
+  getAllUsers().then(result => {
+    return res.json(result);
+  });
 });
 
 app.get("/getuser/:username", (req, res) => {
-	getUserProfile(req.params.username).then(result => {
-		res.send(result);
-	});
+  getUserProfile(req.params.username).then(result => {
+    res.send(result);
+  });
 });
 
 app.post("/login", (req, res) => {
+
 	console.log("FORM VALUES:", req.body);
 	getUser(req.body.email, req.body.password)
 		.then(result => {
@@ -109,30 +114,31 @@ app.post("/register", (req, res) => {
 		req.body.password,
 		req.body.avatar
 	);
+
 });
 
 app.get("/jj", (req, res) => {});
 
 app.get("/:id", (req, res) => {
-	console.log(req.params);
-	const { id } = req.params;
-	res.send(id);
+  console.log(req.params);
+  const { id } = req.params;
+  res.send(id);
 });
 
 app.get("/getmessages/:username", (req, res) => {
-	getMessage(req.params.username).then(data => {
-		res.send(data);
-	});
+  getMessage(req.params.username).then(data => {
+    res.send(data);
+  });
 });
 
 app.post("/postmessage", (req, res) => {
-	let sender = req.body.sender;
-	let reciever = req.body.reciever;
-	let title = req.body.title;
-	let message = req.body.message;
-	console.log(sender, "jzizzless");
+  let sender = req.body.sender;
+  let reciever = req.body.reciever;
+  let title = req.body.title;
+  let message = req.body.message;
+  console.log(sender, "jzizzless");
 
-	postMessage(sender, reciever, title, message);
+  postMessage(sender, reciever, title, message);
 });
 
 //-----------------------------------------------------------------------
@@ -140,13 +146,13 @@ app.post("/postmessage", (req, res) => {
 //------------API ROUTEs-------------------------------
 
 http.listen(PORT, () => {
-	console.log(`listening on Port ${PORT}`);
+  console.log(`listening on Port ${PORT}`);
 });
 
 const defaultPlayerDataTest = {
-	rooms: [],
-	username: "jayjay",
-	email: "jayjay@toronto.com"
+  rooms: [],
+  username: "jayjay",
+  email: "jayjay@toronto.com"
 };
 
 const onlinePlayers = {};
@@ -154,35 +160,35 @@ const onlinePlayers = {};
 //------------------------------------------------------------------------
 
 const gameData = {
-	soccer: {
-		lobby: {
-			soccerRoom1: {
-				status: "",
-				players: {},
-				chats: [
-					{ key: ";czvxzc", user: "Good duke", msg: "Hello all" },
-					{ key: ";bvxcb", user: "Bad duke", msg: "Hello all" },
-					{ key: "sfsaf,.dsj", user: "No one", msg: "Hello none" }
-				]
-			},
-			soccerRoom2: {
-				status: "aaa",
-				players: { jayjay: { ready: false }, sarah: { ready: true } },
-				chats: [
-					{ key: ";pfdzzzzzzzzsAsaj", user: "Jayjay", msg: "I wanna eat" },
-					{ key: ";pfdsbbaj", user: "Sarah", msg: "Ok!" }
-				]
-			}
-		}
-	},
-	eggCatch: { lobby: {} },
-	world: { lobby: {} },
-	rockPaperScissors: {
-		lobby: {}
-		// testRockPaperScissors123qweasd: {
-		//   players: { JayJay: {}, Sarah: {}, Selin: {} }
-		// }
-	}
+  soccer: {
+    lobby: {
+      soccerRoom1: {
+        status: "",
+        players: {},
+        chats: [
+          { key: ";czvxzc", user: "Good duke", msg: "Hello all" },
+          { key: ";bvxcb", user: "Bad duke", msg: "Hello all" },
+          { key: "sfsaf,.dsj", user: "No one", msg: "Hello none" }
+        ]
+      },
+      soccerRoom2: {
+        status: "aaa",
+        players: { jayjay: { ready: false }, sarah: { ready: true } },
+        chats: [
+          { key: ";pfdzzzzzzzzsAsaj", user: "Jayjay", msg: "I wanna eat" },
+          { key: ";pfdsbbaj", user: "Sarah", msg: "Ok!" }
+        ]
+      }
+    }
+  },
+  eggCatch: { lobby: {} },
+  world: { lobby: {} },
+  rockPaperScissors: {
+    lobby: {}
+    // testRockPaperScissors123qweasd: {
+    //   players: { JayJay: {}, Sarah: {}, Selin: {} }
+    // }
+  }
 };
 
 // const gameData = {
@@ -232,16 +238,16 @@ const gameData = {
 //------------------------------------------------------------------------
 
 io.on("connection", socket => {
-	console.log("A user has been connected: ", socket.id);
-	onlinePlayers[socket.id] = defaultPlayerDataTest;
-	socket.on("disconnect", () => {
-		console.log("a user has been disconnected", socket.id);
-		delete onlinePlayers[socket.id];
-		console.log(onlinePlayers);
-	});
-	world(socket, io.sockets, io.sockets.adapter.rooms, gameData.world);
-	soccerGame(socket, io.sockets, io.sockets.adapter.rooms, gameData.soccer, io);
-	rockPaperScissorsGame(socket, io.sockets, gameData.rockPaperScissors, io);
-	eggCatchGame(socket, io.sockets, io.sockets.adapter.rooms, gameData.eggCatch);
-	lobby(socket, io.sockets, io.sockets.adapter.rooms, gameData, io);
+  console.log("A user has been connected: ", socket.id);
+  onlinePlayers[socket.id] = defaultPlayerDataTest;
+  socket.on("disconnect", () => {
+    console.log("a user has been disconnected", socket.id);
+    delete onlinePlayers[socket.id];
+    console.log(onlinePlayers);
+  });
+  world(socket, io.sockets, io.sockets.adapter.rooms, gameData.world);
+  soccerGame(socket, io.sockets, io.sockets.adapter.rooms, gameData.soccer, io);
+  rockPaperScissorsGame(socket, io.sockets, gameData.rockPaperScissors, io);
+  eggCatchGame(socket, io.sockets, io.sockets.adapter.rooms, gameData.eggCatch);
+  lobby(socket, io.sockets, io.sockets.adapter.rooms, gameData, io);
 });
