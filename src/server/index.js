@@ -56,10 +56,10 @@ const pool = new Pool({
 });
 pool.connect();
 
-console.log("mikuro san");
+// console.log("mikuro san");
 // return;
 
-//-----------Helper functions
+//-----------Helper functionsl/
 
 const getAllUsers = function() {
   return pool
@@ -129,7 +129,9 @@ app.post("/login", (req, res) => {
     .then(result => {
       console.log("OVER HERE", result);
 
-      const cookie = new Cookies(req.headers.cookie);
+      const cookies = new Cookies(req.headers.cookie);
+
+      console.log("AHHHHHHHHHHHH", cookies.get("myCat"));
 
       //req.session.user_id = result[0].username;
       res.send(result);
@@ -182,11 +184,11 @@ http.listen(PORT, () => {
   console.log(`listening on Port ${PORT}`);
 });
 
-const defaultPlayerDataTest = {
-  rooms: [],
-  username: "jayjay",
-  email: "jayjay@toronto.com"
-};
+// const defaultPlayerDataTest = {
+//   rooms: [],
+//   username: "jayjay",
+//   email: "jayjay@toronto.com"
+// };
 
 const onlinePlayers = {};
 
@@ -225,11 +227,16 @@ const gameData = {
 
 io.on("connection", socket => {
   console.log("A user has been connected: ", socket.id);
-  onlinePlayers[socket.id] = defaultPlayerDataTest;
+  // onlinePlayers[socket.id] = { username: null };
   socket.on("disconnect", () => {
     console.log("a user has been disconnected", socket.id);
     delete onlinePlayers[socket.id];
     console.log(onlinePlayers);
+  });
+  socket.on("login", data => {
+    console.log("adding people HERE!", data);
+    onlinePlayers[socket.id] = { username: data.username };
+    console.log("onlinePlayers", onlinePlayers);
   });
   world(socket, io.sockets, io.sockets.adapter.rooms, gameData.world);
   soccerGame(socket, io.sockets, io.sockets.adapter.rooms, gameData.soccer, io);

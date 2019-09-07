@@ -36,10 +36,6 @@ function App() {
   let socket = io(`:${serverPORT}`);
   console.log("initializing app");
 
-  //====================COOKIES============================//
-
-  //=======================================================//
-
   return (
     <Router>
       <NavBar loginStatus={loginStatus} setLoginStatus={setLoginStatus} />
@@ -70,6 +66,7 @@ function App() {
                 loginStatus={loginStatus}
                 setLoginStatus={setLoginStatus}
                 setProfileInfo={setProfileInfo}
+                socket={socket}
               />
             );
           }}
