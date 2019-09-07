@@ -10,13 +10,11 @@ const lobby = require("./lobby/index");
 const cookieSession = require("cookie-session");
 
 const {
-
-	getMessage,
-	getUserData,
-	postMessage,
-	getUserProfile,
-	createUser
-
+  getMessage,
+  getUserData,
+  postMessage,
+  getUserProfile,
+  createUser
 } = require("../../db/queries/allQueries");
 // app.get("/", (req, res) => {
 //   res.send("<h1>Hellow World</h1>");
@@ -25,6 +23,24 @@ const {
 const cors = require("cors");
 const bodyParser = require("body-parser");
 
+//================COOKIES================
+//================COOKIES================
+//================COOKIES================
+//================COOKIES================
+//================COOKIES================
+//================COOKIES================
+
+const Cookies = require("universal-cookie");
+
+//================COOKIES================
+//================COOKIES================
+//================COOKIES================
+//================COOKIES================
+//================COOKIES================
+//================COOKIES================
+//================COOKIES================
+//================COOKIES================
+
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(cors({ origin: "http://localhost:3000", credentials: true }));
@@ -32,8 +48,9 @@ app.set("trust proxy", 1); // trust first proxy
 
 app.use(
   cookieSession({
-    name: "user_id",
-    keys: ["user_id"]
+    name: "session",
+    keys: ["toronto"],
+    maxAge: 24 * 60 * 60 * 1000
   })
 );
 //------------API ROUTEs-------------------------------
@@ -61,23 +78,46 @@ const getAllUsers = function() {
     .then(res => res.rows);
 };
 const getUser = function(email, password) {
-
-	return pool
-		.query({
-			text: `SELECT id, username, first_name, avatar 
+  return pool
+    .query({
+      text: `SELECT id, username, first_name, avatar 
     FROM users 
     WHERE email = $1 AND pass = $2`,
-			values: [email, password],
-			name: "get_message_query"
-		})
-		.then(res => {
-			return res.rows;
-		});
-
+      values: [email, password],
+      name: "get_message_query"
+    })
+    .then(res => {
+      return res.rows;
+    });
 };
 
-//----------------------------------------------------
+//===================================
+//===================================
+//===================================
+//===================================
+//===================================
+//===================================
+//===================================
 
+// return;
+app.get("/test123", (req, res) => {
+  const cookies = new Cookies(req.headers.cookie);
+  console.log("AHHHHHHHHHHHH", cookies.get("myCat")); // Pacman or undefined if not set yet
+  console.log("juice");
+  res.send("<h1>Hello test123</h1>");
+});
+
+//===================================
+//===================================
+//===================================
+//===================================
+//===================================
+//===================================
+//===================================
+//===================================
+//===================================
+
+//----------------------------------------------------
 //-------------------router requests-------------------------
 app.get("/users", (req, res) => {
   getAllUsers().then(result => {
@@ -92,29 +132,27 @@ app.get("/getuser/:username", (req, res) => {
 });
 
 app.post("/login", (req, res) => {
-
-	console.log("FORM VALUES:", req.body);
-	getUser(req.body.email, req.body.password)
-		.then(result => {
-			console.log("OVER HERE", result);
-			req.session.user_id = result[0].username;
-			res.send(result);
-		})
-		.catch(err => {
-			console.log("LIDDDD");
-		});
+  console.log("FORM VALUES:", req.body);
+  getUser(req.body.email, req.body.password)
+    .then(result => {
+      console.log("OVER HERE", result);
+      req.session.user_id = result[0].username;
+      res.send(result);
+    })
+    .catch(err => {
+      console.log("LIDDDD");
+    });
 });
 
 app.post("/register", (req, res) => {
-	createUser(
-		req.body.username,
-		req.body.firstName,
-		req.body.lastName,
-		req.body.email,
-		req.body.password,
-		req.body.avatar
-	);
-
+  createUser(
+    req.body.username,
+    req.body.firstName,
+    req.body.lastName,
+    req.body.email,
+    req.body.password,
+    req.body.avatar
+  );
 });
 
 app.get("/jj", (req, res) => {});
@@ -185,56 +223,9 @@ const gameData = {
   world: { lobby: {} },
   rockPaperScissors: {
     lobby: {}
-    // testRockPaperScissors123qweasd: {
-    //   players: { JayJay: {}, Sarah: {}, Selin: {} }
-    // }
   }
 };
 
-// const gameData = {
-//   soccer: {
-//     soccertest1: {
-//       players: { Thilina: {}, Sarah: {}, Anchen: {}, Selin: {} },
-//       status: "recruiting",
-//       chats: [
-//         { key: ";czvxzc", user: "Good duke", msg: "Hello all" },
-//         { key: ";bvxcb", user: "Bad duke", msg: "Hello all" }
-//       ]
-//     },
-//     soccertest2: {
-//       players: { Thilina: {}, Sarah: {}, Anchen: {}, Selin: {} },
-//       status: "recruiting",
-//       chats: [
-//         { key: ";pfdzzzzzzzzsAsaj", user: "Good duke", msg: "Hello all" },
-//         { key: ";pfdsbbaj", user: "Bad duke", msg: "Hello all" }
-//       ]
-//     },
-//     soccertest3: {
-//       players: { Thilina: {}, Sarah: {}, Anchen: {}, Selin: {} },
-//       status: "recruiting",
-//       chats: [
-//         { key: ";pfFADSFADSdsaj", user: "Good duke", msg: "Hello all" },
-//         { key: ";pfFDASFDASCVCZVCZdsaj", user: "Bad duke", msg: "Hello all" }
-//       ]
-//     }
-//   },
-//   eggCatch: {
-//     eggCatchYaminoma: {
-//       players: { jayjay: {}, Sarah: {}, Anchen: {}, Selin: {} },
-//       status: "recruiting",
-//       chats: [{ key: ";CC", user: "Evil duke", msg: "Hello all" }]
-//     },
-//     eggCatchYaminoma2: {
-//       players: { Thilina: {}, Sarah: {}, Anchen: {}, Selin: {} },
-//       status: "recruiting",
-//       chats: [
-//         { key: ";pfdsaj", user: "Good duke", msg: "Hello all" },
-//         { key: ";DFA", user: "Bad duke", msg: "Hello all" }
-//       ]
-//     }
-//   },
-//   world: {}
-// };
 //------------------------------------------------------------------------
 
 io.on("connection", socket => {
