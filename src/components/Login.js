@@ -22,7 +22,10 @@ function Login({ loginStatus, setLoginStatus, setProfileInfo, socket }) {
         if (response.data.length) {
           setLoginStatus(true);
           //------Associate with socket-------------------------------------
-          socket.emit("login", { username: response.data[0].username });
+          socket.emit("login", {
+            username: response.data[0].username,
+            avatar: response.data[0].avatar
+          });
           //---------------------------------------------------------------
           // console.log("cookies should be setting now");
           //this should be set to a cookies session instead

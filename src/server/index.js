@@ -235,7 +235,7 @@ io.on("connection", socket => {
   });
   socket.on("login", data => {
     console.log("adding people HERE!", data);
-    onlinePlayers[socket.id] = { username: data.username };
+    onlinePlayers[socket.id] = { username: data.username, avatar: data.avatar };
     console.log("onlinePlayers", onlinePlayers);
   });
   world(socket, io.sockets, io.sockets.adapter.rooms, gameData.world);
