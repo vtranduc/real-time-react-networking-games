@@ -1,0 +1,152 @@
+body,
+.home {
+	height: 100%;
+	margin: 0;
+	font-size: 16px;
+	font-family: "Lato", sans-serif;
+	font-weight: 400;
+	line-height: 1.8em;
+	color: #666;
+}
+.pimg1,
+.pimg2,
+.pimg3,
+.pimg4,
+.pimg5 {
+	position: relative;
+	opacity: 0.7;
+	background-position: center;
+	background-size: cover;
+	background-repeat: no-repeat;
+
+	/* fixed = parallax
+	scroll = normal */
+	background-attachment: fixed;
+}
+.pimg1 {
+	background-image: url("/assets//HomePage/background1.png");
+	min-height: 800px;
+}
+.pimg2 {
+	background-image: url("/assets/HomePage/background2.jpg");
+	min-height: 400px;
+}
+.pimg3 {
+	background-image: url("/assets/HomePage/background3.png");
+	min-height: 400px;
+}
+.pimg4 {
+	background-image: url("/assets/HomePage/background7.jpg");
+	min-height: 400px;
+}
+.pimg5 {
+	background-image: url("/assets/HomePage/background4.jpg");
+	min-height: 400px;
+}
+
+.section {
+	text-align: center;
+	padding: 50px 80px;
+	min-height: 200px;
+}
+.section-light {
+	background-color: #f4f4f4;
+	color: #666;
+}
+.section-dark {
+	background-color: #282e34;
+	color: #ddd;
+}
+
+.ptext {
+	position: absolute;
+	top: 50%;
+	width: 100%;
+	text-align: center;
+	font-size: 27px;
+	letter-spacing: 8px;
+	text-transform: uppercase;
+}
+.route-link {
+	color: rgb(226, 226, 226);
+	text-decoration: none;
+	letter-spacing: 5px;
+	font-weight: bold;
+	font-size: 14px;
+}
+body,
+.home1 {
+	height: 100%;
+	margin: 0;
+	font-size: 16px;
+	font-family: "Lato", sans-serif;
+	font-weight: 400;
+	line-height: 1.8em;
+	color: #666;
+}
+.pimg11,
+.pimg21,
+.pimg31,
+.pimg41,
+.pimg51 {
+	position: relative;
+	opacity: 0.7;
+	background-position: center;
+	background-size: cover;
+	background-repeat: no-repeat;
+
+	/* fixed = parallax
+	scroll = normal */
+	background-attachment: fixed;
+}
+.pimg11 {
+	background-image: url("/assets//HomePage/background1.png");
+	min-height: 800px;
+}
+.pimg21 {
+	background-image: url("/assets/HomePage/background2.jpg");
+	min-height: 400px;
+}
+.pimg31 {
+	background-image: url("/assets/HomePage/background3.png");
+	min-height: 400px;
+}
+.pimg41 {
+	background-image: url("/assets/HomePage/background7.jpg");
+	min-height: 400px;
+}
+.pimg51 {
+	background-image: url("/assets/HomePage/background4.jpg");
+	min-height: 400px;
+}
+
+.section1 {
+	text-align: center;
+	padding: 50px 80px;
+	min-height: 200px;
+}
+.section-light1 {
+	background-color: #f4f4f4;
+	color: #666;
+}
+.section-dark1 {
+	background-color: #282e34;
+	color: #ddd;
+}
+
+.ptext1 {
+	position: absolute;
+	top: 50%;
+	width: 100%;
+	text-align: center;
+	font-size: 27px;
+	letter-spacing: 8px;
+	text-transform: uppercase;
+}
+.route-link1 {
+	color: rgb(226, 226, 226);
+	text-decoration: none;
+	letter-spacing: 5px;
+	font-weight: bold;
+	font-size: 14px;
+}
