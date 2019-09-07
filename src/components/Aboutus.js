@@ -9,66 +9,44 @@ function Aboutus() {
 					<div className="pimg1">
 						<div className="ptext">
 							<span className="border">
-								<h2>Welcome</h2>
+								<h2>Viet-Nhien Tran Duc</h2>
 							</span>
 						</div>
 					</div>
 					<section className="section section-light">
-						<h2>Section One</h2>
+						<h2>Introducing Viet</h2>
 						<p>
-							Ex irure fugiat dolore consectetur aliqua aliquip irure deserunt
-							veniam et sit pariatur incididunt. Enim in tempor cupidatat Lorem
-							consequat. Proident nisi cupidatat eiusmod ullamco tempor sunt
-							minim culpa adipisicing incididunt cupidatat eiusmod. Ut quis
-							voluptate deserunt proident. Duis sunt sunt incididunt laborum
-							deserunt. Aliqua aliquip deserunt aliqua ullamco cupidatat elit
-							voluptate ex ex adipisicing Lorem eu officia sit. Cillum enim
-							nostrud aliquip amet sit proident cillum dolor aliquip. Non
-							consectetur irure ad sint proident sint qui ex consequat sunt
-							laboris eiusmod est. Nulla proident ex adipisicing Lorem
-							reprehenderit ut Lorem anim fugiat excepteur elit Lorem deserunt.
-							Ex nulla deserunt irure voluptate dolore sit non eiusmod. Laboris
-							qui exercitation amet officia ex elit esse duis cupidatat sunt
-							nostrud sunt minim velit. Et pariatur culpa nostrud occaecat ea
-							incididunt Lorem qui consectetur laboris consectetur. Sit et
-							deserunt nostrud irure laboris elit.v
+							Viet-Nhien Tran Duc has a rich background in scientific research
+							and extensive coding experience from several disciplines,
+							including web development and numerical modeling. His passion for
+							computing science has driven him to pursue a career in becoming a
+							full stack web-developer.
 						</p>
 					</section>
 					<div className="pimg2">
 						<div className="ptext">
 							<span className="border">
 								<Link className="route-link" to="/soccer">
-									<h1>Anime Soccer</h1>
+									<h1>Achievements</h1>
 								</Link>
 							</span>
 						</div>
 					</div>
 					<section className="section section-dark">
-						<h2>Sockets + React + Custom Engine</h2>
+						<h2>Custom Physics Engines - Python Javascript / React</h2>
 						<p>
-							Ex irure fugiat dolore consectetur aliqua aliquip irure deserunt
-							veniam et sit pariatur incididunt. Enim in tempor cupidatat Lorem
-							consequat. Proident nisi cupidatat eiusmod ullamco tempor sunt
-							minim culpa adipisicing incididunt cupidatat eiusmod. Ut quis
-							voluptate deserunt proident. Duis sunt sunt incididunt laborum
-							deserunt. Aliqua aliquip deserunt aliqua ullamco cupidatat elit
-							voluptate ex ex adipisicing Lorem eu officia sit. Cillum enim
-							nostrud aliquip amet sit proident cillum dolor aliquip. Non
-							consectetur irure ad sint proident sint qui ex consequat sunt
-							laboris eiusmod est. Nulla proident ex adipisicing Lorem
-							reprehenderit ut Lorem anim fugiat excepteur elit Lorem deserunt.
-							Ex nulla deserunt irure voluptate dolore sit non eiusmod. Laboris
-							qui exercitation amet officia ex elit esse duis cupidatat sunt
-							nostrud sunt minim velit. Et pariatur culpa nostrud occaecat ea
-							incididunt Lorem qui consectetur laboris consectetur. Sit et
-							deserunt nostrud irure laboris elit.
+							With his extensive knowledge in computer science, mathematics,
+							physics, and chemical engineering, Viet has created and
+							successfully implemented physics engines for multiple games within
+							his projects. His most recent physics engine is demonstrated in
+							his soccer game on this website.
 						</p>
 					</section>
 					<div className="pimg3">
 						<div className="ptext">
 							<span className="border">
 								<Link className="route-link" to="/phaser-game">
-									<h1>Flappy Bird</h1>
+									<h1>Projects</h1>
 								</Link>
 							</span>
 						</div>
@@ -142,7 +120,7 @@ function Aboutus() {
 					<div className="pimg11">
 						<div className="ptext1">
 							<span className="border1">
-								<h2>Welcome</h2>
+								<h2>Jay Jay Ting</h2>
 							</span>
 						</div>
 					</div>
