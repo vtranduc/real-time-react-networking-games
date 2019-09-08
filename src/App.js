@@ -91,17 +91,17 @@ function App() {
     };
   }, [socket]);
 
-  return (
-    <Router>
-      <NavBar
-        loginStatus={loginStatus}
-        setLoginStatus={setLoginStatus}
-        profileInfo={profileInfo}
-      />
+	return (
+		<Router>
+			<NavBar
+				loginStatus={loginStatus}
+				setLoginStatus={setLoginStatus}
+				profileInfo={profileInfo}
+			/>
 
-      <Switch>
-        <Route path="/" exact component={Home} />
-        {/* <Route
+			<Switch>
+				<Route path="/" exact component={Home} />
+				{/* <Route
           path="/profile"
           exact
           render={() => {
@@ -110,56 +110,55 @@ function App() {
             );
           }}
         /> */}
-        <Route path="/about" exact component={About} />
-        <Route
-          path="/lobby"
-          exact
-          render={() => {
-            return (
-              <div>
-                {profileInfo ? (
-                  <Lobby
-                    socket={socket}
-                    setRoom={setRoom}
-                    profileInfo={profileInfo}
-                  />
-                ) : (
-                  <h3>Retrieving user info...</h3>
-                )}
-              </div>
-            );
-          }}
-        />
-        <Route
-          path="/aboutus"
-          exact
-          render={() => {
-            return <Aboutus />;
-          }}
-        />
-        <Route
-          path="/login"
-          exact
-          render={() => {
-            return (
-              <Login
-                loginStatus={loginStatus}
-                setLoginStatus={setLoginStatus}
-                setProfileInfo={setProfileInfo}
-                socket={socket}
-                httpServer={httpServer}
-              />
-            );
-          }}
-        />
-        {/* <Route path="/world/:username" exact component={World} /> */}
-        <Route
-          path="/world/:username"
-          render={props => {
-            return <World testStr={"testStr"} {...props} />;
-          }}
-        />
-
+				<Route path="/about" exact component={About} />
+				<Route
+					path="/lobby"
+					exact
+					render={() => {
+						return (
+							<div>
+								{profileInfo ? (
+									<Lobby
+										socket={socket}
+										setRoom={setRoom}
+										profileInfo={profileInfo}
+									/>
+								) : (
+									<h3>Retrieving user info...</h3>
+								)}
+							</div>
+						);
+					}}
+				/>
+				<Route
+					path="/aboutus"
+					exact
+					render={() => {
+						return <Aboutus />;
+					}}
+				/>
+				<Route
+					path="/login"
+					exact
+					render={() => {
+						return (
+							<Login
+								loginStatus={loginStatus}
+								setLoginStatus={setLoginStatus}
+								setProfileInfo={setProfileInfo}
+								socket={socket}
+								httpServer={httpServer}
+							/>
+						);
+					}}
+				/>
+				{/* <Route path="/world/:username" exact component={World} /> */}
+				<Route
+					path="/world/:username"
+					render={props => {
+						return <World testStr={"testStr"} {...props} />;
+					}}
+				/>
         <Route
           path="/register"
           exact
@@ -216,9 +215,9 @@ function App() {
             return <Profile profileInfo={profileInfo} />;
           }}
         /> */}
-      </Switch>
-    </Router>
-  );
+			</Switch>
+		</Router>
+	);
 }
 
 export default App;
