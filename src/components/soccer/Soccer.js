@@ -161,6 +161,7 @@ export default function Soccer({ socket, room }) {
 				style={{
 					height: fieldSpec.height,
 					width: fieldSpec.width,
+					borderRadius: "10px",
 					position: "absolute",
 					top: fieldSpec.top,
 					left: fieldSpec.left
@@ -194,10 +195,11 @@ export default function Soccer({ socket, room }) {
 					<div
 						style={{
 							position: "absolute",
-							top: fieldSpec.top - 50,
+							top: fieldSpec.top - 65,
 							left: fieldSpec.left + fieldSpec.width / 3,
 							background: "white",
-							width: "25em"
+							width: "25em",
+							borderRadius: "10px"
 						}}>
 						{gameStat.timeRemaining > 0 ? (
 							<h3>
@@ -251,7 +253,7 @@ export default function Soccer({ socket, room }) {
 							src="assets/soccer/pin.png"
 							style={{
 								width: pinSpec.width,
-								hegith: pinSpec.height,
+								height: pinSpec.height,
 								top: mousing.y - pinSpec.height,
 								left: mousing.x - pinSpec.width / 2,
 								position: "absolute",

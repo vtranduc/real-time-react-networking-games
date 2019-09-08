@@ -27,7 +27,6 @@
 	padding-top: 5%;
 	padding-left: 7%;
 	padding-right: 3.5%;
-
 	border-radius: 20%;
 }
 .home3 {
@@ -51,7 +50,7 @@
 .pimg42,
 .pimg52 {
 	position: relative;
-
+	border: solid white 8px;
 	background-position: center;
 	background-size: cover;
 	background-repeat: no-repeat;
@@ -93,6 +92,7 @@
 	padding: 50px 80px;
 	min-height: 200px;
 	border-radius: 20%;
+	border: solid black 8px;
 }
 .section-light2 {
 	background-color: #f4f4f4;
@@ -127,7 +127,7 @@
 .pimg41,
 .pimg51 {
 	position: relative;
-
+	border: white solid 8px;
 	background-position: center;
 	background-size: cover;
 	background-repeat: no-repeat;
@@ -138,7 +138,6 @@
 }
 .pimg11 {
 	background-image: url("/assets/aboutus/test3.jpg");
-
 	min-height: 800px;
 }
 .pimg21 {
