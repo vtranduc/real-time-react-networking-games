@@ -19,16 +19,6 @@ const lobby = require("./lobby/index");
 
 const { cookieEncrypt, cookieDecrypt } = require("./helpers/cookiesEncription");
 
-// const session = require("express-session")({
-//   secret: "my-secret",
-//   resave: true,
-//   saveUninitialized: true
-// });
-// const sharedsession = require("express-socket.io-session");
-
-// app.use(session);
-// io.use(sharedsession(session));
-
 //================COOKIES================
 //================COOKIES================
 //================COOKIES================
@@ -67,11 +57,6 @@ const pool = new Pool({
   password: 123
 });
 pool.connect();
-
-// console.log("mikuro san");
-// return;
-
-//-----------Helper functionsl/
 
 const getAllUsers = function() {
   return pool
@@ -165,19 +150,7 @@ app.post("/login", (req, res) => {
   console.log("FORM VALUES:", req.body);
   getUser(req.body.email, req.body.password)
     .then(result => {
-      // console.log("OVER HERE", result);
-
-      // const cookies = new Cookies(req.headers.cookie);
-
-      // console.log("AHHHHHHHHHHHH", cookies.get("myCat"));
-
-      // // req.session.user_id = result[0].username;
-
       result[0].cookie = cookieEncrypt(result[0].username);
-
-      // console.log("what is result anyway?: ", result[0]);
-      // console.log("type: ", typeof result);
-
       res.send(result);
     })
     .catch(err => {
@@ -198,7 +171,7 @@ app.post("/register", (req, res) => {
   );
 });
 
-app.get("/jj", (req, res) => {});
+// app.get("/jj", (req, res) => {});
 
 app.get("/:id", (req, res) => {
   console.log(req.params);
@@ -252,7 +225,8 @@ defaultAvatars = [
   "https://66.media.tumblr.com/98af64c609d1d3484f0f1ab7d464d200/tumblr_onzhhzWMbE1seeoy9o2_250.png",
   "https://66.media.tumblr.com/16cea447c9af76216f54c4e0668b9dba/tumblr_pjsogf4hfM1w722h2o5_500.png",
   "https://pbs.twimg.com/profile_images/571597459281829888/bjGTj5B9_400x400.png",
-  "https://cdn.discordapp.com/attachments/299832570693156874/619578961688789003/Eli1.png"
+  "https://cdn.discordapp.com/attachments/299832570693156874/619578961688789003/Eli1.png",
+  "https://avatarfiles.alphacoders.com/148/148267.png"
 ];
 
 const gameData = {
