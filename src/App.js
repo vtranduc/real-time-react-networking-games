@@ -23,58 +23,73 @@ const serverPORT = 3001;
 
 function App() {
   //--------------------global states----------------------
-  const [loginStatus, setLoginStatus] = useState(false);
+  const [loginStatus, setLoginStatus] = useState(null);
   const [room, setRoom] = useState("soccerHAHA");
   const [profileInfo, setProfileInfo] = useState(null);
   const httpServer = "http://localhost:3001/";
+  const [socket, setSocket] = useState(null);
   //-------------------------------------------------------
-  let socket = io(`:${serverPORT}`);
+  // let socket;
   console.log("initializing app");
 
   useEffect(() => {
-    let cookies = new Cookies();
-    if (cookies.get("profile")) {
-      console.log("LOGGED IN HERE BABY!");
-      axios
-        .post(`${httpServer}loggedInStatus`, { cookie: cookies.get("profile") })
-        .then(response => {
-          if (response.data.length === 1) {
-            setLoginStatus(true);
-            setProfileInfo({
-              username: response.data[0].username,
-              avatar: response.data[0].avatar,
-              firstName: response.data[0].first_name,
-              lastName: response.data[0].last_name
-            });
-            socket.emit("login", {
-              username: response.data[0].username,
-              avatar: response.data[0].avatar
-            });
-          } else {
-            console.log("did not find the user!");
-            cookies.remove("profile");
-            socket.emit("requestGuestProfile");
-          }
-        });
-    } else {
-      console.log("NO COOKIE FOUND!");
-      socket.emit("requestGuestProfile");
-    }
-    const handleCatchGuestProfile = function(data) {
-      console.log("getting guest profile");
-      setLoginStatus(false);
-      setProfileInfo({
-        username: data.username,
-        avatar: data.avatar,
-        firstName: "",
-        lastName: ""
-      });
-    };
-    socket.on("catchGuestProfile", handleCatchGuestProfile);
-    return () => {
-      socket.removeListener("catchGuestProfile", handleCatchGuestProfile);
-    };
+    setSocket(io(`:${serverPORT}`));
   }, []);
+  useEffect(() => {
+    // socket = io(`:${serverPORT}`);
+    console.log("after socket setup. This is to be printed only twice!");
+    let handleCatchGuestProfile;
+    if (socket) {
+      // setSocket(io(`:${serverPORT}`));
+      let cookies = new Cookies();
+      if (cookies.get("profile")) {
+        console.log("LOGGED IN HERE BABY!");
+        axios
+          .post(`${httpServer}loggedInStatus`, {
+            cookie: cookies.get("profile")
+          })
+          .then(response => {
+            if (response.data.length === 1) {
+              setLoginStatus(true);
+              setProfileInfo({
+                username: response.data[0].username,
+                avatar: response.data[0].avatar,
+                firstName: response.data[0].first_name,
+                lastName: response.data[0].last_name
+              });
+              socket.emit("login", {
+                username: response.data[0].username,
+                avatar: response.data[0].avatar
+              });
+            } else {
+              console.log("did not find the user!");
+              cookies.remove("profile");
+              socket.emit("requestGuestProfile");
+            }
+          });
+      } else {
+        console.log("NO COOKIE FOUND!");
+        console.log(socket);
+        socket.emit("requestGuestProfile");
+      }
+      const handleCatchGuestProfile = function(data) {
+        console.log("getting guest profile");
+        setLoginStatus(false);
+        setProfileInfo({
+          username: data.username,
+          avatar: data.avatar,
+          firstName: "",
+          lastName: ""
+        });
+      };
+      socket.on("catchGuestProfile", handleCatchGuestProfile);
+    }
+    return () => {
+      if (socket && handleCatchGuestProfile) {
+        socket.removeListener("catchGuestProfile", handleCatchGuestProfile);
+      }
+    };
+  }, [socket]);
 
   return (
     <Router>
@@ -156,12 +171,15 @@ function App() {
           path="/user/:username"
           // exact
           render={props => {
-            return (
+            return profileInfo && loginStatus !== null ? (
               <Profile
                 profileInfo={profileInfo}
                 httpServer={httpServer}
+                loginStatus={loginStatus}
                 {...props}
               />
+            ) : (
+              <h3>Waiting for the server response...</h3>
             );
           }}
         />
@@ -169,7 +187,11 @@ function App() {
           path="/soccer"
           exact
           render={() => {
-            return <Soccer socket={socket} room={room} />;
+            return socket ? (
+              <Soccer socket={socket} room={room} />
+            ) : (
+              <h3>Waiting for socket</h3>
+            );
           }}
         />
         <Route

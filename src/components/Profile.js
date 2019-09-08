@@ -13,7 +13,7 @@ import Input from "@material-ui/core/Input";
 import axios from "axios";
 import { Link } from "react-router-dom";
 
-function Profile({ profileInfo, httpServer, match }) {
+function Profile({ profileInfo, httpServer, loginStatus, match }) {
   //axios call to get user messages
   const [posts, setPosts] = useState(null);
   const [postList, setPostList] = useState([]);
@@ -56,7 +56,15 @@ function Profile({ profileInfo, httpServer, match }) {
   // =========ALL LOADING============================
 
   useEffect(() => {
-    console.log("attempt to retrie user data from the server");
+    // console.log(
+    //   "attempt to retrie user data from the server",
+    //   match.params.username
+    // );
+
+    axios.post(`${httpServer}retrieveuserprofile`, {
+      username: match.params.username,
+      viewer: loginStatus ? profileInfo.username : null
+    });
   }, []);
 
   // useEffect(() => {
