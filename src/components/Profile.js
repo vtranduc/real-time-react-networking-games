@@ -13,7 +13,7 @@ import Input from "@material-ui/core/Input";
 import axios from "axios";
 import { Link } from "react-router-dom";
 
-function Profile({ profileInfo, httpServer }) {
+function Profile({ profileInfo, httpServer, match }) {
   //axios call to get user messages
   const [posts, setPosts] = useState(null);
   const [postList, setPostList] = useState([]);
@@ -47,7 +47,17 @@ function Profile({ profileInfo, httpServer }) {
     }
   }
 
+  // =========ALL LOADING============================
+  // =========ALL LOADING============================
+  // =========ALL LOADING============================
+  // =========ALL LOADING============================
+  // =========ALL LOADING============================
+  // =========ALL LOADING============================
+  // =========ALL LOADING============================
+
   useEffect(() => {
+    console.log("PASS ME THE DATAAAAAAAAAAAAA: ", match.params.username);
+
     if (profileInfo) {
       axios
         .get(`${httpServer}getmessages/${profileInfo.username}`)
@@ -56,6 +66,16 @@ function Profile({ profileInfo, httpServer }) {
         });
     }
   }, []);
+
+  // =========ALL LOADING============================
+  // =========ALL LOADING============================
+  // =========ALL LOADING============================
+  // =========ALL LOADING============================
+  // =========ALL LOADING============================
+  // =========ALL LOADING============================
+  // =========ALL LOADING============================
+  // =========ALL LOADING============================
+  // =========ALL LOADING============================
 
   useEffect(() => {
     let postHistory = [];

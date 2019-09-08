@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import "../../styles/chatBubble.css";
 
 // import Cookies from "universal-cookie";
@@ -10,7 +10,10 @@ import "../../styles/chatBubble.css";
 // });
 // console.log("LooKKK JERE", cookies.get("myCat")); // Pacman
 
-export default function World({ socket }) {
+export default function World({ match, testStr }) {
+  useEffect(() => {
+    console.log("show meeeeeeee", testStr, match);
+  }, []);
   return (
     <div
       style={{

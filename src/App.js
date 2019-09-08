@@ -78,11 +78,15 @@ function App() {
 
   return (
     <Router>
-      <NavBar loginStatus={loginStatus} setLoginStatus={setLoginStatus} />
+      <NavBar
+        loginStatus={loginStatus}
+        setLoginStatus={setLoginStatus}
+        profileInfo={profileInfo}
+      />
 
       <Switch>
         <Route path="/" exact component={Home} />
-        <Route
+        {/* <Route
           path="/profile"
           exact
           render={() => {
@@ -90,7 +94,7 @@ function App() {
               <Profile profileInfo={profileInfo} httpServer={httpServer} />
             );
           }}
-        />
+        /> */}
         <Route path="/about" exact component={About} />
         <Route
           path="/lobby"
@@ -133,13 +137,32 @@ function App() {
             );
           }}
         />
-        <Route path="/world" exact component={World} />
+        {/* <Route path="/world/:username" exact component={World} /> */}
+        <Route
+          path="/world/:username"
+          render={props => {
+            return <World testStr={"testStr"} {...props} />;
+          }}
+        />
 
         <Route
           path="/register"
           exact
           render={() => {
             return <Register httpServer={httpServer} />;
+          }}
+        />
+        <Route
+          path="/user/:username"
+          // exact
+          render={props => {
+            return (
+              <Profile
+                profileInfo={profileInfo}
+                httpServer={httpServer}
+                {...props}
+              />
+            );
           }}
         />
         <Route
@@ -164,13 +187,13 @@ function App() {
           }}
         />
         <Route path="/phaser-game" exact component={PhaserGame} />
-        <Route
+        {/* <Route
           path="/profile"
           exact
           render={() => {
             return <Profile profileInfo={profileInfo} />;
           }}
-        />
+        /> */}
       </Switch>
     </Router>
   );

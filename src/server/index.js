@@ -10,24 +10,10 @@ const rockPaperScissorsGame = require("./rockPaperScissors/index");
 const lobby = require("./lobby/index");
 //--------------------------------
 
-//================COOKIES================
-//================COOKIES================
-//================COOKIES================
-//================COOKIES================
-//================COOKIES================
-//================COOKIES================
-
+//----App configuration-----------
 const { cookieEncrypt, cookieDecrypt } = require("./helpers/cookiesEncription");
-
-//================COOKIES================
-//================COOKIES================
-//================COOKIES================
-//================COOKIES================
-//================COOKIES================
-//================COOKIES================
-//================COOKIES================
-//================COOKIES================
-// const Cookies = require("universal-cookie");
+const profileServerData = require("./user/index");
+//--------------------------------
 
 const {
   getMessage,
@@ -87,6 +73,21 @@ const getUser = function(email, password) {
 //===================================
 //===================================
 //===================================
+
+//================Profile================
+//================Profile================
+//================Profile================
+//================Profile================
+//================Profile================
+
+profileServerData(app, pool);
+
+//================Profile================
+//================Profile================
+//================Profile================
+//================Profile================
+//================Profile================
+//================Profile================
 
 // return;
 // app.get("/test123", (req, res) => {
@@ -177,22 +178,6 @@ app.get("/:id", (req, res) => {
   console.log(req.params);
   const { id } = req.params;
   res.send(id);
-});
-
-app.get("/getmessages/:username", (req, res) => {
-  getMessage(req.params.username).then(data => {
-    res.send(data);
-  });
-});
-
-app.post("/postmessage", (req, res) => {
-  let sender = req.body.sender;
-  let reciever = req.body.reciever;
-  let title = req.body.title;
-  let message = req.body.message;
-  console.log(sender, "jzizzless");
-
-  postMessage(sender, reciever, title, message);
 });
 
 //-----------------------------------------------------------------------
