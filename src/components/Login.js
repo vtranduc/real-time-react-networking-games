@@ -4,7 +4,13 @@ import axios from "axios";
 import Cookies from "universal-cookie";
 // import { Socket } from "net";
 
-function Login({ loginStatus, setLoginStatus, setProfileInfo, socket }) {
+function Login({
+  loginStatus,
+  setLoginStatus,
+  setProfileInfo,
+  socket,
+  httpServer
+}) {
   const [userInfo, setUserInfo] = useState({ email: "", password: "" });
   console.log(loginStatus);
   function handleSubmit(event) {
@@ -13,8 +19,9 @@ function Login({ loginStatus, setLoginStatus, setProfileInfo, socket }) {
     //alert(`${user.username} ${user.password}`);
     let cookies = new Cookies();
     //--------------this is to login, maybe need to add useeffect-----------
+    // console.log("SERVER IS: ", httpServer);
     axios
-      .post("http://localhost:3001/login", {
+      .post(`${httpServer}login`, {
         email: userInfo.email,
         password: userInfo.password
       })
@@ -26,7 +33,14 @@ function Login({ loginStatus, setLoginStatus, setProfileInfo, socket }) {
             username: response.data[0].username,
             avatar: response.data[0].avatar
           });
+
           //---------------------------------------------------------------
+          console.log("Setting the cookie!");
+          cookies.set("profile", response.data[0].username, {
+            path: "/"
+          });
+          console.log("show me response!: ", response.data);
+          console.log("Have set the cookie", cookies.get("profile"));
           // console.log("cookies should be setting now");
           //this should be set to a cookies session instead
 
@@ -38,7 +52,7 @@ function Login({ loginStatus, setLoginStatus, setProfileInfo, socket }) {
           // 		lastName: response.data[0].last_name
           // 	})
           // );
-          cookies.set("profile", response.data[0].username, {
+          cookies.set("profile", response.data[0].cookie, {
             path: "/"
           });
           setProfileInfo({

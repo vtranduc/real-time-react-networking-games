@@ -9,7 +9,9 @@ import Chip from "@material-ui/core/Chip";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 import useKeyPress from "../helpers/useKeyPress";
-import "../styles/lobby.css"
+import "../styles/lobby.css";
+
+import Cookies from "universal-cookie";
 //=======================================
 // import FormControl from "@material-ui/core/FormControl";
 // import InputLabel from "@material-ui/core/InputLabel";
@@ -31,6 +33,8 @@ export default function Lobby({ socket, setRoom }) {
   const [createRoomMode, setCreateRoomMode] = useState(false);
   const [passcodeMode, setPasscodeMode] = useState(false);
   // const [roomStatus, getRoomStatys] = useState(null);
+
+  let cookies = new Cookies();
 
   const handlePasscodeSend = function() {
     socket.emit("lobbyValidatePasscode", {
@@ -61,11 +65,26 @@ export default function Lobby({ socket, setRoom }) {
 
   useEffect(() => {
     socket.emit("lobbyConnect");
+
     const handleLobbyUpdate = function(data) {
-      // console.log("heyheyhey", data);
       setLobbyData(data);
     };
     socket.on("lobbyUpdate", handleLobbyUpdate);
+    //======sept 7======================
+    const handleLobbyJoinedUserUpdate = function(data) {
+      console.log("this guy has joined!");
+    };
+    socket.on("lobbyJoinedUserUpdate", handleLobbyJoinedUserUpdate);
+
+    // const handleLobbyUserJoin = function(data) {
+    //   console.log("new user has just joined");
+    //   setLobbyData(data.lobbyData);
+    // };
+    // socket.on("lobbyUserJoin", handleLobbyUserJoin);
+
+    console.log("watch meeeeeeeeeeeeeeee: ", cookies.get("profile"));
+
+    //===================================
     const handleLobbyRoomCreation = function(data) {
       if (data) {
         setLobbyData(data.lobbyStat);
@@ -84,11 +103,6 @@ export default function Lobby({ socket, setRoom }) {
     };
     socket.on("lobbyRoomCreation", handleLobbyRoomCreation);
     const handleLobbyPasscodeValidation = function(data) {
-      // console.log("has received back!", data);
-      // console.log({
-      //   game: selectedGame,
-      //   room: data
-      // });
       if (data) {
         setSelectedGame(data.game);
         setSelectedRoom(data.room);
@@ -108,6 +122,10 @@ export default function Lobby({ socket, setRoom }) {
       socket.emit("lobbyDisconnect", "maybe add something later");
       socket.removeListener("lobbyUpdate", handleLobbyUpdate);
       socket.removeListener("lobbyRoomCreation", handleLobbyRoomCreation);
+      socket.removeListener(
+        "lobbyJoinedUserUpdate",
+        handleLobbyJoinedUserUpdate
+      );
       socket.removeListener(
         "lobbyPasscodeValidation",
         handleLobbyPasscodeValidation
@@ -133,7 +151,6 @@ export default function Lobby({ socket, setRoom }) {
         document.getElementById("lobbyPasscodeInputField") ===
           document.activeElement
       ) {
-        // console.log("Brandon");
         handlePasscodeSend();
       } else if (
         createRoomMode &&
@@ -142,7 +159,6 @@ export default function Lobby({ socket, setRoom }) {
           document.getElementById("lobbyNewPasscode") ===
             document.activeElement)
       ) {
-        console.log("attempt to create ROOMA NOW");
         handleCreateRoom();
       } else if (selectedRoom) {
         if (chatMode) {
@@ -161,10 +177,15 @@ export default function Lobby({ socket, setRoom }) {
   useEffect(() => {
     if (entry.inQueue) {
       console.log("time to send up the chat!");
+      const player = lobbyData[selectedGame][selectedRoom].players[socket.id];
       socket.emit("lobbyReceiveChat", {
         game: selectedGame,
         room: selectedRoom,
-        msg: entry.msg
+        msg: entry.msg,
+        user: player ? player.username : "need to refresh!",
+        avatar: player
+          ? player.avatar
+          : "https://www.drupal.org/files/issues/default-avatar.png"
       });
       setEntry({ inQueue: false, msg: "" });
     }
@@ -173,7 +194,8 @@ export default function Lobby({ socket, setRoom }) {
   return (
     <>
       {lobbyData ? (
-        <Paper id ="paper"
+        <Paper
+          id="paper"
           style={{
             margin: "2em",
             display: "flex",
@@ -202,7 +224,6 @@ export default function Lobby({ socket, setRoom }) {
                 justifyContent: "center"
               }}
             >
-              
               Games
             </h3>
             <List>
@@ -493,6 +514,9 @@ export default function Lobby({ socket, setRoom }) {
                   {Object.keys(
                     lobbyData[selectedGame][selectedRoom].players
                   ).map(player => {
+                    // console.log("ayami", player);
+                    const playerInfo =
+                      lobbyData[selectedGame][selectedRoom].players[player];
                     return (
                       <ListItem
                         key={`lobbyroom${selectedGame}${selectedRoom}${player}`}
@@ -504,6 +528,16 @@ export default function Lobby({ socket, setRoom }) {
                             : "none"
                         }}
                       >
+                        <img
+                          src={`${playerInfo.avatar}`}
+                          alt={playerInfo.avatar}
+                          // borderRadius="50%"
+                          width="50vw"
+                          style={{ borderRadius: "50%", marginRight: "0.5em" }}
+                          // width="50vw"
+                          // height="50vw"
+                          // style={{width="50vw", height="50vw"}}
+                        ></img>
                         <div
                           style={{
                             display: "flex",
@@ -511,7 +545,7 @@ export default function Lobby({ socket, setRoom }) {
                             width: "100%"
                           }}
                         >
-                          {player}
+                          {playerInfo.username}
                           {lobbyData[selectedGame][selectedRoom].players[player]
                             .ready && (
                             <div style={{ color: "green", fontSize: "0.8em" }}>
@@ -593,12 +627,19 @@ export default function Lobby({ socket, setRoom }) {
                   {lobbyData[selectedGame][selectedRoom].chats.map(chat => {
                     return (
                       <ListItem key={chat.key} button>
+                        <img
+                          src={chat.avatar}
+                          // width="7%"
+                          width="50vw"
+                          style={{ borderRadius: "50%" }}
+                        ></img>
                         <Chip
                           label={chat.user}
                           style={{
                             fontSize: "0.8em",
                             backgroundColor: "gray",
-                            marginRight: "1em"
+                            marginRight: "1em",
+                            marginLeft: "1em"
                           }}
                         ></Chip>
                         {chat.msg}

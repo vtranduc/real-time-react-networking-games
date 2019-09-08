@@ -1,13 +1,42 @@
 const app = require("express")();
-const http = require("http").createServer(app);
-const io = require("socket.io")(http);
+const server = require("http").createServer(app);
+const io = require("socket.io")(server);
 const PORT = 3001;
+//----Listeners for components----
 const soccerGame = require("./soccer/index");
 const eggCatchGame = require("./eggCatch/index");
 const world = require("./world/index");
 const rockPaperScissorsGame = require("./rockPaperScissors/index");
 const lobby = require("./lobby/index");
-const Cookies = require("universal-cookie");
+//--------------------------------
+//================COOKIES================
+//================COOKIES================
+//================COOKIES================
+//================COOKIES================
+//================COOKIES================
+//================COOKIES================
+
+const { cookieEncrypt } = require("./helpers/cookiesEncription");
+
+// const session = require("express-session")({
+//   secret: "my-secret",
+//   resave: true,
+//   saveUninitialized: true
+// });
+// const sharedsession = require("express-socket.io-session");
+
+// app.use(session);
+// io.use(sharedsession(session));
+
+//================COOKIES================
+//================COOKIES================
+//================COOKIES================
+//================COOKIES================
+//================COOKIES================
+//================COOKIES================
+//================COOKIES================
+//================COOKIES================
+// const Cookies = require("universal-cookie");
 
 const {
   getMessage,
@@ -22,24 +51,6 @@ const {
 
 const cors = require("cors");
 const bodyParser = require("body-parser");
-
-//================COOKIES================
-//================COOKIES================
-//================COOKIES================
-//================COOKIES================
-//================COOKIES================
-//================COOKIES================
-
-// const Cookies = require("universal-cookie");
-
-//================COOKIES================
-//================COOKIES================
-//================COOKIES================
-//================COOKIES================
-//================COOKIES================
-//================COOKIES================
-//================COOKIES================
-//================COOKIES================
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
@@ -92,11 +103,17 @@ const getUser = function(email, password) {
 //===================================
 
 // return;
-app.get("/test123", (req, res) => {
-  const cookies = new Cookies(req.headers.cookie);
-  console.log("AHHHHHHHHHHHH", cookies.get("myCat")); // Pacman or undefined if not set yet
-  console.log("juice");
-  res.send("<h1>Hello test123</h1>");
+// app.get("/test123", (req, res) => {
+//   const cookies = new Cookies(req.headers.cookie);
+//   console.log("AHHHHHHHHHHHH", cookies.get("myCat")); // Pacman or undefined if not set yet
+//   console.log("juice");
+//   res.send("<h1>Hello test123</h1>");
+// });
+
+app.post("/loggedInStatus", (req, res) => {
+  console.log("checking the cookie now");
+  const someData = { dummy: "hello JAy cookie" };
+  res.send(someData);
 });
 
 //===================================
@@ -127,19 +144,27 @@ app.post("/login", (req, res) => {
   console.log("FORM VALUES:", req.body);
   getUser(req.body.email, req.body.password)
     .then(result => {
-      console.log("OVER HERE", result);
+      // console.log("OVER HERE", result);
 
-      const cookies = new Cookies(req.headers.cookie);
+      // const cookies = new Cookies(req.headers.cookie);
 
-      console.log("AHHHHHHHHHHHH", cookies.get("myCat"));
+      // console.log("AHHHHHHHHHHHH", cookies.get("myCat"));
 
-      //req.session.user_id = result[0].username;
+      // // req.session.user_id = result[0].username;
+
+      result[0].cookie = cookieEncrypt(result[0].username);
+
+      // console.log("what is result anyway?: ", result[0]);
+      // console.log("type: ", typeof result);
+
       res.send(result);
     })
     .catch(err => {
       console.log(err);
     });
 });
+
+// app.get()
 
 app.post("/register", (req, res) => {
   createUser(
@@ -180,7 +205,7 @@ app.post("/postmessage", (req, res) => {
 
 //------------API ROUTEs-------------------------------
 
-http.listen(PORT, () => {
+server.listen(PORT, () => {
   console.log(`listening on Port ${PORT}`);
 });
 
@@ -194,6 +219,21 @@ const onlinePlayers = {};
 
 //------------------------------------------------------------------------
 
+defaultAvatars = [
+  // "https://avatarfiles.alphacoders.com/987/98744.gif",
+  "https://avatarfiles.alphacoders.com/527/52773.jpg",
+  "https://avatarfiles.alphacoders.com/715/71560.jpg",
+  "https://avatarfiles.alphacoders.com/106/10638.gif",
+  "https://avatarfiles.alphacoders.com/893/89303.gif",
+  "https://avatarfiles.alphacoders.com/822/82242.png",
+  "https://avatarfiles.alphacoders.com/633/63329.png",
+  "https://i.imgur.com/EsVWBJz.png",
+  "https://66.media.tumblr.com/98af64c609d1d3484f0f1ab7d464d200/tumblr_onzhhzWMbE1seeoy9o2_250.png",
+  "https://66.media.tumblr.com/16cea447c9af76216f54c4e0668b9dba/tumblr_pjsogf4hfM1w722h2o5_500.png",
+  "https://pbs.twimg.com/profile_images/571597459281829888/bjGTj5B9_400x400.png",
+  "https://cdn.discordapp.com/attachments/299832570693156874/619578961688789003/Eli1.png"
+];
+
 const gameData = {
   soccer: {
     lobby: {
@@ -201,17 +241,47 @@ const gameData = {
         status: "",
         players: {},
         chats: [
-          { key: ";czvxzc", user: "Good duke", msg: "Hello all" },
-          { key: ";bvxcb", user: "Bad duke", msg: "Hello all" },
-          { key: "sfsaf,.dsj", user: "No one", msg: "Hello none" }
+          {
+            key: ";czvxzc",
+            user: "Good duke",
+            msg: "Hello all",
+            avatar:
+              defaultAvatars[Math.floor(Math.random() * defaultAvatars.length)]
+          },
+          {
+            key: ";bvxcb",
+            user: "Bad duke",
+            msg: "Hello all",
+            avatar:
+              defaultAvatars[Math.floor(Math.random() * defaultAvatars.length)]
+          },
+          {
+            key: "sfsaf,.dsj",
+            user: "No one",
+            msg: "Hello none",
+            avatar:
+              defaultAvatars[Math.floor(Math.random() * defaultAvatars.length)]
+          }
         ]
       },
       soccerRoom2: {
         status: "aaa",
-        players: { jayjay: { ready: false }, sarah: { ready: true } },
+        players: {},
         chats: [
-          { key: ";pfdzzzzzzzzsAsaj", user: "Jayjay", msg: "I wanna eat" },
-          { key: ";pfdsbbaj", user: "Sarah", msg: "Ok!" }
+          {
+            key: ";pfdzzzzzzzzsAsaj",
+            user: "Jayjay",
+            msg: "I wanna eat",
+            avatar:
+              defaultAvatars[Math.floor(Math.random() * defaultAvatars.length)]
+          },
+          {
+            key: ";pfdsbbaj",
+            user: "Sarah",
+            msg: "Ok!",
+            avatar:
+              defaultAvatars[Math.floor(Math.random() * defaultAvatars.length)]
+          }
         ]
       }
     }
@@ -227,20 +297,41 @@ const gameData = {
 
 io.on("connection", socket => {
   console.log("A user has been connected: ", socket.id);
-  // onlinePlayers[socket.id] = { username: null };
+  onlinePlayers[socket.id] = getGuestId(socket.id, defaultAvatars);
   socket.on("disconnect", () => {
     console.log("a user has been disconnected", socket.id);
     delete onlinePlayers[socket.id];
     console.log(onlinePlayers);
   });
+  //-----------------LOGGING------------------------------------
   socket.on("login", data => {
     console.log("adding people HERE!", data);
     onlinePlayers[socket.id] = { username: data.username, avatar: data.avatar };
-    console.log("onlinePlayers", onlinePlayers);
+    // console.log("onlinePlayers", onlinePlayers);
+    // socket.handshake.session.userData = data;
+    // socket.handshake.session.save();
   });
+  // Have not implemented yet!------------------------
+  // socket.on("logout", function(userdata) {
+  //   if (socket.handshake.session.userdata) {
+  //     delete socket.handshake.session.userdata;
+  //     socket.handshake.session.save();
+  //   }
+  // });
+
+  // https://www.npmjs.com/package/express-socket.io-session
+
+  //--------------------------------------------------------------
   world(socket, io.sockets, io.sockets.adapter.rooms, gameData.world);
   soccerGame(socket, io.sockets, io.sockets.adapter.rooms, gameData.soccer, io);
   rockPaperScissorsGame(socket, io.sockets, gameData.rockPaperScissors, io);
   eggCatchGame(socket, io.sockets, io.sockets.adapter.rooms, gameData.eggCatch);
-  lobby(socket, io.sockets, io.sockets.adapter.rooms, gameData, io);
+  lobby(socket, io.sockets, gameData, io, onlinePlayers);
 });
+
+const getGuestId = function(socketId, defaultAvatars) {
+  return {
+    username: `Guest_${socketId.slice(0, 3)}`,
+    avatar: defaultAvatars[Math.floor(Math.random() * defaultAvatars.length)]
+  };
+};
