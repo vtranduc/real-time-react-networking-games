@@ -5,10 +5,7 @@ function Aboutus() {
 	return (
 		<div id="background">
 			<div id="split">
-				<div
-					className="about"
-					style={{ width: "50%", height: "100%", overflowY: "auto" }}
-				>
+				<div className="about">
 					<div className="home2">
 						<div className="pimg12">
 							<div className="ptext2">
@@ -95,7 +92,128 @@ function Aboutus() {
 							<h2>More About Viet</h2>
 							<p>
 								To know more about Viet, please checkout the following links
-								below: GitHub, Resume, LinkedIn
+								below:
+								<br></br>
+								<a href="https://github.com/vtranduc/real-time-react-networking-games.git">
+									Github
+								</a>
+								<br></br>
+								<a href="https://github.com/vtranduc/multiPlayersMiniGameGallery.git">
+									MultiplayerMinigames
+								</a>
+								<br></br>
+								<a href="https://www.canva.com/design/DADi-9HI_kM/share/preview?token=Qcg5reeI4iM5yKE0cuobfA&role=EDITOR&utm_content=DADi-9HI_kM&utm_campaign=designshare&utm_medium=link&utm_source=sharebutton">
+									Resume
+								</a>
+								<br></br>
+								<a href="https://play.google.com/store/apps/details?id=ca.ualberta.customizableanimeartpuzzle&hl=en">
+									AnimePuzzle
+								</a>
+								<br></br>
+								<a href="https://github.com/vtranduc/tweeter">Tweeter</a>
+							</p>
+						</section>
+						{/* SPLITTTTTING ============================ */}
+					</div>
+				</div>
+				<div className="about">
+					<div className="home3">
+						<div className="pimg11">
+							<div className="ptext">
+								<span className="border2">
+									<h2>Jay Jay Ting</h2>
+								</span>
+							</div>
+						</div>
+						<section className="section2 section-light2">
+							<h2>Introducing Jay Jay</h2>
+							<p>
+								Jay Jay is a Full-Stack web developer with a background in Human
+								Biology. His working experience as a product manager, and his
+								recent internship in Silicon Valley demonstrates his passion in
+								learning computing science. His recent projects has utilized
+								React, sockets, and Phaser (game engine) to implement a fully
+								functional website.
+							</p>
+						</section>
+						<div className="pimg21">
+							<div className="ptext2">
+								<span className="border2">
+									<Link className="route-link2" to="/soccer">
+										<h1 className="header">Credentials</h1>
+									</Link>
+								</span>
+							</div>
+						</div>
+						<section className="section2 section-dark2">
+							<h2 className="header">
+								Java OCP I - UC Berkeley Extensions: Software and Programming
+							</h2>
+							<p>
+								With his experience in multiple Object-Oriented Languages and
+								their design patterns, Jay Jay has developed his personal game
+								with the game engine LibGDX and Unity implementing custom
+								hitboxes for collision detection.
+							</p>
+						</section>
+						<div className="pimg31">
+							<div className="ptext2">
+								<span className="border2">
+									<Link className="route-link2" to="/phaser-game">
+										<h1>Projects</h1>
+									</Link>
+								</span>
+							</div>
+						</div>
+						<section className="section2 section-dark2">
+							<h2>
+								Multiplayer Online - Card Games - Scheduler - Anime Puzzle -
+								Tweeter
+							</h2>
+							<p>
+								Projects displayed above defines Jay Jay's deidication and
+								passion for web development. Each and every project showcases
+								his extensive background knowledge as well as knowledge acquired
+								through the course of Lighthouse Labs.<br></br>
+								<a href="https://github.com/vtranduc/real-time-react-networking-games.git">
+									Multiplayer Online
+								</a>
+								<br></br>
+								<a href="https://github.com/vtranduc/multiPlayersMiniGameGallery.git">
+									Card Games
+								</a>
+								<br></br>
+								<a href="https://play.google.com/store/apps/details?id=ca.ualberta.customizableanimeartpuzzle&hl=en">
+									Anime Puzzle
+								</a>
+								<br></br>
+								<a href="https://github.com/vtranduc/tweeter">Tweeter</a>
+							</p>
+						</section>
+						<div className="pimg41">
+							<div className="ptext2">
+								<span className="border2">
+									<Link className="route-link2" to="/lobby">
+										<h1>About</h1>
+									</Link>
+								</span>
+							</div>
+						</div>
+						<section className="section2 section-dark2">
+							<h2>More About Jay Jay</h2>
+							<p>
+								To know more about Jay Jay, please checkout the following links
+								below:
+								<br></br>
+								<a href="https://github.com/vtranduc/real-time-react-networking-games.git">
+									Github
+								</a>
+								<br></br>
+								<a href="https://github.com/vtranduc/multiPlayersMiniGameGallery.git">
+									Resume
+								</a>
+								<br></br>
+								<a href="https://github.com/vtranduc/tweeter">Tweeter</a>
 							</p>
 						</section>
 						{/* <div className="pimg5">
@@ -111,7 +229,7 @@ function Aboutus() {
 				</div>
 
 				{/* split */}
-				<div
+				{/* <div
 					style={{
 						width: "50%",
 						height: "100%",
@@ -119,7 +237,7 @@ function Aboutus() {
 						borderRadius: "30%"
 					}}
 				>
-					<div className="home1">
+					<div className="home12">
 						<div className="pimg11">
 							<div className="ptext1">
 								<span className="border1">
@@ -249,7 +367,7 @@ function Aboutus() {
 							</div>
 						</div>
 					</div>
-				</div>
+				</div> */}
 			</div>
 		</div>
 	);
