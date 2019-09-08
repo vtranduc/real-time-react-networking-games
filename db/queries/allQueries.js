@@ -15,7 +15,7 @@ const getUserProfile = function(username) {
 	FROM users WHERE username = $1`,
       values: [username]
     })
-    .then(res => res.rows);
+    .then(res => res.rows[0]);
 };
 
 const createUser = function(
@@ -134,28 +134,65 @@ const postMessage = function(
 // 		});
 // };
 
-const getMessage = function(recieverName) {
-  return pool
-    .query({
-      text: `SELECT users.id from users WHERE username = $1`,
-      values: [recieverName]
-    })
-    .then(res => {
-      console.log(res.rows[0].id);
-      return pool.query({
-        text: `SELECT * FROM user_posts WHERE reciever_id = $1`,
-        values: [res.rows[0].id]
+// const getMessage = function(recieverName) {
+//   return pool
+//     .query({
+//       text: `SELECT users.id from users WHERE username = $1`,
+//       values: [recieverName]
+//     })
+//     .then(res => {
+//       console.log(res.rows[0].id);
+//       return pool.query({
+//         text: `SELECT * FROM user_posts WHERE reciever_id = $1`,
+//         values: [res.rows[0].id]
+//       });
+//     })
+//     .then(res => {
+//       return res.rows;
+//     });
+// };
+
+const getFriendList = function(username) {
+  return getIdFromUsername(username).then(res => {
+    return pool
+      .query({
+        text: `SELECT username, avatar FROM users JOIN friendship ON friendship.user_id = users.id WHERE request_status = TRUE AND (user_id = $1 OR reciever_id = $1)`,
+        values: [res]
+      })
+      .then(res => res.rows);
+  });
+};
+
+const getMessage = function(receiverUsername) {
+  return getIdFromUsername(receiverUsername).then(res => {
+    return pool
+      .query({
+        text: `SELECT users.username, users.avatar, user_posts.sent_message, user_posts.message_title, user_posts.time_of_post FROM users JOIN user_posts ON user_posts.sender_id = users.id WHERE user_posts.reciever_id = $1`,
+        values: [res]
+      })
+      .then(res => res.rows)
+      .catch(err => {
+        console.log("FAILED HEREEEEEEEEEEEE", err);
       });
-    })
-    .then(res => {
-      return res.rows;
-    });
+  });
 };
 
 //getUsers().then(console.log);
 
-//getMessage("a").then(console.log);
-module.exports = { getUserProfile, getMessage, postMessage, createUser };
+// getMessage("a").then(res => {
+//   console.log(
+//     "LOOK HEREEEE==========================================",
+//     res,
+//     "LOOK HEREEEE=========================================="
+//   );
+// });
+module.exports = {
+  getUserProfile,
+  getMessage,
+  postMessage,
+  createUser,
+  getFriendList
+};
 
 // const getMessages = (user, chatroom) => {
 //     return pool
