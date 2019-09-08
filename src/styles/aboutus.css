@@ -1,179 +1,165 @@
-#split {
-  display: flex;
-  justify-content: space-evenly;
+.about {
+	width: 50%;
+	height: 100%;
+	overflow-y: "auto";
+}
 
-  height: calc(100vh - 82px);
+#split {
+	display: flex;
+	justify-content: space-evenly;
+
+	height: calc(100vh - 82px);
 }
 #background {
-  background-color: black;
+	background-color: #282e34;
 }
-body,
+
 .home2 {
-  height: 100%;
-  margin: 0;
-  font-size: 16px;
-  font-family: "Lato", sans-serif;
-  font-weight: 400;
-  line-height: 1.8em;
-  color: #666;
-  height: 100%;
-  overflow-y: auto;
-  border-radius: 30%;
+	height: 100%;
+	margin: 0;
+	font-size: 16px;
+	font-family: "Lato", sans-serif;
+	font-weight: 400;
+	line-height: 1.8em;
+	color: grey;
+	height: 100%;
+	overflow-y: auto;
+	padding-top: 5%;
+	padding-left: 7%;
+	padding-right: 3.5%;
+
+	border-radius: 20%;
+}
+.home3 {
+	height: 100%;
+	margin: 0;
+	font-size: 16px;
+	font-family: "Lato", sans-serif;
+	font-weight: 400;
+	line-height: 1.8em;
+	color: grey;
+	height: 100%;
+	overflow-y: auto;
+	padding-top: 5%;
+	padding-right: 7%;
+	padding-left: 3.5%;
+	border-radius: 20%;
 }
 .pimg12,
 .pimg22,
 .pimg32,
 .pimg42,
 .pimg52 {
-  position: relative;
+	position: relative;
 
-  background-position: center;
-  background-size: cover;
-  background-repeat: no-repeat;
-  border-radius: 20%;
+	background-position: center;
+	background-size: cover;
+	background-repeat: no-repeat;
+	border-radius: 30%;
 
-  /* fixed = parallax
+	/* fixed = parallax
 	scroll = normal */
 }
 .pimg12 {
-  background-image: url("/assets/Aboutus/cutie.jpg");
+	background-image: url("/assets/aboutus/cutie.jpg");
 
-  min-height: 800px;
+	min-height: 800px;
 }
 .pimg22 {
-  background-image: url("/assets/Aboutus/tagteam.jpg");
-  background-attachment: fixed;
+	background-image: url("/assets/aboutus/lichking.jpg");
+	background-attachment: fixed;
 
-  min-height: 400px;
+	min-height: 400px;
 }
 .pimg32 {
-  background-image: url("/assets/Aboutus/kimiwa.jpg");
-  background-attachment: fixed;
-  background-position-x: -200px;
-  min-height: 400px;
+	background-image: url("/assets/aboutus/kimiwa.jpg");
+	background-attachment: fixed;
+	background-position-x: -200px;
+	min-height: 400px;
 }
 .pimg42 {
-  background-image: url("/assets/HomePage/background7.jpg");
-  background-attachment: fixed;
-  min-height: 400px;
+	background-image: url("/assets/aboutus/pokemon.jpg");
+	background-attachment: fixed;
+	min-height: 400px;
 }
 .pimg52 {
-  background-image: url("/assets/HomePage/background4.jpg");
-  background-attachment: fixed;
-  min-height: 400px;
+	background-image: url("/assets/aboutus/kimiwa.jpg");
+	background-attachment: fixed;
+	min-height: 400px;
 }
 
 .section2 {
-  text-align: center;
-  padding: 50px 80px;
-  min-height: 200px;
-  border-radius: 20%;
+	text-align: center;
+	padding: 50px 80px;
+	min-height: 200px;
+	border-radius: 20%;
 }
 .section-light2 {
-  background-color: #f4f4f4;
-  color: #666;
+	background-color: #f4f4f4;
+	color: dimgray;
 }
 .section-dark2 {
-  background-color: #282e34;
-  color: #ddd;
+	background-color: grey;
+
+	color: #ddd;
 }
 
 .ptext2 {
-  position: absolute;
-  top: 50%;
-  width: 100%;
-  text-align: center;
-  font-size: 27px;
-  letter-spacing: 8px;
-  text-transform: uppercase;
+	position: absolute;
+	top: 50%;
+	width: 100%;
+	text-align: center;
+	font-size: 27px;
+	letter-spacing: 8px;
+	text-transform: uppercase;
 }
 .route-link2 {
-  color: rgb(226, 226, 226);
-  text-decoration: none;
-  letter-spacing: 5px;
-  font-weight: bold;
-  font-size: 14px;
+	color: rgb(226, 226, 226);
+	text-decoration: none;
+	letter-spacing: 5px;
+	font-weight: bold;
+	font-size: 14px;
 }
 
-.home12 {
-  height: 100%;
-  margin: 0;
-  font-size: 16px;
-  font-family: "Lato", sans-serif;
-  font-weight: 400;
-  line-height: 1.8em;
-  color: #666;
-}
 .pimg11,
 .pimg21,
 .pimg31,
 .pimg41,
 .pimg51 {
-  position: relative;
+	position: relative;
 
-  background-position: center;
-  background-size: cover;
-  background-repeat: no-repeat;
-  border-radius: 20%;
+	background-position: center;
+	background-size: cover;
+	background-repeat: no-repeat;
+	border-radius: 30%;
 
-  /* fixed = parallax
+	/* fixed = parallax
 	scroll = normal */
 }
 .pimg11 {
-  background-image: url("/assets/aboutus/jayjay.jpg");
-  /* background-size: 80%;
-	background-position-x: 800px; */
-  min-height: 800px;
+	background-image: url("/assets/aboutus/test3.jpg");
+
+	min-height: 800px;
 }
 .pimg21 {
-  background-image: url("/assets/Aboutus/tagteam.jpg");
-  min-height: 400px;
-  background-attachment: fixed;
+	background-image: url("/assets/aboutus/illidan.jpg");
+	background-attachment: fixed;
+
+	min-height: 400px;
 }
 .pimg31 {
-  background-image: url("/assets/HomePage/background3.png");
-  min-height: 400px;
-  background-attachment: fixed;
+	background-image: url("/assets/aboutus/pokemon2.jpg");
+	background-attachment: fixed;
+
+	min-height: 400px;
 }
 .pimg41 {
-  background-image: url("/assets/HomePage/background7.jpg");
-  min-height: 400px;
-  background-attachment: fixed;
+	background-image: url("/assets/aboutus/pokemon.jpg");
+	background-attachment: fixed;
+	min-height: 400px;
 }
 .pimg51 {
-  background-image: url("/assets/HomePage/background4.jpg");
-  min-height: 400px;
-  background-attachment: fixed;
-}
-
-.section1 {
-  text-align: center;
-  padding: 50px 80px;
-  min-height: 200px;
-  border-radius: 20%;
-}
-.section-light1 {
-  background-color: #f4f4f4;
-  color: #666;
-}
-.section-dark1 {
-  background-color: #282e34;
-  color: #ddd;
-}
-
-.ptext1 {
-  position: absolute;
-  top: 50%;
-  width: 100%;
-  text-align: center;
-  font-size: 27px;
-  letter-spacing: 8px;
-  text-transform: uppercase;
-}
-.route-link1 {
-  color: rgb(226, 226, 226);
-  text-decoration: none;
-  letter-spacing: 5px;
-  font-weight: bold;
-  font-size: 14px;
+	background-image: url("/assets/aboutus/pokemon.jpg");
+	background-attachment: fixed;
+	min-height: 400px;
 }
