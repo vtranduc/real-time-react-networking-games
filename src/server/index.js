@@ -97,6 +97,10 @@ profileServerData(app, pool);
 //   res.send("<h1>Hello test123</h1>");
 // });
 
+// app.post("/retrieveuserprofile", (req, res) => {
+//   console.log("I am looking for: ", req.body);
+// });
+
 app.post("/loggedInStatus", (req, res) => {
 	console.log("checking the cookie now");
 	// console.log("bomb: ", );
