@@ -29,10 +29,10 @@ function Login({
         if (response.data.length) {
           setLoginStatus(true);
           //------Associate with socket-------------------------------------
-          socket.emit("login", {
-            username: response.data[0].username,
-            avatar: response.data[0].avatar
-          });
+          // socket.emit("login", {
+          //   username: response.data[0].username,
+          //   avatar: response.data[0].avatar
+          // });
 
           //---------------------------------------------------------------
           console.log("Setting the cookie!");

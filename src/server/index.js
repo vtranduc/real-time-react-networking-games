@@ -9,6 +9,7 @@ const world = require("./world/index");
 const rockPaperScissorsGame = require("./rockPaperScissors/index");
 const lobby = require("./lobby/index");
 //--------------------------------
+
 //================COOKIES================
 //================COOKIES================
 //================COOKIES================
@@ -16,7 +17,7 @@ const lobby = require("./lobby/index");
 //================COOKIES================
 //================COOKIES================
 
-const { cookieEncrypt } = require("./helpers/cookiesEncription");
+const { cookieEncrypt, cookieDecrypt } = require("./helpers/cookiesEncription");
 
 // const session = require("express-session")({
 //   secret: "my-secret",
@@ -112,8 +113,28 @@ const getUser = function(email, password) {
 
 app.post("/loggedInStatus", (req, res) => {
   console.log("checking the cookie now");
-  const someData = { dummy: "hello JAy cookie" };
-  res.send(someData);
+  // console.log("bomb: ", );
+
+  const username = cookieDecrypt(req.body.cookie);
+
+  pool
+    .query({
+      text: `SELECT id, username, first_name, avatar 
+    FROM users 
+    WHERE username = $1`,
+      values: [username],
+      name: "get_message_query"
+    })
+    .then(result => {
+      res.send(result.rows);
+    });
+
+  // getUserProfile(username).then(result => {
+  //   res.send(result);
+  // });
+
+  // const someData = { dummy: "hello JAy cookie" };
+  // res.send(someData);
 });
 
 //===================================
@@ -297,20 +318,31 @@ const gameData = {
 
 io.on("connection", socket => {
   console.log("A user has been connected: ", socket.id);
-  onlinePlayers[socket.id] = getGuestId(socket.id, defaultAvatars);
   socket.on("disconnect", () => {
     console.log("a user has been disconnected", socket.id);
-    delete onlinePlayers[socket.id];
-    console.log(onlinePlayers);
+    // delete onlinePlayers[socket.id];
   });
   //-----------------LOGGING------------------------------------
-  socket.on("login", data => {
-    console.log("adding people HERE!", data);
-    onlinePlayers[socket.id] = { username: data.username, avatar: data.avatar };
-    // console.log("onlinePlayers", onlinePlayers);
-    // socket.handshake.session.userData = data;
-    // socket.handshake.session.save();
+  // socket.on("setUpGuestProfile", () => {
+  //   console.log("ADDING A GUEST HERE!!!");
+  //   onlinePlayers[socket.id] = getGuestId(socket.id, defaultAvatars);
+  // });
+  // socket.on("login", data => {
+  //   console.log("adding people HERE!", data);
+  //   onlinePlayers[socket.id] = { username: data.username, avatar: data.avatar };
+  //   // console.log("onlinePlayers", onlinePlayers);
+  //   // socket.handshake.session.userData = data;
+  //   // socket.handshake.session.save();
+  // });
+
+  socket.on("requestGuestProfile", () => {
+    // console.log("SET UP GUEST ON THE SERVER");
+    io.to(socket.id).emit("catchGuestProfile", {
+      username: `Guest_${socket.id.slice(0, 3)}`,
+      avatar: defaultAvatars[Math.floor(Math.random() * defaultAvatars.length)]
+    });
   });
+
   // Have not implemented yet!------------------------
   // socket.on("logout", function(userdata) {
   //   if (socket.handshake.session.userdata) {
@@ -326,12 +358,12 @@ io.on("connection", socket => {
   soccerGame(socket, io.sockets, io.sockets.adapter.rooms, gameData.soccer, io);
   rockPaperScissorsGame(socket, io.sockets, gameData.rockPaperScissors, io);
   eggCatchGame(socket, io.sockets, io.sockets.adapter.rooms, gameData.eggCatch);
-  lobby(socket, io.sockets, gameData, io, onlinePlayers);
+  lobby(socket, io.sockets, gameData, io);
 });
 
-const getGuestId = function(socketId, defaultAvatars) {
-  return {
-    username: `Guest_${socketId.slice(0, 3)}`,
-    avatar: defaultAvatars[Math.floor(Math.random() * defaultAvatars.length)]
-  };
-};
+// const getGuestId = function(socketId, defaultAvatars) {
+//   return {
+//     username: `Guest_${socketId.slice(0, 3)}`,
+//     avatar: defaultAvatars[Math.floor(Math.random() * defaultAvatars.length)]
+//   };
+// };

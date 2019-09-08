@@ -22,7 +22,7 @@ import Cookies from "universal-cookie";
 // import ToggleButtonGroup from "@material-ui/lab/ToggleButtonGroup";
 // import MenuItem from "@material-ui/core/MenuItem";
 
-export default function Lobby({ socket, setRoom }) {
+export default function Lobby({ socket, setRoom, profileInfo }) {
   // function handle
 
   const [lobbyData, setLobbyData] = useState(null);
@@ -40,7 +40,9 @@ export default function Lobby({ socket, setRoom }) {
     socket.emit("lobbyValidatePasscode", {
       game: selectedGame,
       room: passcodeMode,
-      passcode: document.getElementById("lobbyPasscodeInputField").value
+      passcode: document.getElementById("lobbyPasscodeInputField").value,
+      username: profileInfo.username,
+      avatar: profileInfo.avatar
     });
     document.getElementById("lobbyPasscodeInputField").value = "";
     setPasscodeMode(false);
@@ -93,7 +95,9 @@ export default function Lobby({ socket, setRoom }) {
         setCreateRoomMode(false);
         socket.emit("lobbyJoinLeaveRoom", {
           game: data.game,
-          room: data.room
+          room: data.room,
+          username: profileInfo.username,
+          avatar: profileInfo.avatar
         });
         setEntry({ ...entry, msg: "" });
       } else {
@@ -109,7 +113,9 @@ export default function Lobby({ socket, setRoom }) {
         setCreateRoomMode(false);
         socket.emit("lobbyJoinLeaveRoom", {
           game: data.game,
-          room: data.room
+          room: data.room,
+          username: profileInfo.username,
+          avatar: profileInfo.avatar
         });
         setEntry({ ...entry, msg: "" });
       } else {
@@ -405,7 +411,9 @@ export default function Lobby({ socket, setRoom }) {
                               setCreateRoomMode(false);
                               socket.emit("lobbyJoinLeaveRoom", {
                                 game: selectedGame,
-                                room: room
+                                room: room,
+                                username: profileInfo.username,
+                                avatar: profileInfo.avatar
                               });
                               setEntry({ ...entry, msg: "" });
                             } else {
@@ -668,7 +676,6 @@ export default function Lobby({ socket, setRoom }) {
     </>
   );
 }
-
 const spaceRemover = function(str) {
   let marker = null;
   for (let i = 0; i < str.length; i++) {

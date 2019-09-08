@@ -1,30 +1,15 @@
-// const getLobbyStatus = require("../helpers/getRooms");
-
-const lobby = function(socket, sockets, gameData, io, onlinePlayers) {
-  // console.log("initializing lobby");
-
-  // socket.on("lobbyConnect", () => {
-  //   socket.join("lobby");
-  //   sockets
-  //     .to("lobby")
-  //     .emit("lobbyUserJoin", { lobbyData: getLobbyStatus(gameData) });
+const lobby = function(socket, sockets, gameData, io) {
   socket.on("lobbyConnect", () => {
-    // WATASHI YAMINOMA!--------
-    // console.log("LOOK HERE FOR COOKIE TEST! ", io.sessions[socket.id]);
-    //---------------------------
-
     socket.join("lobby");
     sockets.to("lobby").emit("lobbyUpdate", getLobbyStatus(gameData));
-    io.to(socket.id).emit("lobbyJoinedUserUpdate", {});
   });
 
   socket.on("lobbyJoinLeaveRoom", data => {
-    // console.log("A user has joined the room!", data);
     leaveAllRooms(gameData, socket.id);
     if (data) {
       gameData[data.game].lobby[data.room].players[socket.id] = getPlayerStat(
-        socket.id,
-        onlinePlayers
+        data.username,
+        data.avatar
       );
     }
     sockets.to("lobby").emit("lobbyUpdate", getLobbyStatus(gameData));
@@ -43,15 +28,8 @@ const lobby = function(socket, sockets, gameData, io, onlinePlayers) {
   });
 
   socket.on("lobbyCreateRoom", data => {
-    // console.log("Someone is attempting to create a room!", data);
-    // console.log(checkRoomAvaibility(gameData, data.room));
-    // console.log(Object.keys(rooms));
     if (checkRoomAvaibility(gameData, data.room)) {
-      // sockets.to("lobby").emit("lobbyUpdate", getLobbyStatus(gameData));
       gameData[data.game].lobby[data.room] = initializeLobbyRoom(data.passcode);
-      // sockets.to("lobby").emit("lobbyRoomCreation", getLobbyStatus(gameData));
-      // io.to(socket.id).emit("lobbyRoomCreation", true);
-      // sockets.to("lobby").emit("lobbyUpdate", getLobbyStatus(gameData));
       const lobbyStat = getLobbyStatus(gameData);
       socket.broadcast.to("lobby").emit("lobbyUpdate", lobbyStat);
       io.to(socket.id).emit("lobbyRoomCreation", {
@@ -71,18 +49,20 @@ const lobby = function(socket, sockets, gameData, io, onlinePlayers) {
   });
 
   socket.on("lobbySetReady", data => {
-    // console.log("aladeen");
-    // console.log(gameData[data.game].lobby[data.room].players[socket.id]);
-    gameData[data.game].lobby[data.room].players[socket.id].ready = true;
-    sockets.to("lobby").emit("lobbyUpdate", getLobbyStatus(gameData));
+    try {
+      gameData[data.game].lobby[data.room].players[socket.id].ready = true;
+      sockets.to("lobby").emit("lobbyUpdate", getLobbyStatus(gameData));
+    } catch (err) {
+      console.log("Room is not ready!");
+    }
   });
 
   socket.on("lobbyValidatePasscode", data => {
     if (data.passcode === gameData[data.game].lobby[data.room].status) {
       try {
         gameData[data.game].lobby[data.room].players[socket.id] = getPlayerStat(
-          socket.id,
-          onlinePlayers
+          data.username,
+          data.avatar
         );
         io.to(socket.id).emit("lobbyPasscodeValidation", {
           game: data.game,
@@ -112,11 +92,11 @@ const lobby = function(socket, sockets, gameData, io, onlinePlayers) {
 
 module.exports = lobby;
 
-const getPlayerStat = function(socketId, onlinePlayers) {
+const getPlayerStat = function(username, avatar) {
   return {
     ready: false,
-    username: onlinePlayers[socketId].username,
-    avatar: onlinePlayers[socketId].avatar
+    username: username,
+    avatar: avatar
   };
 };
 
@@ -139,7 +119,6 @@ const checkRoomAvaibility = function(gameData, requestedName) {
 const getLobbyStatus = function(gameData) {
   let output = {};
   for (let game in gameData) {
-    // output[game] = gameData[game].lobby;
     output[game] = {};
     for (let room in gameData[game].lobby) {
       output[game][room] = {
