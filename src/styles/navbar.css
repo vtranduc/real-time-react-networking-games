@@ -5,6 +5,28 @@
 }
 
 @import url(`https://fonts.googleapis.com/css?family=Poppins&display=swap`);
+#sep {
+	display: flex;
+	flex-direction: "row";
+
+	background-color: gray;
+}
+#navprofile {
+	display: flex;
+	justify-content: center;
+	flex-direction: row;
+	margin-left: 1%;
+	align-items: center;
+}
+#navimage {
+	height: 10vh;
+	border-radius: 30%;
+	border: 2px solid white;
+}
+
+#welcomeprompt {
+	margin: 1em;
+}
 
 nav {
 	display: flex;
@@ -12,7 +34,6 @@ nav {
 	align-items: center;
 	align-content: center;
 	min-height: 8vh;
-
 	background-color: grey;
 }
 .logo {
