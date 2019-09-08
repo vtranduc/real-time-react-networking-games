@@ -24,7 +24,7 @@ const serverPORT = 3001;
 function App() {
   //--------------------global states----------------------
   const [loginStatus, setLoginStatus] = useState(null);
-  const [room, setRoom] = useState("soccerHAHA");
+  const [room, setRoom] = useState("testingSoccer");
   const [profileInfo, setProfileInfo] = useState(null);
   const httpServer = "http://localhost:3001/";
   const [socket, setSocket] = useState(null);
