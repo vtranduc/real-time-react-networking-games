@@ -2,11 +2,11 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import "../styles/navbar.css";
 
-function NavBar({loginStatus, setLoginStatus}) {
+function NavBar({ loginStatus, setLoginStatus }) {
 	const [pageName, setPageName] = useState("The Best Website in the World");
-	
+
 	return (
-		<div >
+		<div>
 			{!loginStatus && (
 				<nav>
 					<h3>{pageName}</h3>
@@ -22,9 +22,8 @@ function NavBar({loginStatus, setLoginStatus}) {
 									<li>Home</li>
 								</Link>
 								<Link
-									to="/about"
+									to="/aboutus"
 									onClick={() => {
-
 										setPageName("About Me and My Love Viet");
 									}}
 								>
@@ -101,7 +100,7 @@ function NavBar({loginStatus, setLoginStatus}) {
 									to="/"
 									onClick={() => {
 										setPageName("Home");
-										setLoginStatus(false)
+										setLoginStatus(false);
 									}}
 								>
 									<li>Logout</li>
