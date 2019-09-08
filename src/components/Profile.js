@@ -61,10 +61,14 @@ function Profile({ profileInfo, httpServer, loginStatus, match }) {
     //   match.params.username
     // );
 
-    axios.post(`${httpServer}retrieveuserprofile`, {
-      username: match.params.username,
-      viewer: loginStatus ? profileInfo.username : null
-    });
+    axios
+      .post(`${httpServer}retrieveuserprofile`, {
+        username: match.params.username
+        // viewer: loginStatus ? profileInfo.username : null
+      })
+      .then(res => {
+        console.log("Data received by client: ", res.data);
+      });
   }, []);
 
   // useEffect(() => {
