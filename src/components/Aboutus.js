@@ -5,7 +5,10 @@ function Aboutus() {
 	return (
 		<div id="background">
 			<div id="split">
-				<div style={{ width: "50%", height: "100%", overflowY: "auto" }}>
+				<div
+					className="about"
+					style={{ width: "50%", height: "100%", overflowY: "auto" }}
+				>
 					<div className="home2">
 						<div className="pimg12">
 							<div className="ptext2">
@@ -28,13 +31,15 @@ function Aboutus() {
 							<div className="ptext2">
 								<span className="border2">
 									<Link className="route-link2" to="/soccer">
-										<h1>Achievements</h1>
+										<h1 className="header">Achievements</h1>
 									</Link>
 								</span>
 							</div>
 						</div>
 						<section className="section2 section-dark2">
-							<h2>Custom Physics Engines - Python Javascript / React</h2>
+							<h2 className="header">
+								Custom Physics Engines - Python Javascript / React
+							</h2>
 							<p>
 								With his extensive knowledge in computer science, mathematics,
 								physics, and chemical engineering, Viet has created and
