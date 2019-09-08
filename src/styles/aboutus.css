@@ -4,7 +4,9 @@
 
 	height: calc(100vh - 82px);
 }
-
+#background {
+	background-color: black;
+}
 body,
 .home2 {
 	height: 100%;
@@ -24,7 +26,7 @@ body,
 .pimg42,
 .pimg52 {
 	position: relative;
-	opacity: 0.7;
+
 	background-position: center;
 	background-size: cover;
 	background-repeat: no-repeat;
@@ -108,7 +110,7 @@ body,
 .pimg41,
 .pimg51 {
 	position: relative;
-	opacity: 0.7;
+
 	background-position: center;
 	background-size: cover;
 	background-repeat: no-repeat;
