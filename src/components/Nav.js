@@ -16,42 +16,42 @@ function NavBar({ loginStatus, setLoginStatus, profileInfo }) {
 
 			{!loginStatus && (
 				<nav>
-					<h3>{pageName}</h3>
+					{/* <h3>{pageName}</h3> */}
 					<div>
 						<div className="logo">
 							<ul className="nav-links">
 								<Link
 									to="/"
 									onClick={() => {
-										setPageName("The Best Website in the World");
+										// setPageName("The Best Website in the World");
 									}}>
 									<li>Home</li>
 								</Link>
 								<Link
 									to="/aboutus"
 									onClick={() => {
-										setPageName("About Me and My Love Viet");
+										// setPageName("About Me and My Love Viet");
 									}}>
 									<li>About</li>
 								</Link>
 								<Link
 									to="/lobby"
 									onClick={() => {
-										setPageName("Games Lobby");
+										// setPageName("Games Lobby");
 									}}>
 									<li>Lobby</li>
 								</Link>
 								<Link
 									to="/Login"
 									onClick={() => {
-										setPageName("Login Page");
+										// setPageName("Login Page");
 									}}>
 									<li>Login</li>
 								</Link>
 								<Link
 									to="/Register"
 									onClick={() => {
-										setPageName("Register Page");
+										// setPageName("Register Page");
 									}}>
 									<li>Register</li>
 								</Link>
@@ -62,7 +62,7 @@ function NavBar({ loginStatus, setLoginStatus, profileInfo }) {
 			)}
 			{loginStatus && (
 				<nav>
-					<h3>{pageName}</h3>
+					{/* <h3>{pageName}</h3> */}
 					<div>
 						<div className="logo">
 							<ul className="nav-links">
