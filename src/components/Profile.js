@@ -56,16 +56,20 @@ function Profile({ profileInfo, httpServer, match }) {
   // =========ALL LOADING============================
 
   useEffect(() => {
-    console.log("PASS ME THE DATAAAAAAAAAAAAA: ", match.params.username);
-
-    if (profileInfo) {
-      axios
-        .get(`${httpServer}getmessages/${profileInfo.username}`)
-        .then(data => {
-          setPosts(data.data);
-        });
-    }
+    console.log("attempt to retrie user data from the server");
   }, []);
+
+  // useEffect(() => {
+  //   console.log("PASS ME THE DATAAAAAAAAAAAAA: ", match.params.username);
+
+  //   if (profileInfo) {
+  //     axios
+  //       .get(`${httpServer}getmessages/${profileInfo.username}`)
+  //       .then(data => {
+  //         setPosts(data.data);
+  //       });
+  //   }
+  // }, []);
 
   // =========ALL LOADING============================
   // =========ALL LOADING============================
