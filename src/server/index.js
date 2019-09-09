@@ -41,7 +41,7 @@ app.set("trust proxy", 1); // trust first proxy
 const { Pool } = require("pg");
 //const dbParams = require("../lib/db.js");
 const pool = new Pool({
-  user: "postgres",
+  user: "JJ",
   host: "localhost",
   database: "gamefinal",
   password: 123

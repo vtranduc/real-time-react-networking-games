@@ -1,6 +1,18 @@
-#paper {
-	margin: 2em;
-	display: "flex";
-	justify-content: "space-between";
-	height: "70vh";
+body,
+.home {
+	font-size: 15px;
+	font-family: "Lato", sans-serif;
+	font-weight: 400;
+}
+
+.games-rooms-seperate {
+	display: flex;
+	flex-direction: column;
+}
+
+.room-header {
+	display: flex;
+	justify-content: center;
+
+	border-radius: 5px;
 }

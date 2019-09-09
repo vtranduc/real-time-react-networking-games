@@ -206,29 +206,19 @@ export default function Lobby({ socket, setRoom, profileInfo }) {
             margin: "2em",
             display: "flex",
             justifyContent: "space-between",
-            height: "70vh"
+            height: "70vh",
+            border: "solid black 0.5em",
+            backgroundColor: "white"
           }}
         >
           {/* 1--------------------------------------------- */}
-          <div
-            style={{
-              borderRight: "none",
-              borderRight: "1px solid rgba(0,0,0,0.1)",
-              width: "15%",
-              overflow: "auto",
-              marginTop: "1em",
-              marginBottom: "1em"
-              // margin: "0em",
-              // marginRight: 0,
-              // marginLeft: 0
-            }}
+          <div className = "games-rooms-seperate">
+            <div
+            
           >
+            
             <h3
-              style={{
-                borderBottom: "none",
-                display: "flex",
-                justifyContent: "center"
-              }}
+              className = "room-header"
             >
               Games
             </h3>
@@ -269,16 +259,9 @@ export default function Lobby({ socket, setRoom, profileInfo }) {
           </div>
           {/* 2--------------------------------------------- */}
           <div
-            style={{
-              border: "none",
-              borderRight: "1px solid rgba(0,0,0,0.1)",
-              width: "15%",
-              overflow: "auto",
-              marginTop: "1em",
-              marginBottom: "1em"
-            }}
+            
           >
-            <h3 style={{ display: "flex", justifyContent: "center" }}>Rooms</h3>
+            <h3 className = "room-header">Rooms</h3>
             {passcodeMode ? (
               <div
                 style={{
@@ -448,6 +431,7 @@ export default function Lobby({ socket, setRoom, profileInfo }) {
               </List>
             )}
           </div>
+          </div >
           {/* 3--------------------------------------------- */}
           <div
             style={{
@@ -461,11 +445,7 @@ export default function Lobby({ socket, setRoom, profileInfo }) {
             }}
           >
             <h3
-              style={{
-                width: "100%",
-                display: "flex",
-                justifyContent: "center"
-              }}
+              className = "room-header"
             >
               Currently joined
             </h3>
@@ -602,11 +582,7 @@ export default function Lobby({ socket, setRoom, profileInfo }) {
             }}
           >
             <h3
-              style={{
-                width: "100%",
-                display: "flex",
-                justifyContent: "center"
-              }}
+              className = "room-header"
             >
               Chats
             </h3>
