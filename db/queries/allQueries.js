@@ -14,10 +14,9 @@ const getUserProfile = function(username) {
 			text: `SELECT id, username, avatar
 	FROM users WHERE username = $1`,
 
-      values: [username]
-    })
-    .then(res => res.rows[0]);
-
+			values: [username]
+		})
+		.then(res => res.rows[0]);
 };
 
 const createUser = function(
@@ -136,7 +135,6 @@ const postMessage = function(
 // 		});
 // };
 
-
 // const getMessage = function(recieverName) {
 //   return pool
 //     .query({
@@ -155,30 +153,64 @@ const postMessage = function(
 //     });
 // };
 
+//will only return user id and avatar... will need to convert to username later
 const getFriendList = function(username) {
-  return getIdFromUsername(username).then(res => {
-    return pool
-      .query({
-        text: `SELECT username, avatar FROM users JOIN friendship ON friendship.user_id = users.id WHERE request_status = TRUE AND (user_id = $1 OR reciever_id = $1)`,
-        values: [res]
-      })
-      .then(res => res.rows);
-  });
+	return getIdFromUsername(username).then(res => {
+		return pool
+			.query({
+				text: `SELECT users.username, users.id, reciever_id,  avatar FROM users JOIN friendship ON user_id = users.id`
+			})
+			.then(res => {
+				return res;
+			});
+	});
 };
 
-const getMessage = function(receiverUsername) {
-  return getIdFromUsername(receiverUsername).then(res => {
-    return pool
-      .query({
-        text: `SELECT users.username, users.avatar, user_posts.sent_message, user_posts.message_title, user_posts.time_of_post FROM users JOIN user_posts ON user_posts.sender_id = users.id WHERE user_posts.reciever_id = $1`,
-        values: [res]
-      })
-      .then(res => res.rows)
-      .catch(err => {
-        console.log("FAILED HEREEEEEEEEEEEE", err);
-      });
-  });
+getFriendList("a").then(res => {
+	console.log(res.rows);
+});
 
+//same as getfriendlist, will return follow_id and avatar of followers only
+const getFollowers = function(username) {
+	return pool
+		.query({
+			text: `SELECT DISTINCT follow_id, avatar FROM follow JOIN users ON user_id = users.id WHERE users.username = $1`,
+			values: [username]
+		})
+		.then(res => {
+			return res.rows;
+		});
+};
+//same as get friend list, will return user_id and avatar of follows only
+const getFollows = function(username) {
+	return pool
+		.query({
+			text: `SELECT DISTINCT user_id, avatar FROM follow JOIN users ON users.id = follow_id WHERE users.username = $1`,
+			values: [username]
+		})
+		.then(res => {
+			return res.rows;
+		});
+};
+
+// getFollows("b").then(res => {
+// 	console.log("hello", res, "hello");
+// });
+
+const getMessage = function(receiverUsername) {
+	return getIdFromUsername(receiverUsername).then(res => {
+		return pool
+			.query({
+				text: `SELECT users.username, users.avatar, user_posts.sent_message, 
+        user_posts.message_title, user_posts.time_of_post FROM users JOIN 
+        user_posts ON user_posts.sender_id = users.id WHERE user_posts.reciever_id = $1`,
+				values: [res]
+			})
+			.then(res => res.rows)
+			.catch(err => {
+				console.log("FAILED HEREEEEEEEEEEEE", err);
+			});
+	});
 };
 
 //getUsers().then(console.log);
@@ -191,11 +223,13 @@ const getMessage = function(receiverUsername) {
 //   );
 // });
 module.exports = {
-  getUserProfile,
-  getMessage,
-  postMessage,
-  createUser,
-  getFriendList
+	getUserProfile,
+	getMessage,
+	postMessage,
+	createUser,
+	getFriendList,
+	getFollowers,
+	getFollows
 };
 
 // const getMessages = (user, chatroom) => {

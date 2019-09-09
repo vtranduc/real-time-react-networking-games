@@ -20,7 +20,10 @@ const {
 	getUserData,
 	postMessage,
 	getUserProfile,
-	createUser
+	createUser,
+	getFollowers,
+	getFollows,
+	getFriendList
 } = require("../../db/queries/allQueries");
 // app.get("/", (req, res) => {
 //   res.send("<h1>Hellow World</h1>");
