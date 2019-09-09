@@ -5,7 +5,10 @@ const {
   getUserProfile,
   createUser,
   getFriendList,
-  getFriendReceiverList
+  getFriendReceiverList,
+  getFriendSenderList,
+  getFollowingList,
+  getFollowerList
 } = require("../../../db/queries/allQueries");
 
 const profileServerData = function(app, pool) {
@@ -41,10 +44,13 @@ const profileServerData = function(app, pool) {
         Promise.all([
           getMessage(req.body.username),
           // getFriendList(req.body.username),
-          getFriendReceiverList(req.body.username)
+          getFriendReceiverList(req.body.username),
+          getFriendSenderList(req.body.username),
+          getFollowingList(req.body.username),
+          getFollowerList(req.body.username)
         ]).then(response => {
           console.log("============================================");
-          console.log("SHOW MEMEMEMEME", response[1]);
+          console.log("SHOW MEMEMEMEME", response[4]);
           console.log("123============================================");
 
           // const profileData = {
