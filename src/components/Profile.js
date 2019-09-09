@@ -14,9 +14,10 @@ import axios from "axios";
 import { Link } from "react-router-dom";
 
 function Profile({ profileInfo, httpServer, loginStatus, socket, match }) {
-  //axios call to get user messages
-  const [posts, setPosts] = useState(null);
   const [postList, setPostList] = useState([]);
+  //axios call to get user messages
+  // const [posts, setPosts] = useState(null);
+
   const [userMessage, setUserMessage] = useState({
     title: "",
     message: ""
@@ -57,42 +58,58 @@ function Profile({ profileInfo, httpServer, loginStatus, socket, match }) {
 
   const [wall, setWall] = useState(null);
   const [profileData, setProfileData] = useState(null);
+  const [toOtherUser, setToOtherUser] = useState({
+    trigger: false,
+    username: null
+  });
 
   useEffect(() => {
-    axios
-      .post(`${httpServer}retrieveuserprofile`, {
-        username: match.params.username
-      })
-      .then(res => {
-        console.log("Data received by client: ", res.data);
-        if (res.data) {
-          const hello = {
-            username: match.params.username,
-            avatar: res.data.avatar,
-            followings: res.data.followings,
-            followers: res.data.followers,
-            friends: [
-              ...new Set([
-                ...res.data.friends.receivers,
-                ...res.data.friends.senders
-              ])
-            ]
-          };
-          setProfileData(hello);
-          //---------
-          setWall([]);
-          console.log("Hello is this: ", hello);
-          // setProfileData({
-          //   username: match.params.username,
-          //   avatar: res.data.avatar
-          // });
-        } else {
-          console.log("User does not exist!");
-          setProfileData(false);
-          setWall([]);
-        }
-      });
+    setToOtherUser({ trigger: true, username: match.params.username });
   }, []);
+
+  useEffect(() => {
+    console.log("changed trigger");
+    if (toOtherUser.trigger) {
+      console.log("hello");
+      setToOtherUser({ ...toOtherUser, trigger: false });
+      axios
+        .post(`${httpServer}retrieveuserprofile`, {
+          username: toOtherUser.username
+        })
+        .then(res => {
+          console.log("Data received by client: ", res.data);
+          if (res.data) {
+            const hello = {
+              username: toOtherUser.username,
+              avatar: res.data.avatar,
+              bio: res.data.bio,
+              followings: res.data.followings,
+              followers: res.data.followers,
+              friends: [
+                ...new Set([
+                  ...res.data.friends.receivers,
+                  ...res.data.friends.senders
+                ])
+              ]
+            };
+            setProfileData(hello);
+            console.log("posts are: ", res.data.posts);
+            // setPostList(res.data.posts);
+            //---------
+            setWall(res.data.posts);
+            console.log("Hello is this: ", hello);
+            // setProfileData({
+            //   username: match.params.username,
+            //   avatar: res.data.avatar
+            // });
+          } else {
+            console.log("User does not exist!");
+            setProfileData(false);
+            setWall([]);
+          }
+        });
+    }
+  }, [toOtherUser.trigger]);
 
   // =========ALL LOADING============================
   // =========ALL LOADING============================
@@ -150,8 +167,8 @@ function Profile({ profileInfo, httpServer, loginStatus, socket, match }) {
             />
           )} */}
 
-                  <img src={profileInfo.avatar} id="profile-img" />
-
+                  <img src={profileData.avatar} id="profile-img" />
+                  <h2 style={{ color: "white" }}>{profileData.username}</h2>
                   <div id="profile-button">
                     <Button variant="contained" color="primary">
                       Add Friend
@@ -160,10 +177,7 @@ function Profile({ profileInfo, httpServer, loginStatus, socket, match }) {
                       Follow
                     </Button>
                   </div>
-                  <div id="profile-about">
-                    Neque porro quisquam est qui dolorem ipsum quia dolor sit
-                    amet, consectetur, adipisci velit.
-                  </div>
+                  <div id="profile-about">{profileData.bio}</div>
                 </div>
 
                 {/* -------------FRIENDS------------------------------------------------- */}
@@ -197,6 +211,13 @@ function Profile({ profileInfo, httpServer, loginStatus, socket, match }) {
                         >
                           <Link
                             to={`/user/${friend.username}`}
+                            // to="/aboutus"
+                            onClick={() => {
+                              setToOtherUser({
+                                trigger: true,
+                                username: friend.username
+                              });
+                            }}
                             style={{
                               height: "100%",
                               borderRadius: "50%"
@@ -248,6 +269,12 @@ function Profile({ profileInfo, httpServer, loginStatus, socket, match }) {
                               height: "100%",
                               borderRadius: "50%"
                             }}
+                            onClick={() => {
+                              setToOtherUser({
+                                trigger: true,
+                                username: follower.username
+                              });
+                            }}
                           >
                             <img
                               style={{ borderRadius: "50%", height: "100%" }}
@@ -290,6 +317,12 @@ function Profile({ profileInfo, httpServer, loginStatus, socket, match }) {
                         >
                           <Link
                             to={`/user/${following.username}`}
+                            onClick={() => {
+                              setToOtherUser({
+                                trigger: true,
+                                username: following.username
+                              });
+                            }}
                             style={{
                               height: "100%",
                               borderRadius: "50%"
@@ -325,7 +358,79 @@ function Profile({ profileInfo, httpServer, loginStatus, socket, match }) {
 
                   <Button onClick={handleSubmit}>Submit</Button>
                 </form>
-                {postList}
+                {/* {postList} */}
+                <List>
+                  {wall.map(post => {
+                    console.log(post, "army");
+                    return (
+                      <ListItem
+                        key={`wall${post.username}${post.time_of_post}`}
+                      >
+                        <div>
+                          <Link
+                            to={`/user/${post.username}`}
+                            style={{
+                              height: "100%",
+                              borderRadius: "50%"
+                            }}
+                            onClick={() => {
+                              setToOtherUser({
+                                trigger: true,
+                                username: post.username
+                              });
+                            }}
+                          >
+                            <img
+                              src={post.avatar}
+                              alt={post.avatar}
+                              width="70vw"
+                              style={{
+                                borderRadius: "50%",
+                                marginRight: "0.5em"
+                              }}
+                            ></img>
+                          </Link>
+                          <h4
+                            style={{
+                              width: "100%",
+                              display: "flex",
+                              justifyContent: "center"
+                            }}
+                          >
+                            {post.username}
+                          </h4>
+                        </div>
+                        <div
+                          style={{
+                            display: "flex",
+                            flexDirection: "column",
+                            width: "100%"
+                          }}
+                        >
+                          <Chip
+                            label={post.message_title}
+                            style={{
+                              fontSize: "1.2em",
+                              backgroundColor: "gray",
+                              marginRight: "1em",
+                              marginLeft: "1em"
+                            }}
+                          ></Chip>
+
+                          <p style={{ color: "black" }}>{post.sent_message}</p>
+                          <p
+                            style={{
+                              display: "flex",
+                              justifyContent: "flex-end"
+                            }}
+                          >
+                            {post.time_of_post}
+                          </p>
+                        </div>
+                      </ListItem>
+                    );
+                  })}
+                </List>
               </div>
             </div>
           ) : (

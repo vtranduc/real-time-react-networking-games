@@ -170,7 +170,7 @@ function App() {
         />
         <Route
           path="/user/:username"
-          // exact
+          exact
           render={props => {
             return profileInfo && loginStatus !== null && socket ? (
               <Profile

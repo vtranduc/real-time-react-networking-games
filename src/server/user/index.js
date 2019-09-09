@@ -36,10 +36,10 @@ const profileServerData = function(app, pool) {
   //=======================================================
 
   app.post("/retrieveuserprofile", (req, res) => {
-    console.log("I am looking for: ", req.body);
+    // console.log("I am looking for: ", req.body);
 
     getUserProfile(req.body.username).then(userData => {
-      console.log("hello peon bow to me", userData);
+      // console.log("hello peon bow to me", userData);
       if (userData) {
         Promise.all([
           getMessage(req.body.username),
@@ -49,14 +49,15 @@ const profileServerData = function(app, pool) {
           getFollowingList(req.body.username),
           getFollowerList(req.body.username)
         ]).then(response => {
-          console.log("============================================");
-          console.log("SHOW MEMEMEMEME", response[4]);
-          console.log("123============================================");
+          // console.log("============================================");
+          // console.log("SHOW MEMEMEMEME", response[4]);
+          // console.log("123============================================");
 
           const profileData = {
             username: userData.username,
             avatar: userData.avatar,
-            posts: response[0],
+            bio: userData.bio,
+            posts: response[0] ? response[0] : [],
             friends: {
               receivers: response[1] ? response[1] : [],
               senders: response[2] ? response[2] : []
@@ -64,8 +65,8 @@ const profileServerData = function(app, pool) {
             followings: response[3] ? response[3] : [], //getfollowers function
             followers: response[4] ? response[4] : [] // get follows function
           };
-          console.log("profileData", profileData);
-          console.log("in deapth", profileData.friends);
+          // console.log("profileData", profileData);
+          // console.log("in deapth", profileData.friends);
           res.send(profileData);
         });
       } else {
