@@ -39,10 +39,10 @@ function Aboutus() {
 							</h2>
 							<p>
 								With his extensive knowledge in computer science, mathematics,
-								physics, and chemical engineering, Viet has created and
-								successfully implemented physics engines for multiple games
-								within his projects. His most recent physics engine is
-								demonstrated in his soccer game on this website.
+								physics, geometry, linear algebra, and chemical engineering,
+								Viet has created and successfully implemented physics engines
+								for multiple games within his projects. His most recent physics
+								engine is demonstrated in his soccer game on this website.
 							</p>
 						</section>
 						<div className="pimg32">
@@ -150,10 +150,11 @@ function Aboutus() {
 								Java OCP I - UC Berkeley Extensions: Software and Programming
 							</h2>
 							<p>
-								With his experience in multiple Object-Oriented Languages and
-								their design patterns, Jay Jay has developed his personal game
-								with the game engine LibGDX and Unity implementing custom
-								hitboxes for collision detection.
+								With his experience in multiple Object-Oriented Languages, their
+								design patterns, and training animated 3D models (machine
+								learning), Jay Jay has developed his personal game with the game
+								engine LibGDX, Phaser 3 and Unity implementing procedurally
+								animated 3D models into his custom games.
 							</p>
 						</section>
 						<div className="pimg31">
@@ -173,8 +174,9 @@ function Aboutus() {
 							<p>
 								Projects displayed above defines Jay Jay's deidication and
 								passion for web development. Each and every project showcases
-								his extensive background knowledge as well as knowledge acquired
-								through the course of Lighthouse Labs.<br></br>
+								his extensive background knowledge in computer science as well
+								as knowledge acquired throughout the course of Lighthouse Labs.
+								<br></br>
 								<a href="https://github.com/vtranduc/real-time-react-networking-games.git">
 									Multiplayer Online
 								</a>
@@ -184,7 +186,7 @@ function Aboutus() {
 								</a>
 								<br></br>
 								<a href="https://play.google.com/store/apps/details?id=ca.ualberta.customizableanimeartpuzzle&hl=en">
-									Anime Puzzle
+									Scheduler
 								</a>
 								<br></br>
 								<a href="https://github.com/vtranduc/tweeter">Tweeter</a>
