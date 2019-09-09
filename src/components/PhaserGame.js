@@ -48,7 +48,7 @@ function PhaserGame() {
 			physics: {
 				default: "arcade",
 				parent: "phaser",
-				arcade: { debug: true, fps: 100, gravity: { y: 200 } }
+				arcade: { debug: false, fps: 100, gravity: { y: 200 } }
 			},
 			parent: "phaser",
 			scene: { preload, create, update },
@@ -79,7 +79,7 @@ function PhaserGame() {
 				0,
 				"bomb"
 			);
-			bomb.setScale(getRandomInt(20, 35) / 200);
+			bomb.setScale(getRandomInt(20, 55) / 200);
 			bomb.body.setCircle(150);
 			bombs.add(bomb);
 			physics.add.overlap(player, bomb, hitBomb, null, this);
@@ -130,24 +130,11 @@ function PhaserGame() {
 		function hitBomb(player, bomb) {
 			player.setTint(0xff0000);
 
-			for (let interval of intervalArr) {
-				clearInterval(interval);
-			}
-			for (let interval of timeoutArr) {
-				clearTimeout(interval);
-			}
-
-			clearInterval(intervalStars);
-			intervalStars = undefined;
-
-			physics.pause();
-			gameOver = true;
-
 			if (highscore < score) {
 				setHighscore(score);
 			}
 			score = 0;
-
+			gameOver = true;
 			scene.restart();
 
 			//window.location.reload();

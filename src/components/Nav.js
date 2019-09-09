@@ -67,7 +67,7 @@ function NavBar({ loginStatus, setLoginStatus, profileInfo }) {
 						<div className="logo">
 							<ul className="nav-links">
 								<Link
-									to="/profile"
+									to="/user/a"
 									onClick={() => {
 										setPageName("User Profile");
 									}}>

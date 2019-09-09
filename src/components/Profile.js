@@ -182,14 +182,8 @@ function Profile({ profileInfo, httpServer, loginStatus, socket, match }) {
 
                 {/* -------------FRIENDS------------------------------------------------- */}
 
-                <Paper
-                  style={{
-                    width: "100%",
-                    marginTop: "2vh",
-                    display: "flex",
-                    flexDirection: "column",
-                    height: "20vh"
-                  }}
+                <Paper className = "big3"
+                  
                 >
                   <h3 style={{ display: "flex", justifyContent: "center" }}>
                     Friends ({profileData.friends.length})
@@ -236,14 +230,8 @@ function Profile({ profileInfo, httpServer, loginStatus, socket, match }) {
 
                 {/* -------------FOLLOWERS------------------------------------------------- */}
 
-                <Paper
-                  style={{
-                    width: "100%",
-                    marginTop: "2vh",
-                    display: "flex",
-                    flexDirection: "column",
-                    height: "20vh"
-                  }}
+                <Paper className = "big3"
+                  
                 >
                   <h3 style={{ display: "flex", justifyContent: "center" }}>
                     Followers ({profileData.followers.length})
@@ -288,14 +276,8 @@ function Profile({ profileInfo, httpServer, loginStatus, socket, match }) {
                 </Paper>
 
                 {/* -------------FOLLOWING------------------------------------------------- */}
-                <Paper
-                  style={{
-                    width: "100%",
-                    marginTop: "2vh",
-                    display: "flex",
-                    flexDirection: "column",
-                    height: "20vh"
-                  }}
+                <Paper className = "big3"
+                  
                 >
                   <h3 style={{ display: "flex", justifyContent: "center" }}>
                     Following ({profileData.followings.length})
