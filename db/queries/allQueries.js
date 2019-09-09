@@ -153,44 +153,145 @@ const postMessage = function(
 //     });
 // };
 
-//will only return user id and avatar... will need to convert to username later
+
+// const getFriendList = function(username) {
+//   return getIdFromUsername(username).then(res => {
+//     return pool
+//       .query({
+//         text: `SELECT username, avatar FROM users JOIN friendship ON friendship.user_id = users.id WHERE request_status = TRUE AND (user_id = $1 OR reciever_id = $1)`,
+//         values: [res]
+//       })
+//       .then(res => res.rows);
+//   });
+// };
+
 const getFriendList = function(username) {
-	return getIdFromUsername(username).then(res => {
-		return pool
-			.query({
-				text: `SELECT users.username, users.id, reciever_id,  avatar FROM users JOIN friendship ON user_id = users.id`
-			})
-			.then(res => {
-				return res;
-			});
-	});
+  return getIdFromUsername(username).then(response => {
+    // console.log("HI ALLLLLLLLLLLLLL-----------------", response);
+    return pool
+      .query({
+        // text: `SELECT friendship.reciever_id, users.avatar FROM users JOIN friendship ON users.id = friendship.user_id WHERE user_id = $1`,
+        text: `SELECT username, avatar FROM users JOIN friendship ON user_id = users.id WHERE (user_id = $1 OR reciever_id = $1)`,
+        values: [response]
+      })
+      .then(res => {
+        console.log("AINSE ALL QUERIES");
+        return res.rows;
+      });
+  });
 };
 
-getFriendList("a").then(res => {
-	console.log(res.rows);
-});
+const getFriendReceiverList = function(username) {
+  // const res1 = async await pool.query({
+  //       text: `SELECT id
+  //   FROM users
+  //   WHERE username = $1`,
+  //       values: [username],
+  //       name: "get_message_query"
+  //     })
 
-//same as getfriendlist, will return follow_id and avatar of followers only
-const getFollowers = function(username) {
-	return pool
-		.query({
-			text: `SELECT DISTINCT follow_id, avatar FROM follow JOIN users ON user_id = users.id WHERE users.username = $1`,
-			values: [username]
-		})
-		.then(res => {
-			return res.rows;
-		});
-};
-//same as get friend list, will return user_id and avatar of follows only
-const getFollows = function(username) {
-	return pool
-		.query({
-			text: `SELECT DISTINCT user_id, avatar FROM follow JOIN users ON users.id = follow_id WHERE users.username = $1`,
-			values: [username]
-		})
-		.then(res => {
-			return res.rows;
-		});
+  pool
+    .query({
+      text: `SELECT id FROM users WHERE username = $1`,
+      values: [username],
+      name: "get_message_query"
+    })
+    .then(res1 => res1.rows[0].id)
+    .then(res2 => {
+      console.log(res2, "is res2===============");
+
+      return pool.query({
+        text: `SELECT reciever_id FROM friendship WHERE user_id = $1`,
+        values: [res2]
+      });
+
+      // return pool
+      //     .query({
+      //       text: `SELECT id FROM users WHERE username = $1`,
+      //       values: [username],
+      //       name: "get_message_query"
+    })
+    .then(res3 => {
+      console.log(res3.rows, "is res3--------------------");
+      if (res3.rows && res3.rows.length >= 1) {
+        let str = `(`;
+        for (let id of res3.rows) {
+          str += `${id.reciever_id},`;
+        }
+        str = str.slice(0, str.length - 1) + ")";
+        console.log("str - ", str);
+        return str;
+      } else {
+        console.log("NO ONE HAS EVER RECEIVED FRIEND REQUEST FROM THEM");
+        return null;
+      }
+    }); //=============================== WHERE I LEFT OFF
+
+  // console.log("hello all");
+
+  // // return Promise((resolve, reject) => {
+  //   return pool
+  //     .query({
+  //       text: `SELECT id FROM users WHERE username = $1`,
+  //       values: [username],
+  //       name: "get_message_query"
+  //     }).then(res=>res.rows)
+  //     // .then(res1 => {
+  //     //   console.log("pika1------------------------------", res1.rows);
+  //     //   if (true) {
+  //     //     resolve(5);
+  //     //   } else {
+  //         reject(5);
+  //       // }
+  //     // });
+  // };
+
+  // pool
+  //   .query({
+  //     text: `SELECT id
+  // FROM users
+  // WHERE username = $1`,
+  //     values: [username],
+  //     name: "get_message_query"
+  //   })
+
+  console.log("hellopppp", res1);
+
+  return;
+  //--------------------------------------------
+
+  return getIdFromUsername(username).then(response => {
+    // console.log("HI ALLLLLLLLLLLLLL-----------------", response);
+    return pool
+      .query({
+        // text: `SELECT friendship.reciever_id, users.avatar FROM users JOIN friendship ON users.id = friendship.user_id WHERE user_id = $1`,
+        text: `SELECT reciever_id FROM friendship WHERE user_id = $1`,
+        values: [response]
+      })
+      .then(res => {
+        // console.log("AINSE ALL QUERIES");
+        console.log("pikapika", res.rows);
+        let val;
+        if (res.rows) {
+          val = `(`;
+          for (let id of res.rows) {
+            val += `${id.reciever_id},`;
+          }
+          val = val.slice(0, val.length - 1) + ")";
+
+          console.log("raichu", val);
+        } else {
+          val = "()";
+        }
+        return pool
+          .query({
+            text: `SELECT * FROM users`,
+            values: [0]
+          })
+          .then(resFinal => resFinal.rows);
+      });
+  });
+
 };
 
 // getFollows("b").then(res => {
@@ -223,13 +324,14 @@ const getMessage = function(receiverUsername) {
 //   );
 // });
 module.exports = {
-	getUserProfile,
-	getMessage,
-	postMessage,
-	createUser,
-	getFriendList,
-	getFollowers,
-	getFollows
+
+  getUserProfile,
+  getMessage,
+  postMessage,
+  createUser,
+  getFriendList,
+  getFriendReceiverList
+
 };
 
 // const getMessages = (user, chatroom) => {

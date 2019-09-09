@@ -199,8 +199,8 @@ function App() {
           path="/rockpaperscissors"
           exact
           render={() => {
-            return socket ? (
-              <RockPaperScissors socket={socket} />
+            return socket && profileInfo ? (
+              <RockPaperScissors socket={socket} profileInfo={profileInfo} />
             ) : (
               <h3>Waiting to generate socket</h3>
             );

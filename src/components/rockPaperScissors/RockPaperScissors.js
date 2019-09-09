@@ -24,7 +24,7 @@ const useStyles = makeStyles(theme => ({
 
 // const bubbleMirror = {};
 
-export default function RockPaperScissors({ socket }) {
+export default function RockPaperScissors({ socket, profileInfo }) {
   //---Temporary data---
   const room = "testRockPaperScissors123qweasd";
   const nPlayers = 2;
@@ -50,7 +50,12 @@ export default function RockPaperScissors({ socket }) {
   };
 
   useEffect(() => {
-    socket.emit("rpsInitialize", { room, nPlayers });
+    socket.emit("rpsInitialize", {
+      room,
+      nPlayers,
+      username: profileInfo.username,
+      avatar: profileInfo.avatar
+    });
     const handleRpsUpdate = function(data) {
       if (data.status.switchStage) {
         if (data.status.stage === "show") {
@@ -138,10 +143,12 @@ export default function RockPaperScissors({ socket }) {
           marginRight: "3vw",
           marginLeft: "3vw",
           marginBottom: "2vh",
-          height: "60vh",
-          marginTop: "3vh"
+          height: "70vh",
+          marginTop: "3vh",
+          overflow: "auto"
         }}
       >
+        {/* <div style={{ height: "100%" }}> */}
         <Fab
           variant="extended"
           aria-label="delete"
@@ -201,12 +208,23 @@ export default function RockPaperScissors({ socket }) {
                   }}
                 >
                   {rpsSortPlayers(rpsData.players).map(player => {
+                    // console.log(
+                    //   "SHOW AVATAR!!",
+                    //   rpsData.players[player].avatar
+                    // );
                     return (
                       <ListItem
                         key={`displayPlayers${player}`}
                         className="playerScoreBox"
                       >
-                        <div className="eachBoxPlayer">
+                        <div
+                          className="eachBoxPlayer"
+                          // style={{
+                          //   // border: "solid",
+                          //   width: "30%"
+                          //   // maxHeight: "20vh"
+                          // }}
+                        >
                           <div className="playerBubble">
                             {bubble[player] && bubble[player].msg && (
                               <div
@@ -223,6 +241,19 @@ export default function RockPaperScissors({ socket }) {
                               </div>
                             )}
                           </div>
+                          <img
+                            src={rpsData.players[player].avatar}
+                            alt={rpsData.players[player].avatar}
+                            style={{
+                              width: "100%",
+                              objectFit: "none",
+                              objectFit: "cover",
+                              width: "250px",
+                              height: "250px"
+                              // width: "30vw"
+                              // maxWidth: "30vw"
+                            }}
+                          ></img>
 
                           <div className="yellowBox">
                             {rpsData.players[player].response ? (
@@ -332,7 +363,10 @@ export default function RockPaperScissors({ socket }) {
                     ) : (
                       <div>
                         <div
-                          style={{ display: "flex", justifyContent: "center" }}
+                          style={{
+                            display: "flex",
+                            justifyContent: "center"
+                          }}
                         >
                           <h4>What will you choose?</h4>
                         </div>
@@ -388,6 +422,7 @@ export default function RockPaperScissors({ socket }) {
             )}
           </div>
         )}
+        {/* </div> */}
       </Paper>
 
       <div

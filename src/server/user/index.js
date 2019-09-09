@@ -4,7 +4,8 @@ const {
   postMessage,
   getUserProfile,
   createUser,
-  getFriendList
+  getFriendList,
+  getFriendReceiverList
 } = require("../../../db/queries/allQueries");
 
 const profileServerData = function(app, pool) {
@@ -37,24 +38,29 @@ const profileServerData = function(app, pool) {
     getUserProfile(req.body.username).then(userData => {
       console.log("hello peon bow to me", userData);
       if (userData) {
-        Promise.all(
-          [getMessage(req.body.username)],
-          getFriendList(req.body.username)
-        ).then(response => {
-          const profileData = {
-            username: userData.username,
-            avatar: userData.avatar,
-            posts: response[0],
-            friends: [], //getfriendlist function
-            followings: [], //getfollowers function
-            followers: [] // get follows function
-          };
-          console.log("profileData", profileData);
-          res.send(profileData);
+        Promise.all([
+          getMessage(req.body.username),
+          // getFriendList(req.body.username),
+          getFriendReceiverList(req.body.username)
+        ]).then(response => {
+          console.log("============================================");
+          console.log("SHOW MEMEMEMEME", response[1]);
+          console.log("123============================================");
+
+          // const profileData = {
+          //   username: userData.username,
+          //   avatar: userData.avatar,
+          //   posts: response[0],
+          //   friends: [], //getfriendlist function
+          //   followings: [], //getfollowers function
+          //   followers: [] // get follows function
+          // };
+          // console.log("profileData", profileData);
+          // res.send(profileData);
         });
       } else {
-        console.log("The user does not exists!");
-        res.send(null);
+        // console.log("The user does not exists!");
+        // res.send(null);
       }
     });
 
