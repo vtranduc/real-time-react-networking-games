@@ -1,8 +1,8 @@
-INSERT INTO users (username, first_name, last_name, email, pass, avatar)
-VALUES('jzizzless', 'jayjay', 'ting', 'jayjay_ting@hotmail.com','hello', 'https://i.pinimg.com/originals/66/3f/6d/663f6dbf145854a9fb0917fe35f8156a.gif'),
-('a','a', 'aa', 'aa@aa.com','a', 'https://i.pinimg.com/originals/66/3f/6d/663f6dbf145854a9fb0917fe35f8156a.gif'),
-('b','b', 'bb', 'bb@bb.com','b','https://i.pinimg.com/originals/66/3f/6d/663f6dbf145854a9fb0917fe35f8156a.gif'),
-('c','c', 'cc', 'cc@cc.com','c', 'https://i.pinimg.com/originals/66/3f/6d/663f6dbf145854a9fb0917fe35f8156a.gif');
+INSERT INTO users (username, first_name, last_name, bio, email, pass, avatar)
+VALUES('jzizzless', 'jayjay', 'ting', 'I am simply the best in the world','jayjay_ting@hotmail.com','hello', 'https://i.pinimg.com/originals/66/3f/6d/663f6dbf145854a9fb0917fe35f8156a.gif'),
+('a','a', 'aa', 'aa@aa.com','a', 'This is a', 'https://i.pinimg.com/originals/66/3f/6d/663f6dbf145854a9fb0917fe35f8156a.gif'),
+('b','b', 'bb', 'bb@bb.com','b','This is b','https://i.pinimg.com/originals/66/3f/6d/663f6dbf145854a9fb0917fe35f8156a.gif'),
+('c','c', 'cc', 'cc@cc.com','c','This is c', 'https://i.pinimg.com/originals/66/3f/6d/663f6dbf145854a9fb0917fe35f8156a.gif');
 
 INSERT INTO follow(user_id, follow_id)
 VALUES(1, 2),
@@ -27,13 +27,13 @@ VALUES(3, 'left', 1, 1),
 (6, 'left', 4, 2);
 
 
-INSERT INTO friendship(user_id, reciever_id, request_status)
+INSERT INTO friendship(user_id, receiver_id, request_status)
 VALUES(1, 2, false),
 (1, 3, false),
 (2, 3, true),
 (3, 4, true);
 
-INSERT INTO user_posts(sender_id, reciever_id, message_title,sent_message, time_of_post)
+INSERT INTO user_posts(sender_id, receiver_id, message_title,sent_message, time_of_post)
 VALUES (1, 2,'song' ,'I dont wanna close my eyeyeyeyeyeys, dont wanna see you baby cuz you feel me babe, and i dont wanna miss a thang', CURRENT_TIMESTAMP),
 (2, 3, 'flirt', 'you naughty boy~', CURRENT_TIMESTAMP),
 (2 ,4, 'flirting','no.... YOU are naughty~', CURRENT_TIMESTAMP),
