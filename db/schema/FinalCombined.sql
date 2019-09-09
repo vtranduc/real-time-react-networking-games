@@ -23,7 +23,8 @@ CREATE TABLE users
   bio TEXT NOT NULL,
   email VARCHAR(255) NOT NULL,
   pass VARCHAR(255) NOT NULL,
-  avatar TEXT NOT NULL
+  avatar TEXT NOT NULL,
+  background TEXT NOT NULL
 
 );
 -- 
