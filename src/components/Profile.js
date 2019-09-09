@@ -70,7 +70,13 @@ function Profile({ profileInfo, httpServer, loginStatus, socket, match }) {
             username: match.params.username,
             avatar: res.data.avatar,
             followings: res.data.followings,
-            followers: res.data.followers
+            followers: res.data.followers,
+            friends: [
+              ...new Set([
+                ...res.data.friends.receivers,
+                ...res.data.friends.senders
+              ])
+            ]
           };
           setProfileData(hello);
           //---------
@@ -159,6 +165,53 @@ function Profile({ profileInfo, httpServer, loginStatus, socket, match }) {
                     amet, consectetur, adipisci velit.
                   </div>
                 </div>
+
+                {/* -------------FRIENDS------------------------------------------------- */}
+
+                <Paper
+                  style={{
+                    width: "100%",
+                    marginTop: "2vh",
+                    display: "flex",
+                    flexDirection: "column",
+                    height: "20vh"
+                  }}
+                >
+                  <h3 style={{ display: "flex", justifyContent: "center" }}>
+                    Friends ({profileData.friends.length})
+                  </h3>
+                  <List
+                    style={{
+                      margin: 5,
+                      overflow: "auto",
+                      display: "flex",
+                      flexDirection: "row",
+                      height: "100%"
+                    }}
+                  >
+                    {profileData.friends.map(friend => {
+                      return (
+                        <ListItem
+                          key={`friend-${friend.username}`}
+                          style={{ height: "100%" }}
+                        >
+                          <Link
+                            to={`/user/${friend.username}`}
+                            style={{
+                              height: "100%",
+                              borderRadius: "50%"
+                            }}
+                          >
+                            <img
+                              style={{ borderRadius: "50%", height: "100%" }}
+                              src={friend.avatar}
+                            ></img>
+                          </Link>
+                        </ListItem>
+                      );
+                    })}
+                  </List>
+                </Paper>
 
                 {/* -------------FOLLOWERS------------------------------------------------- */}
 
