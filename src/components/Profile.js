@@ -159,22 +159,98 @@ function Profile({ profileInfo, httpServer, loginStatus, socket, match }) {
                     amet, consectetur, adipisci velit.
                   </div>
                 </div>
+
+                {/* -------------FOLLOWERS------------------------------------------------- */}
+
                 <Paper
                   style={{
                     width: "100%",
                     marginTop: "2vh",
                     display: "flex",
-                    flexDirection: "column"
+                    flexDirection: "column",
+                    height: "20vh"
                   }}
                 >
                   <h3 style={{ display: "flex", justifyContent: "center" }}>
-                    Following
+                    Followers ({profileData.followers.length})
                   </h3>
-                  <div>
-                    {profileData.followings.map(following => {
-                      return <div>sup</div>;
+                  <List
+                    style={{
+                      margin: 5,
+                      overflow: "auto",
+                      display: "flex",
+                      flexDirection: "row",
+                      height: "100%"
+                    }}
+                  >
+                    {profileData.followers.map(follower => {
+                      return (
+                        <ListItem
+                          key={`follower-${follower.username}`}
+                          style={{ height: "100%" }}
+                        >
+                          <Link
+                            to={`/user/${follower.username}`}
+                            style={{
+                              height: "100%",
+                              borderRadius: "50%"
+                            }}
+                          >
+                            <img
+                              style={{ borderRadius: "50%", height: "100%" }}
+                              src={follower.avatar}
+                            ></img>
+                          </Link>
+                        </ListItem>
+                      );
                     })}
-                  </div>
+                  </List>
+                </Paper>
+
+                {/* -------------FOLLOWING------------------------------------------------- */}
+                <Paper
+                  style={{
+                    width: "100%",
+                    marginTop: "2vh",
+                    display: "flex",
+                    flexDirection: "column",
+                    height: "20vh"
+                  }}
+                >
+                  <h3 style={{ display: "flex", justifyContent: "center" }}>
+                    Following ({profileData.followings.length})
+                  </h3>
+                  <List
+                    style={{
+                      margin: 5,
+                      overflow: "auto",
+                      display: "flex",
+                      flexDirection: "row",
+                      height: "100%"
+                    }}
+                  >
+                    {profileData.followings.map(following => {
+                      return (
+                        <ListItem
+                          key={`following-${following.username}`}
+                          style={{ height: "100%" }}
+                        >
+                          <Link
+                            to={`/user/${following.username}`}
+                            style={{
+                              height: "100%",
+                              borderRadius: "50%"
+                            }}
+                          >
+                            <img
+                              style={{ borderRadius: "50%", height: "100%" }}
+                              src={following.avatar}
+                            ></img>
+                          </Link>
+                        </ListItem>
+                      );
+                    })}
+                  </List>
                 </Paper>
               </div>
               <div className="right">
