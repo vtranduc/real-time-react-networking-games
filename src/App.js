@@ -172,11 +172,12 @@ function App() {
           path="/user/:username"
           // exact
           render={props => {
-            return profileInfo && loginStatus !== null ? (
+            return profileInfo && loginStatus !== null && socket ? (
               <Profile
                 profileInfo={profileInfo}
                 httpServer={httpServer}
                 loginStatus={loginStatus}
+                socket={socket}
                 {...props}
               />
             ) : (
