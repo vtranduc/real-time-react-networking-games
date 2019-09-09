@@ -57,9 +57,12 @@ const profileServerData = function(app, pool) {
             username: userData.username,
             avatar: userData.avatar,
             posts: response[0],
-            friends: { receivers: response[1], senders: response[2] }, //getfriendlist function
-            followings: response[3], //getfollowers function
-            followers: response[4] // get follows function
+            friends: {
+              receivers: response[1] ? response[1] : [],
+              senders: response[2] ? response[2] : []
+            }, //getfriendlist function
+            followings: response[3] ? response[3] : [], //getfollowers function
+            followers: response[4] ? response[4] : [] // get follows function
           };
           console.log("profileData", profileData);
           console.log("in deapth", profileData.friends);
