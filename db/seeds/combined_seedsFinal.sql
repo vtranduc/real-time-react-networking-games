@@ -1,8 +1,8 @@
 INSERT INTO users (username, first_name, last_name, bio, email, pass, avatar)
 VALUES('jzizzless', 'jayjay', 'ting', 'I am simply the best in the world','jayjay_ting@hotmail.com','hello', 'https://i.pinimg.com/originals/66/3f/6d/663f6dbf145854a9fb0917fe35f8156a.gif'),
-('a','a', 'aa', 'aa@aa.com','a', 'This is a', 'https://media.giphy.com/media/WW7vnXiXTuGhq/giphy.gif'),
-('b','b', 'bb', 'bb@bb.com','b','This is b','https://media.giphy.com/media/gx54W1mSpeYMg/giphy.gif'),
-('c','c', 'cc', 'cc@cc.com','c','This is c', 'https://media.giphy.com/media/Rov6QSZGBQgNO/giphy.gif');
+('a','a', 'aa', 'This is a','aa@aa.com','a', 'https://media.giphy.com/media/WW7vnXiXTuGhq/giphy.gif'),
+('b','b', 'bb', 'This is b','bb@bb.com','b','https://media.giphy.com/media/gx54W1mSpeYMg/giphy.gif'),
+('c','c', 'cc', 'This is c','cc@cc.com','c', 'https://media.giphy.com/media/Rov6QSZGBQgNO/giphy.gif');
 
 INSERT INTO follow(user_id, follow_id)
 VALUES(1, 2),
