@@ -34,7 +34,7 @@ function Profile({ profileInfo, httpServer, loginStatus, socket, match }) {
           title: userMessage.title,
           message: userMessage.message,
           sender: profileInfo.username,
-          reciever: "a"
+          receiver: "a"
         })
         .then(function(response) {
           console.log(response);
