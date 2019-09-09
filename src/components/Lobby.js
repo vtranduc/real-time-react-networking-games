@@ -486,18 +486,38 @@ export default function Lobby({ socket, setRoom, profileInfo }) {
                       width: "100%"
                     }}
                   >
-                    <Button
-                      variant="contained"
-                      color="primary"
-                      onClick={() => {
-                        socket.emit("lobbySetReady", {
-                          room: selectedRoom,
-                          game: selectedGame
-                        });
-                      }}
-                    >
-                      Ready!
-                    </Button>
+                    {lobbyData[selectedGame][selectedRoom].players[socket.id] &&
+                    lobbyData[selectedGame][selectedRoom].players[socket.id]
+                      .ready ? (
+                      <Button
+                        variant="contained"
+                        color="secondary"
+                        onClick={() => {
+                          socket.emit("lobbySetReady", {
+                            room: selectedRoom,
+                            game: selectedGame,
+                            ready: false
+                          });
+                        }}
+                      >
+                        Cancel
+                      </Button>
+                    ) : (
+                      <Button
+                        variant="contained"
+                        color="primary"
+                        onClick={() => {
+                          socket.emit("lobbySetReady", {
+                            room: selectedRoom,
+                            game: selectedGame,
+                            ready: true
+                          });
+                        }}
+                      >
+                        Ready!
+                      </Button>
+                    )}
+
                     {Object.keys(lobbyData[selectedGame][selectedRoom].players)
                       .length === 1 && (
                       <Button
@@ -533,7 +553,7 @@ export default function Lobby({ socket, setRoom, profileInfo }) {
                           backgroundColor: lobbyData[selectedGame][selectedRoom]
                             .players[player].ready
                             ? "lightgreen"
-                            : "none"
+                            : "transparent"
                         }}
                       >
                         <img

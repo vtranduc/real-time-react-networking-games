@@ -50,7 +50,8 @@ const lobby = function(socket, sockets, gameData, io) {
 
   socket.on("lobbySetReady", data => {
     try {
-      gameData[data.game].lobby[data.room].players[socket.id].ready = true;
+      gameData[data.game].lobby[data.room].players[socket.id].ready =
+        data.ready;
       sockets.to("lobby").emit("lobbyUpdate", getLobbyStatus(gameData));
     } catch (err) {
       console.log("Room is not ready!");

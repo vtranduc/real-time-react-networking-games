@@ -10,7 +10,9 @@ const rockPaperScissorsGame = function(socket, sockets, rps, io) {
       // console.log(rps[data.room]);
     }
     rps[data.room].players[socket.id] = rpsInitializePlayer(
-      Object.keys(rps[data.room].players).length + 1
+      Object.keys(rps[data.room].players).length + 1,
+      data.username,
+      data.avatar
     );
     socket.join(data.room);
     if (Object.keys(rps[data.room].players).length >= data.nPlayers)
@@ -172,7 +174,9 @@ const rpsGetStat = function(roomData) {
             : false
           : roomData.players[player].response,
       score: roomData.players[player].score,
-      id: roomData.players[player].id
+      id: roomData.players[player].id,
+      username: roomData.players[player].username,
+      avatar: roomData.players[player].avatar
     };
   }
   return output;
@@ -186,8 +190,15 @@ const rpsInitializeRoom = function() {
   };
 };
 
-const rpsInitializePlayer = function(id) {
-  return { id: id, response: "", score: 0, readyForNextGame: null };
+const rpsInitializePlayer = function(id, username, avatar) {
+  return {
+    id: id,
+    response: "",
+    score: 0,
+    readyForNextGame: null,
+    username,
+    avatar
+  };
 };
 
 const rpsUpdateId = function(players) {
