@@ -13,6 +13,7 @@ const lobby = require("./lobby/index");
 //----App configuration-----------
 const { cookieEncrypt, cookieDecrypt } = require("./helpers/cookiesEncription");
 const profileServerData = require("./user/index");
+const userProfileServerSocket = require("./user/serverSocket");
 //--------------------------------
 
 const {
@@ -325,6 +326,7 @@ io.on("connection", socket => {
   rockPaperScissorsGame(socket, io.sockets, gameData.rockPaperScissors, io);
   eggCatchGame(socket, io.sockets, io.sockets.adapter.rooms, gameData.eggCatch);
   lobby(socket, io.sockets, gameData, io);
+  userProfileServerSocket(socket, io.sockets, io);
 });
 
 // const getGuestId = function(socketId, defaultAvatars) {
