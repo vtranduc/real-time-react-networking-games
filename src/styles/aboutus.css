@@ -62,7 +62,7 @@
 .pimg12 {
 	background-image: url("/assets/aboutus/cutie.jpg");
 
-	min-height: 800px;
+	min-height: 500px;
 }
 .pimg22 {
 	background-image: url("/assets/aboutus/lichking.jpg");
@@ -138,7 +138,7 @@
 }
 .pimg11 {
 	background-image: url("/assets/aboutus/test3.jpg");
-	min-height: 800px;
+	min-height: 500px;
 }
 .pimg21 {
 	background-image: url("/assets/aboutus/illidan.jpg");
