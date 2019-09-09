@@ -81,7 +81,7 @@ function NavBar({ loginStatus, setLoginStatus, profileInfo }) {
 									<li>Home</li>
 								</Link>
 								<Link
-									to="/about"
+									to="/aboutus"
 									onClick={() => {
 										setPageName("About Me and My Love Viet");
 									}}>
