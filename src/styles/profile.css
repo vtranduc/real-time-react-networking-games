@@ -9,6 +9,16 @@
 
 	width: 40%;
 }
+.big3 {
+	width: 100%;
+	margin-top: 2vh;
+	display: flex;
+	flex-direction: column;
+	height: 20vh;
+}
+#profile {
+	display: flex;
+}
 
 #profile {
 	border: solid white 0.3em;
