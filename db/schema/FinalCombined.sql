@@ -30,8 +30,8 @@ CREATE TABLE users
 CREATE TABLE follow
 (
   id SERIAL PRIMARY KEY NOT NULL,
-  user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
-  follow_id INTEGER REFERENCES users(id) ON DELETE CASCADE
+  user_name INTEGER REFERENCES users(username) ON DELETE CASCADE,
+  follow_name INTEGER REFERENCES users(username) ON DELETE CASCADE
 );
 -- 
 
@@ -61,8 +61,8 @@ CREATE TABLE soccer_player
 CREATE TABLE friendship
 (
   id SERIAL PRIMARY KEY NOT NULL,
-  user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
-  reciever_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+  user_name INTEGER REFERENCES users(username) ON DELETE CASCADE,
+  reciever_name INTEGER REFERENCES users(username) ON DELETE CASCADE,
   request_status BOOLEAN DEFAULT false
 
 );
@@ -70,8 +70,8 @@ CREATE TABLE friendship
 CREATE TABLE user_posts
 (
   id SERIAL PRIMARY KEY NOT NULL,
-  sender_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
-  reciever_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+  sender_name INTEGER REFERENCES users(username) ON DELETE CASCADE,
+  reciever_name INTEGER REFERENCES users(username) ON DELETE CASCADE,
   message_title TEXT NOT NULL,
   sent_message TEXT NOT NULL,
   time_of_post TIMESTAMP DEFAULT CURRENT_TIMESTAMP
