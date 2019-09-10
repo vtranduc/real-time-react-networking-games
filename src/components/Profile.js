@@ -1,24 +1,25 @@
 import React, { useState, useEffect } from "react";
 import "../styles/profile.css";
-import Posts from "./Post";
+// import Posts from "./Post";
 import Paper from "@material-ui/core/Paper";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import Chip from "@material-ui/core/Chip";
-import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 import useKeyPress from "../helpers/useKeyPress";
-import Container from "@material-ui/core/Container";
+// import Container from "@material-ui/core/Container";
 import Input from "@material-ui/core/Input";
 import axios from "axios";
 import { Link } from "react-router-dom";
-import { SSL_OP_NO_TLSv1_2 } from "constants";
+// import { SSL_OP_NO_TLSv1_2 } from "constants";
 
 import { makeStyles } from "@material-ui/core/styles";
 import Popper from "@material-ui/core/Popper";
-import Typography from "@material-ui/core/Typography";
+// import Typography from "@material-ui/core/Typography";
 import Fade from "@material-ui/core/Fade";
 import getLastItemFromURL from "../helpers/getLastItemFromURL";
+import CustomizePopover from "./customizePopover/CustomizePopover";
+import TextField from "@material-ui/core/TextField";
 
 const useStyles = makeStyles(theme => ({
   typography: {
@@ -284,6 +285,19 @@ function Profile({
     });
   };
 
+  const handleAcceptRequest = function() {
+    socket.emit("userAcceptRequest", {
+      accepter: profileInfo.username, // FIXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+      sender: getLastItemFromURL(window.location.href)
+    });
+  };
+
+  // const handleEditUserProfile = function() {
+  //   console.log("editing the profile now");
+
+  //   socket.emit("userEditProfile");
+  // };
+
   // =========ALL LOADING============================
   // =========ALL LOADING============================
   // =========ALL LOADING============================
@@ -429,9 +443,7 @@ function Profile({
                                   <Button
                                     variant="contained"
                                     color="primary"
-                                    onClick={() => {
-                                      console.log("clicked");
-                                    }}
+                                    onClick={handleAcceptRequest}
                                   >
                                     Accept
                                   </Button>
@@ -462,17 +474,20 @@ function Profile({
                     )}
 
                     {relationship.friendship === "self" && (
-                      <Button
-                        variant="contained"
-                        color="primary"
-                        onClick={() => {
-                          console.log(
-                            "IMPLEMENT HANDLING OF FRIEND REQUEST RESPOND"
-                          );
-                        }}
-                      >
-                        Edit
-                      </Button>
+                      <CustomizePopover
+                        avatar={profileData.avatar}
+                        background={profileData.background}
+                        bio={profileData.bio}
+                        socket={socket}
+                        username={profileInfo.username}
+                      />
+                      // <Button
+                      //   variant="contained"
+                      //   color="primary"
+                      //   onClick={handleEditUserProfile}
+                      // >
+                      //   Edit
+                      // </Button>
                     )}
 
                     {/* //=============================================================== */}
@@ -509,7 +524,10 @@ function Profile({
                       width: "100%"
                     }}
                   >
-                    <div id="profile-about" style={{ margin: "1em" }}>
+                    <div
+                      id="profile-about"
+                      style={{ margin: "1em", overflowWrap: "break-word" }}
+                    >
                       {profileData.bio}
                     </div>
                   </div>
@@ -753,22 +771,51 @@ function Profile({
               </div>
               <div className="right">
                 <form id="form-post">
-                  <Input
-                    onChange={updateInput}
-                    name="title"
-                    value={userMessage.title}
-                    type="text"
-                    placeholder="Title"
-                  />
-                  <Input
-                    onChange={updateInput}
-                    name="message"
-                    value={userMessage.message}
-                    type="text"
-                    placeholder="Add Message"
-                  />
-
-                  <Button onClick={handleWallPost}>Submit</Button>
+                  <div style={{ display: "flex", flexDirection: "column" }}>
+                    <TextField
+                      label="Title"
+                      placeholder="Enter a title here"
+                      fullWidth
+                      margin="normal"
+                      InputLabelProps={{
+                        shrink: true
+                      }}
+                      name="title"
+                      onChange={updateInput}
+                      value={userMessage.title}
+                      style={{ backgroundColor: "lightgray" }}
+                    />
+                    <TextField
+                      name="message"
+                      label="Message"
+                      placeholder="Send a post!"
+                      fullWidth
+                      margin="normal"
+                      multiline
+                      InputLabelProps={{
+                        shrink: true
+                      }}
+                      rows="10"
+                      style={{ backgroundColor: "lightgray" }}
+                      value={userMessage.message}
+                      onChange={updateInput}
+                    />
+                    <div
+                      style={{
+                        width: "100%",
+                        display: "flex",
+                        justifyContent: "flex-end"
+                      }}
+                    >
+                      <Button
+                        variant="contained"
+                        color="primary"
+                        onClick={handleWallPost}
+                      >
+                        Submit
+                      </Button>
+                    </div>
+                  </div>
                 </form>
                 {/* {postList} */}
                 <List>
