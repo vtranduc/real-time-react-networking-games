@@ -13,7 +13,7 @@ export default function World({ socket }) {
 	useEffect(() => {
 		function preload() {
 			this.load.image("background", "assets/background/plainblue.jpg");
-			this.load.image("player", "assets/soccer/ball.png");
+			this.load.image("player", "assets/world/mage.png");
 			this.load.image("ground", "assets/world/platform.png");
 		}
 
