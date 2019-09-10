@@ -18,6 +18,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import Popper from "@material-ui/core/Popper";
 import Typography from "@material-ui/core/Typography";
 import Fade from "@material-ui/core/Fade";
+import getLastItemFromURL from "../helpers/getLastItemFromURL";
 
 const useStyles = makeStyles(theme => ({
   typography: {
@@ -25,7 +26,15 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-function Profile({ profileInfo, httpServer, loginStatus, socket, match }) {
+function Profile({
+  profileInfo,
+  httpServer,
+  loginStatus,
+  socket,
+  toOtherUser,
+  setToOtherUser,
+  match
+}) {
   // const [postList, setPostList] = useState([]);
   //axios call to get user messages
   // const [posts, setPosts] = useState(null);
@@ -75,10 +84,10 @@ function Profile({ profileInfo, httpServer, loginStatus, socket, match }) {
 
   const [wall, setWall] = useState(null);
   const [profileData, setProfileData] = useState(null);
-  const [toOtherUser, setToOtherUser] = useState({
-    trigger: false,
-    username: null
-  });
+  // const [toOtherUser, setToOtherUser] = useState({
+  //   trigger: false,
+  //   username: null
+  // });
   const [userMessage, setUserMessage] = useState({
     title: "",
     message: ""
@@ -876,14 +885,3 @@ function Profile({ profileInfo, httpServer, loginStatus, socket, match }) {
 }
 
 export default Profile;
-
-const getLastItemFromURL = function(url) {
-  let index = 0;
-  for (let i = url.length - 1; i > 0; i--) {
-    if (url[i] === "/") {
-      index = i;
-      break;
-    }
-  }
-  return url.slice(index + 1, url.length);
-};
