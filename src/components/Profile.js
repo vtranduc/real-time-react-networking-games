@@ -65,7 +65,7 @@ function Profile({
   //   }
   // }
 
-  const classes = useStyles();
+  // const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState(null);
 
   function handleClick(event) {
@@ -890,15 +890,39 @@ function Profile({
                               width: "100%"
                             }}
                           >
-                            <Chip
-                              label={post.message_title}
+                            <div
                               style={{
-                                fontSize: "1.2em",
-                                backgroundColor: "gray",
-                                marginRight: "1em",
-                                marginLeft: "1em"
+                                display: "flex",
+                                flexDirection: "row",
+                                width: "100%",
+                                // border: "solid",
+                                justifyContent: "space-between"
                               }}
-                            ></Chip>
+                            >
+                              <Chip
+                                label={post.message_title}
+                                style={{
+                                  fontSize: "1.2em",
+                                  backgroundColor: "gray",
+                                  marginRight: "1em",
+                                  marginLeft: "1em"
+                                }}
+                              ></Chip>
+                              <div>
+                                {relationship.friendship === "self" && (
+                                  <Button
+                                    variant="outlined"
+                                    color="secondary"
+                                    onClick={() => {
+                                      // console.log("handle delete post");
+                                      socket.emit("userDeletePost");
+                                    }}
+                                  >
+                                    X
+                                  </Button>
+                                )}
+                              </div>
+                            </div>
 
                             <p style={{ color: "black", margin: "1em" }}>
                               {post.sent_message}

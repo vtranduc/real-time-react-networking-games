@@ -89,26 +89,29 @@ export default function CustomizePopover({
                 bio: document.getElementById("customizeBio").value
               };
 
-              if (imgExists(customization.avatar)) {
-                if (imgExists(customization.background)) {
-                  socket.emit("userEditProfile", customization);
-                  setOpen(false);
-                } else {
-                  alert(
-                    "Background image URL is not valid! Resetting to the previous URL now"
-                  );
-                  document.getElementById(
-                    "customizeBackgroundImageURL"
-                  ).value = background;
-                }
-              } else {
-                alert(
-                  "Profile image URL is not valid! Resetting to the previous URL now"
-                );
-                document.getElementById(
-                  "customizeProfileImageURL"
-                ).value = avatar;
-              }
+              socket.emit("userEditProfile", customization);
+              setOpen(false);
+
+              //   if (imgExists(customization.avatar)) {
+              //     if (imgExists(customization.background)) {
+              //       socket.emit("userEditProfile", customization);
+              //       setOpen(false);
+              //     } else {
+              //       alert(
+              //         "Background image URL is not valid! Resetting to the previous URL now"
+              //       );
+              //       document.getElementById(
+              //         "customizeBackgroundImageURL"
+              //       ).value = background;
+              //     }
+              //   } else {
+              //     alert(
+              //       "Profile image URL is not valid! Resetting to the previous URL now"
+              //     );
+              //     document.getElementById(
+              //       "customizeProfileImageURL"
+              //     ).value = avatar;
+              //   }
             }}
             color="primary"
           >
@@ -120,12 +123,12 @@ export default function CustomizePopover({
   );
 }
 
-let imgExists = function(url) {
-  var image = new Image();
-  image.src = url;
-  if (image.width == 0) {
-    return false;
-  } else {
-    return true;
-  }
-};
+// let imgExists = function(url) {
+//   var image = new Image();
+//   image.src = url;
+//   if (image.width === 0) {
+//     return false;
+//   } else {
+//     return true;
+//   }
+// };
