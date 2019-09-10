@@ -275,6 +275,10 @@ const userProfileServerSocket = function(socket, sockets, io, pool) {
         io.to(socket.id).emit("profileReload");
       });
   });
+
+  socket.on("userDeletePost", data => {
+    console.log("deletion on server");
+  });
 };
 
 module.exports = userProfileServerSocket;
