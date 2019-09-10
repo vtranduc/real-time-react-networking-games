@@ -98,8 +98,15 @@ function NavBar({
                     // setPageName("Register Page");
                   }}
                 >
+                  
                   <li>Phaser Games</li>
                 </Link>
+                <Link
+                  to="/chatworld"
+                  onClick={() => {
+                    // setPageName("Games Lobby");
+                  }}
+                >Chat World</Link >
               </ul>
             </div>
           </div>
@@ -176,6 +183,12 @@ function NavBar({
                     setLoginStatus(false);
                   }}
                 >
+                   <Link
+                  to="/chatworld"
+                  onClick={() => {
+                    // setPageName("Games Lobby");
+                  }}
+                >Chat World</Link>
                   <li>Logout</li>
                 </Link>
               </ul>

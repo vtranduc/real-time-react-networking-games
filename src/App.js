@@ -8,7 +8,7 @@ import About from "./components/About";
 import Login from "./components/Login";
 import Register from "./components/Register";
 import Soccer from "./components/soccer/Soccer";
-import World from "./components/world/World";
+import World from "./components/World";
 import EggCatchGame from "./components/eggCatch/eggCatchClient";
 import Home from "./components/Home";
 import Profile from "./components/Profile";
@@ -19,6 +19,7 @@ import axios from "axios";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import io from "socket.io-client";
 import Cookies from "universal-cookie";
+
 
 const serverPORT = 3001;
 
@@ -165,9 +166,10 @@ function App() {
         />
         {/* <Route path="/world/:username" exact component={World} /> */}
         <Route
-          path="/world"
+          path="/chatworld"
           render={props => {
-            return <World testStr={"testStr"} {...props} />;
+
+            return socket? <World socket = {socket} />:<h3>Loading...</h3>
           }}
         />
         <Route
