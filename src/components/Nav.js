@@ -24,36 +24,49 @@ function NavBar({ loginStatus, setLoginStatus, profileInfo }) {
 									to="/"
 									onClick={() => {
 										// setPageName("The Best Website in the World");
-									}}>
+									}}
+								>
 									<li>Home</li>
 								</Link>
 								<Link
 									to="/aboutus"
 									onClick={() => {
 										// setPageName("About Me and My Love Viet");
-									}}>
+									}}
+								>
 									<li>About</li>
 								</Link>
 								<Link
 									to="/lobby"
 									onClick={() => {
 										// setPageName("Games Lobby");
-									}}>
+									}}
+								>
 									<li>Lobby</li>
 								</Link>
 								<Link
 									to="/Login"
 									onClick={() => {
 										// setPageName("Login Page");
-									}}>
+									}}
+								>
 									<li>Login</li>
 								</Link>
 								<Link
 									to="/Register"
 									onClick={() => {
 										// setPageName("Register Page");
-									}}>
+									}}
+								>
 									<li>Register</li>
+								</Link>
+								<Link
+									to="/externalgames"
+									onClick={() => {
+										// setPageName("Register Page");
+									}}
+								>
+									<li>Phaser Games</li>
 								</Link>
 							</ul>
 						</div>
@@ -70,28 +83,32 @@ function NavBar({ loginStatus, setLoginStatus, profileInfo }) {
 									to="/user/a"
 									onClick={() => {
 										setPageName("User Profile");
-									}}>
+									}}
+								>
 									<li>Profile</li>
 								</Link>
 								<Link
 									to="/"
 									onClick={() => {
 										setPageName("The Best Website in the World");
-									}}>
+									}}
+								>
 									<li>Home</li>
 								</Link>
 								<Link
 									to="/aboutus"
 									onClick={() => {
 										setPageName("About Me and My Love Viet");
-									}}>
+									}}
+								>
 									<li>About</li>
 								</Link>
 								<Link
 									to="/lobby"
 									onClick={() => {
 										setPageName("Games Lobby");
-									}}>
+									}}
+								>
 									<li>Game Lobby</li>
 								</Link>
 								<Link
@@ -99,7 +116,8 @@ function NavBar({ loginStatus, setLoginStatus, profileInfo }) {
 									onClick={() => {
 										setPageName("Home");
 										setLoginStatus(false);
-									}}>
+									}}
+								>
 									<li>Logout</li>
 								</Link>
 							</ul>
