@@ -11,8 +11,6 @@ DROP TABLE IF EXISTS friendship
 CASCADE;
 DROP TABLE IF EXISTS user_posts
 CASCADE;
-
-
 -- 
 CREATE TABLE users
 (
@@ -36,8 +34,6 @@ CREATE TABLE follow
   follow_id INTEGER REFERENCES users(id) ON DELETE CASCADE
 );
 -- 
-
-
 
 -- 
 CREATE TABLE soccer_session

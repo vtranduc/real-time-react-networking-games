@@ -41,7 +41,7 @@ app.set("trust proxy", 1); // trust first proxy
 const { Pool } = require("pg");
 //const dbParams = require("../lib/db.js");
 const pool = new Pool({
-  user: "postgres",
+  user: "JJ",
   host: "localhost",
   database: "gamefinal",
   password: 123
@@ -325,7 +325,7 @@ io.on("connection", socket => {
   // https://www.npmjs.com/package/express-socket.io-session
 
   //--------------------------------------------------------------
-  world(socket, io.sockets, io.sockets.adapter.rooms, gameData.world);
+  world(io, socket, io.sockets, io.sockets.adapter.rooms, gameData.world);
   soccerGame(socket, io.sockets, io.sockets.adapter.rooms, gameData.soccer, io);
   rockPaperScissorsGame(socket, io.sockets, gameData.rockPaperScissors, io);
   eggCatchGame(socket, io.sockets, io.sockets.adapter.rooms, gameData.eggCatch);
