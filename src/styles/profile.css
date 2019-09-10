@@ -1,75 +1,121 @@
 #divider {
-	display: flex;
-	flex-direction: row;
-	justify-content: space-between;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
 }
 
 #left {
-	border: solid white 0.3em;
-
-	width: 40%;
+  /* border: solid red 0.3em; */
+  margin: 1%;
+  /* display: flex;
+  flex-direction: column;
+  justify-content: center; */
+  width: 40%;
 }
 .big3 {
-	width: 100%;
-	margin-top: 2vh;
-	display: flex;
-	flex-direction: column;
-	height: 20vh;
-}
-#profile {
-	display: flex;
+  width: 100%;
+  margin-top: 2vh;
+  display: flex;
+  flex-direction: column;
+  height: 20vh;
 }
 
 #profile {
-	border: solid white 0.3em;
-	border-radius: 20px;
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	background-color: black;
-
-	margin: 2%;
+  /* border: solid red 0.3em; */
+  border-radius: 20px;
+  /* display: flex;
+  flex-direction: column;
+  align-items: center; */
+  /* background-color: black; */
+  /* justify-content: center;
+  align-items: center; */
+  overflow: hidden;
+  /* position: "relative"; */
+  /* height: 100%; */
+  width: 100%;
+  /* background-image: url("https://images5.alphacoders.com/587/587597.jpg"); */
+  background-size: cover;
+  background-repeat: no-repeat;
 }
+
+/* #profile #profilebackground {
+  z-index: 0;
+  flex-shrink: 0;
+  max-width: 100%;
+  max-height: 100%;
+  position: absolute;
+} */
+
+/* #profile #profileOverlay {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  z-index: 1;
+  position: absolute;
+  flex-shrink: 0;
+  border: solid, red;
+  /* bottom: 1vh;
+  right: 1vw; */
+/* display: inline-block; */
+/* } */
+
 #profile-about {
-	display: flex;
-	text-align: center;
-	background-color: lightsteelblue;
-	border-radius: 20px;
-	padding: 3px;
-	border: white solid 0.2em;
-	margin: 2%;
+  /* display: flex;
+  text-align: center; */
+  background-color: lightsteelblue;
+  border-radius: 20px;
+  padding: 3px;
+  border: white solid 0.2em;
+  margin: 2%;
+  width: 90%;
 }
 
 #profile-img {
-	border-radius: 20%;
-	max-width: 30%;
-	margin: 3%;
-	border: solid white 0.1em;
-	height: auto;
+  border-radius: 20%;
+  max-width: 30%;
+  margin: 3%;
+  border: solid white 0.1em;
+  height: auto;
 }
 
 .right {
-	border: solid black 0.3em;
-	border-radius: 2em;
+  border: solid black 0.3em;
+  border-radius: 2em;
 
-	background-color: darkgray;
-	width: 60%;
-	margin: 2%;
+  background-color: darkgray;
+  width: 60%;
+  margin: 2%;
 }
 .post {
-	border: solid black 2em;
-	margin: 2%;
+  border: solid black 2em;
+  margin: 2%;
 }
 
 #form-post {
-	margin: 3%;
+  margin: 3%;
 }
 
 .requests {
-	background-color: gray;
+  background-color: gray;
 }
 
 #profile-button {
-	display: flex;
-	justify-content: space-between;
+  display: flex;
+  justify-content: space-evenly;
+  width: 100%;
 }
+
+/* .imaggeCropper {
+  width: 100px;
+  height: 100px;
+  position: relative;
+  overflow: hidden;
+  border-radius: 50%;
+}
+
+.croppedImage {
+  display: inline;
+  margin: 0 auto;
+  height: 100%;
+  width: auto;
+} */
