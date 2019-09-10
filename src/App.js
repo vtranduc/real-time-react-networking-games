@@ -157,7 +157,7 @@ function App() {
 				/>
 				{/* <Route path="/world/:username" exact component={World} /> */}
 				<Route
-					path="/world/:username"
+					path="/world"
 					render={props => {
 						return <World testStr={"testStr"} {...props} />;
 					}}

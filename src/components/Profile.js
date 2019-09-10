@@ -14,6 +14,17 @@ import axios from "axios";
 import { Link } from "react-router-dom";
 import { SSL_OP_NO_TLSv1_2 } from "constants";
 
+import { makeStyles } from "@material-ui/core/styles";
+import Popper from "@material-ui/core/Popper";
+import Typography from "@material-ui/core/Typography";
+import Fade from "@material-ui/core/Fade";
+
+const useStyles = makeStyles(theme => ({
+  typography: {
+    padding: theme.spacing(2)
+  }
+}));
+
 function Profile({ profileInfo, httpServer, loginStatus, socket, match }) {
   // const [postList, setPostList] = useState([]);
   //axios call to get user messages
@@ -43,6 +54,16 @@ function Profile({ profileInfo, httpServer, loginStatus, socket, match }) {
   //     alert("not logged in, or empty title or message");
   //   }
   // }
+
+  const classes = useStyles();
+  const [anchorEl, setAnchorEl] = React.useState(null);
+
+  function handleClick(event) {
+    setAnchorEl(anchorEl ? null : event.currentTarget);
+  }
+
+  const open = Boolean(anchorEl);
+  const id = open ? "simple-popper" : undefined;
 
   // =========ALL LOADING============================
   // =========ALL LOADING============================
@@ -173,7 +194,7 @@ function Profile({ profileInfo, httpServer, loginStatus, socket, match }) {
         alert("The title and the message cannot be empty!");
       } else {
         socket.emit("userPostWall", {
-          sender_username: "a", // FIXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+          sender_username: profileInfo.username, // FIXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
           // sender_username: profileInfo.username,
           receiver_username: getLastItemFromURL(window.location.href),
           message_title: userMessage.title,
@@ -202,7 +223,7 @@ function Profile({ profileInfo, httpServer, loginStatus, socket, match }) {
     // console.log("yaminoma! ohayo!");
     if (loginStatus) {
       socket.emit("userFollow", {
-        follower: "b", // FIXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+        follower: profileInfo.username, // FIXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
         followed: getLastItemFromURL(window.location.href)
       });
     } else {
@@ -214,12 +235,44 @@ function Profile({ profileInfo, httpServer, loginStatus, socket, match }) {
     console.log("attempt to add friend here");
     if (loginStatus) {
       socket.emit("profileAddFriend", {
-        sender: "c", // FIXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+        sender: profileInfo.username, // FIXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
         receiver: getLastItemFromURL(window.location.href)
       });
     } else {
       alert("Please register for an account to use this feature");
     }
+  };
+
+  const handleUnfollow = function() {
+    console.log("unfollow NOW");
+    socket.emit("userUnfollow", {
+      sender: profileInfo.username, // FIXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+      unfollowed: getLastItemFromURL(window.location.href)
+    });
+  };
+
+  const handleRemoveFriend = function() {
+    console.log("remove friend NOW");
+    socket.emit("userRemoveFriend", {
+      remover: profileInfo.username, // FIXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+      removed: getLastItemFromURL(window.location.href)
+    });
+  };
+
+  const handleCancelRequest = function() {
+    console.log("Cancel friend");
+    socket.emit("userCancelRequest", {
+      canceller: profileInfo.username, // FIXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+      cancelled: getLastItemFromURL(window.location.href)
+    });
+  };
+
+  const handleDeclineRequest = function() {
+    console.log("Declining"); // WHERE I LEFT OFF-----------------------------
+    socket.emit("userDeclineRequest", {
+      denier: profileInfo.username, // FIXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+      denied: getLastItemFromURL(window.location.href)
+    });
   };
 
   // =========ALL LOADING============================
@@ -323,39 +376,77 @@ function Profile({ profileInfo, httpServer, loginStatus, socket, match }) {
                       <Button
                         variant="contained"
                         color="primary"
-                        onClick={() => {
-                          console.log(
-                            "PLEASE CREATE HANDLING FOR REMOVING FRIEND!"
-                          );
-                        }}
+                        onClick={handleRemoveFriend}
                       >
                         Remove friend
                       </Button>
                     )}
 
                     {relationship.friendship === "received" && (
-                      <Button
-                        variant="contained"
-                        color="primary"
-                        onClick={() => {
-                          console.log(
-                            "IMPLEMENT HANDLING OF FRIEND REQUEST RESPOND"
-                          );
-                        }}
-                      >
-                        Respond to friend request
-                      </Button>
+                      <div>
+                        <Button
+                          aria-describedby={id}
+                          variant="contained"
+                          color="primary"
+                          onClick={handleClick}
+                          // style={{ color: "red" }}
+                        >
+                          Respond to Friend Request
+                        </Button>
+                        <Popper
+                          id={id}
+                          open={open}
+                          anchorEl={anchorEl}
+                          transition
+                        >
+                          {({ TransitionProps }) => (
+                            <Fade {...TransitionProps} timeout={350}>
+                              <Paper
+                              // style={{
+                              //   backgroundColor: "white",
+                              //   margin: "0.5em",
+                              //   // border: "solid green",
+                              //   width: "30vw"
+                              // }}
+                              >
+                                {/* <Typography className={classes.typography}> */}
+                                <div
+                                  style={{
+                                    display: "flex",
+                                    justifyContent: "space-evenly",
+                                    width: "100%"
+                                  }}
+                                >
+                                  <Button
+                                    variant="contained"
+                                    color="primary"
+                                    onClick={() => {
+                                      console.log("clicked");
+                                    }}
+                                  >
+                                    Accept
+                                  </Button>
+                                  <Button
+                                    variant="contained"
+                                    color="secondary"
+                                    onClick={handleDeclineRequest}
+                                  >
+                                    Decline
+                                  </Button>
+                                </div>
+                                {/* </Typography> */}
+                              </Paper>
+                            </Fade>
+                          )}
+                        </Popper>
+                      </div>
                     )}
 
                     {relationship.friendship === "pending" && (
                       <Button
                         variant="contained"
                         color="primary"
-                        onClick={() => {
-                          console.log(
-                            "IMPLEMENT HANDLING OF FRIEND REQUEST RESPOND"
-                          );
-                        }}
+                        onClick={handleCancelRequest}
                       >
                         Cancel request
                       </Button>
@@ -381,9 +472,7 @@ function Profile({ profileInfo, httpServer, loginStatus, socket, match }) {
                       <Button
                         variant="contained"
                         color="secondary"
-                        onClick={() => {
-                          console.log("IMPLEMENT UNFOLLOW HANDLING PLEASE!");
-                        }}
+                        onClick={handleUnfollow}
                       >
                         Unfollow
                       </Button>

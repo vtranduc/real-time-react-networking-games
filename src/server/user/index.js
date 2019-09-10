@@ -78,7 +78,7 @@ const profileServerData = function(app, pool) {
           // ==============================TRYING TO FIGURE OUT RELATIONSHIP==================================
           // ==============================TRYING TO FIGURE OUT RELATIONSHIP==================================
           // ==============================TRYING TO FIGURE OUT RELATIONSHIP==================================
-          console.log("=========TRYING TO FIGURE OUT RELATIONSHIP===========");
+          // console.log("=========TRYING TO FIGURE OUT RELATIONSHIP===========");
           // let friendship;
 
           if (req.body.requester) {

@@ -137,6 +137,94 @@ const userProfileServerSocket = function(socket, sockets, io, pool) {
         });
     });
   });
+
+  socket.on("userUnfollow", data => {
+    // console.log("unfollow has reached the server");
+    // pool.query({ text: ``, values: [] });
+    Promise.all([
+      getIdFromUsername(data.sender),
+      getIdFromUsername(data.unfollowed)
+    ])
+      .then(res1 => {
+        // console.log("res1: ", res1);
+        return pool.query({
+          text: `SELECT id FROM follow WHERE user_id = $1 AND follow_id = $2`,
+          values: [res1[0], res1[1]]
+        });
+      })
+      .then(res2 => res2.rows)
+      .then(res3 => {
+        // console.log("res3: ", res3);
+        if (res3.length >= 1) {
+          // console.log("deleting");
+          return pool.query({
+            text: `DELETE FROM follow WHERE id = $1`,
+            values: [res3[0].id]
+          });
+        } else {
+          return null;
+        }
+      })
+      .then(() => {
+        // console.log("DONE!");
+        io.to(socket.id).emit("profileReload");
+      });
+  });
+
+  socket.on("userRemoveFriend", data => {
+    // console.log("removing friend on the server");
+    Promise.all([
+      getIdFromUsername(data.remover),
+      getIdFromUsername(data.removed)
+    ]).then(res1 => {
+      // console.log("res1: ", res1);
+      return Promise.all([
+        pool.query({
+          text: `SELECT id FROM friendship WHERE user_id = $1 AND receiver_id = $2 AND request_status = TRUE`,
+          values: [res1[0], res1[1]]
+        }),
+        pool.query({
+          text: `SELECT id FROM friendship WHERE user_id = $1 AND receiver_id = $2 AND request_status = TRUE`,
+          values: [res1[1], res1[0]]
+        })
+      ])
+        .then(res2 =>
+          res2[0].rows.length >= 1 ? res2[0].rows[0].id : res2[1].rows[0].id
+        )
+        .then(res3 => {
+          return pool.query({
+            text: `DELETE FROM friendship WHERE id = $1`,
+            values: [res3]
+          });
+        })
+        .then(() => {
+          io.to(socket.id).emit("profileReload");
+        });
+    });
+  });
+
+  socket.on("userCancelRequest", data => {
+    // console.log("SERVER", data);
+    Promise.all([
+      getIdFromUsername(data.canceller),
+      getIdFromUsername(data.cancelled)
+    ])
+      .then(res1 => {
+        // console.log(res1);
+        return pool.query({
+          text: `DELETE FROM friendship WHERE user_id = $1 AND receiver_id = $2 AND request_status = FALSE`,
+          values: res1
+        });
+      })
+      .then(() => {
+        // console.log("have canceled!");
+        io.to(socket.id).emit("profileReload");
+      });
+  });
+
+  socket.on("userDeclineRequest", data => {
+    console.log("declining on the server"); /////// WHERE I LEFT OFF--------------------
+  });
 };
 
 module.exports = userProfileServerSocket;
