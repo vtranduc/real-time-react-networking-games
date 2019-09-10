@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import "../styles/login.css";
 import axios from "axios";
 import Cookies from "universal-cookie";
@@ -15,7 +16,6 @@ function Login({
 	const [userInfo, setUserInfo] = useState({ email: "", password: "" });
 
 	function handleSubmit(event) {
-		alert(`username: ${userInfo.email} password: ${userInfo.password}`);
 		event.preventDefault();
 		//alert(`${user.username} ${user.password}`);
 		let cookies = new Cookies();
@@ -100,8 +100,7 @@ function Login({
 						<form onSubmit={handleSubmit}>
 							<div
 								class="wrap-input100 validate-input m-t-85 m-b-35"
-								data-validate="Enter username"
-							>
+								data-validate="Enter username">
 								<input
 									class="input100"
 									type="email"
@@ -114,8 +113,7 @@ function Login({
 
 							<div
 								class="wrap-input100 validate-input m-b-50"
-								data-validate="Enter password"
-							>
+								data-validate="Enter password">
 								<input
 									class="input100"
 									type="password"
@@ -127,7 +125,9 @@ function Login({
 							</div>
 
 							<div class="container-login100-form-btn">
-								<button class="login100-form-btn">Login</button>
+							<button class="login100-form-btn">Login</button>
+								
+								
 							</div>
 						</form>
 

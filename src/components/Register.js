@@ -120,9 +120,7 @@ function Register({ httpServer }) {
 
 	function handleSubmit(event) {
 		console.log("submit handled");
-		alert(
-			`${user.firstName}${user.lastName}${user.email}${user.username}${user.password}${user.confirmPassword}`
-		);
+		
 		event.preventDefault();
 
 		createUserSubmit();

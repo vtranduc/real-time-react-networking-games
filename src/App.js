@@ -98,6 +98,7 @@ function App() {
 				loginStatus={loginStatus}
 				setLoginStatus={setLoginStatus}
 				profileInfo={profileInfo}
+				socket={socket}
 			/>
 
 			<Switch>
