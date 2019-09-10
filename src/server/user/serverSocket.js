@@ -223,7 +223,57 @@ const userProfileServerSocket = function(socket, sockets, io, pool) {
   });
 
   socket.on("userDeclineRequest", data => {
-    console.log("declining on the server"); /////// WHERE I LEFT OFF--------------------
+    // console.log("declining on the server"); /////// WHERE I LEFT OFF--------------------
+
+    Promise.all([
+      getIdFromUsername(data.denier),
+      getIdFromUsername(data.denied)
+    ])
+      .then(res1 => {
+        // console.log("res1: ", res1);
+        return pool.query({
+          text: `DELETE FROM friendship WHERE user_id = $1 AND receiver_id = $2 AND request_status = FALSE`,
+          values: [res1[1], res1[0]]
+        });
+      })
+      .then(() => {
+        // console.log("shoot!");
+        io.to(socket.id).emit("profileReload");
+      });
+  });
+
+  socket.on("userAcceptRequest", data => {
+    // console.log("accepting reached server");
+    Promise.all([
+      getIdFromUsername(data.accepter),
+      getIdFromUsername(data.sender)
+    ])
+      .then(res1 => {
+        // console.log("res1: ", res1);
+        return pool.query({
+          text: `UPDATE friendship SET request_status = TRUE WHERE user_id = $1 AND receiver_id = $2`,
+          values: [res1[1], res1[0]]
+        });
+      })
+      .then(res2 => {
+        // console.log("shoot");
+        io.to(socket.id).emit("profileReload");
+      });
+  });
+
+  socket.on("userEditProfile", data => {
+    // console.log("edition has reached the server");
+    getIdFromUsername(data.username)
+      .then(res1 => {
+        // console.log("res1: ", res1);
+        return pool.query({
+          text: `UPDATE users SET avatar = $1, background = $2, bio = $3 WHERE id = $4`,
+          values: [data.avatar, data.background, data.bio, res1]
+        });
+      })
+      .then(() => {
+        io.to(socket.id).emit("profileReload");
+      });
   });
 };
 
