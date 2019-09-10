@@ -241,11 +241,10 @@ export default function RockPaperScissors({ socket, profileInfo }) {
                               </div>
                             )}
                           </div>
-                          <img id = "profile-image"
-                
+                          <img
+                            id="profile-image"
                             src={rpsData.players[player].avatar}
                             alt={rpsData.players[player].avatar}
-                            
                           ></img>
 
                           <div className="yellowBox">
@@ -268,13 +267,16 @@ export default function RockPaperScissors({ socket, profileInfo }) {
                                   </div>
                                 ) : (
                                   <h4 style={{ color: "green" }}>
-                                    {rpsData.players[player].username} Ready&#10004;
+                                    {rpsData.players[player].username}{" "}
+                                    Ready&#10004;
                                   </h4>
                                 )}
                               </div>
                             ) : (
                               <div>
-                                <h4 className="playerName">{rpsData.players[player].username}</h4>
+                                <h4 className="playerName">
+                                  {rpsData.players[player].username}
+                                </h4>
                               </div>
                             )}
                             <div>
@@ -371,7 +373,8 @@ export default function RockPaperScissors({ socket, profileInfo }) {
                             paddingLeft: "20vw"
                           }}
                         >
-                          <button className = "gameButton"
+                          <button
+                            className="gameButton"
                             onClick={() => {
                               handleRpsSelection("rock");
                             }}
@@ -382,7 +385,8 @@ export default function RockPaperScissors({ socket, profileInfo }) {
                               style={{ width: "10vw" }}
                             ></img>
                           </button>
-                          <button className = "gameButton"
+                          <button
+                            className="gameButton"
                             onClick={() => {
                               handleRpsSelection("paper");
                             }}
@@ -393,12 +397,13 @@ export default function RockPaperScissors({ socket, profileInfo }) {
                               style={{ width: "10vw" }}
                             ></img>
                           </button>
-                          <button className = "gameButton"
+                          <button
+                            className="gameButton"
                             onClick={() => {
                               handleRpsSelection("scissor");
                             }}
                           >
-                            <img 
+                            <img
                               src="assets/rockPaperScissors/scissor.png"
                               alt="rpsRock"
                               style={{ width: "10vw" }}

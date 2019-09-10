@@ -102,7 +102,8 @@ function Profile({ profileInfo, httpServer, loginStatus, socket, match }) {
       setToOtherUser({ ...toOtherUser, trigger: false });
       axios
         .post(`${httpServer}retrieveuserprofile`, {
-          username: toOtherUser.username
+          username: toOtherUser.username,
+          requester: loginStatus ? profileInfo.username : null
         })
         .then(res => {
           if (res.data) {
@@ -110,6 +111,7 @@ function Profile({ profileInfo, httpServer, loginStatus, socket, match }) {
               username: toOtherUser.username,
               avatar: res.data.avatar,
               bio: res.data.bio,
+              background: res.data.background,
               followings: res.data.followings,
               followers: res.data.followers,
               friends: [
@@ -119,20 +121,38 @@ function Profile({ profileInfo, httpServer, loginStatus, socket, match }) {
                 ])
               ]
             };
+
+            // console.log(
+            //   "SHOW ME THE DATA HEREEEEEEEEEEEEEEEEEEEEEEEEEEEEE",
+            //   res.data
+            // );
+
             setProfileData(userData);
             // console.log("posts are: ", res.data.posts);
             setWall(res.data.posts);
-            console.log(
-              "naze naze koi niwaaaa: ",
-              userData.followers
-                .map(follower => follower.username)
-                .includes(profileInfo.username)
-            );
+            // console.log(
+            //   "naze naze koi niwaaaa: ",
+            //   userData.followers
+            //     .map(follower => follower.username)
+            //     .includes(profileInfo.username)
+            // );
+
+            console.log("SHOW MY RELATIONSHIP HERE", {
+              friendship: loginStatus ? res.data.friendship : null,
+              follow: loginStatus
+                ? userData.followers
+                    .map(follower => follower.username)
+                    .includes(profileInfo.username)
+                : null
+            });
+
             setRelationship({
-              friendship: null,
-              follow: userData.followers
-                .map(follower => follower.username)
-                .includes(profileInfo.username)
+              friendship: loginStatus ? res.data.friendship : null,
+              follow: loginStatus
+                ? userData.followers
+                    .map(follower => follower.username)
+                    .includes(profileInfo.username)
+                : null
             });
           } else {
             setProfileData(false);
@@ -144,20 +164,24 @@ function Profile({ profileInfo, httpServer, loginStatus, socket, match }) {
   }, [toOtherUser.trigger]);
 
   const handleWallPost = function() {
-    console.log("yaminomA~~~~~~~~~~~~!");
-    console.log("DUMMY DATA HERE! TO BE REPLACED!==========================");
-    // userMessage.title.length > 1 &&
-    //   userMessage.message.length > 1
-    if (userMessage.title.length === 0 || userMessage.message.length === 0) {
-      alert("The title and the message cannot be empty!");
+    if (loginStatus) {
+      console.log("yaminomA~~~~~~~~~~~~!");
+      console.log("DUMMY DATA HERE! TO BE REPLACED!==========================");
+      // userMessage.title.length > 1 &&
+      //   userMessage.message.length > 1
+      if (userMessage.title.length === 0 || userMessage.message.length === 0) {
+        alert("The title and the message cannot be empty!");
+      } else {
+        socket.emit("userPostWall", {
+          sender_username: "a", // FIXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+          // sender_username: profileInfo.username,
+          receiver_username: getLastItemFromURL(window.location.href),
+          message_title: userMessage.title,
+          sent_message: userMessage.message
+        });
+      }
     } else {
-      socket.emit("userPostWall", {
-        sender_username: "a", // FIXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-        // sender_username: profileInfo.username,
-        receiver_username: getLastItemFromURL(window.location.href),
-        message_title: userMessage.title,
-        sent_message: userMessage.message
-      });
+      alert("You must log in to post to the user!");
     }
   };
 
@@ -176,18 +200,26 @@ function Profile({ profileInfo, httpServer, loginStatus, socket, match }) {
 
   const handleUserFollow = function() {
     // console.log("yaminoma! ohayo!");
-    socket.emit("userFollow", {
-      follower: "b", // FIXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-      followed: getLastItemFromURL(window.location.href)
-    });
+    if (loginStatus) {
+      socket.emit("userFollow", {
+        follower: "b", // FIXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+        followed: getLastItemFromURL(window.location.href)
+      });
+    } else {
+      alert("Please register for an account to use this feature");
+    }
   };
 
   const handleAddFriend = function() {
     console.log("attempt to add friend here");
-    socket.emit("profileAddFriend", {
-      sender: "c", // FIXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-      receiver: getLastItemFromURL(window.location.href)
-    });
+    if (loginStatus) {
+      socket.emit("profileAddFriend", {
+        sender: "c", // FIXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+        receiver: getLastItemFromURL(window.location.href)
+      });
+    } else {
+      alert("Please register for an account to use this feature");
+    }
   };
 
   // =========ALL LOADING============================
@@ -225,7 +257,20 @@ function Profile({ profileInfo, httpServer, loginStatus, socket, match }) {
           {profileData ? (
             <div id="divider">
               <div id="left">
-                <div id="profile">
+                <div
+                  id="profile"
+                  style={{
+                    // border: "solid green",
+                    backgroundImage: `url("${profileData.background}")`
+                  }}
+                >
+                  <br></br>
+                  {/* <img
+                    id="profilebackground"
+                    src="https://images5.alphacoders.com/587/587597.jpg"
+                    alt="https://images5.alphacoders.com/587/587597.jpg"
+                  ></img> */}
+                  {/* <img src="https://images5.alphacoders.com/587/587597.jpg"></img> */}
                   {/* {!profileInfo && (
             <img
               src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/7e/Circle-icons-profile.svg/1024px-Circle-icons-profile.svg.png"
@@ -233,25 +278,144 @@ function Profile({ profileInfo, httpServer, loginStatus, socket, match }) {
             />
           )} */}
 
-                  <img src={profileData.avatar} id="profile-img" />
-                  <h2 style={{ color: "white" }}>{profileData.username}</h2>
-                  <div id="profile-button">
-                    <Button
-                      variant="contained"
-                      color="primary"
-                      onClick={handleAddFriend}
+                  {/* <div id="profileOverlay"> */}
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "center",
+                      width: "100%"
+                    }}
+                  >
+                    <img src={profileData.avatar} id="profile-img" />
+                  </div>
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "center",
+                      // border: "solid",
+                      width: "100%"
+                    }}
+                  >
+                    <h2
+                      style={{
+                        color: "white",
+                        backgroundColor: "rgba(0, 0, 0, 0.8)",
+                        borderRadius: "20px"
+                        // opacity: 0.8
+                      }}
                     >
-                      Add Friend
-                    </Button>
-                    <Button
+                      {profileData.username}
+                    </h2>
+                  </div>
+                  <div id="profile-button">
+                    {/* //================================================ */}
+                    {(relationship.friendship === null ||
+                      relationship.friendship === "none") && (
+                      <Button
+                        variant="contained"
+                        color="primary"
+                        onClick={handleAddFriend}
+                      >
+                        Add Friend
+                      </Button>
+                    )}
+                    {relationship.friendship === "established" && (
+                      <Button
+                        variant="contained"
+                        color="primary"
+                        onClick={() => {
+                          console.log(
+                            "PLEASE CREATE HANDLING FOR REMOVING FRIEND!"
+                          );
+                        }}
+                      >
+                        Remove friend
+                      </Button>
+                    )}
+
+                    {relationship.friendship === "received" && (
+                      <Button
+                        variant="contained"
+                        color="primary"
+                        onClick={() => {
+                          console.log(
+                            "IMPLEMENT HANDLING OF FRIEND REQUEST RESPOND"
+                          );
+                        }}
+                      >
+                        Respond to friend request
+                      </Button>
+                    )}
+
+                    {relationship.friendship === "pending" && (
+                      <Button
+                        variant="contained"
+                        color="primary"
+                        onClick={() => {
+                          console.log(
+                            "IMPLEMENT HANDLING OF FRIEND REQUEST RESPOND"
+                          );
+                        }}
+                      >
+                        Cancel request
+                      </Button>
+                    )}
+
+                    {relationship.friendship === "self" && (
+                      <Button
+                        variant="contained"
+                        color="primary"
+                        onClick={() => {
+                          console.log(
+                            "IMPLEMENT HANDLING OF FRIEND REQUEST RESPOND"
+                          );
+                        }}
+                      >
+                        Edit
+                      </Button>
+                    )}
+
+                    {/* //=============================================================== */}
+
+                    {relationship.follow ? (
+                      <Button
+                        variant="contained"
+                        color="secondary"
+                        onClick={() => {
+                          console.log("IMPLEMENT UNFOLLOW HANDLING PLEASE!");
+                        }}
+                      >
+                        Unfollow
+                      </Button>
+                    ) : (
+                      <Button
+                        variant="contained"
+                        color="secondary"
+                        onClick={handleUserFollow}
+                      >
+                        Follow
+                      </Button>
+                    )}
+                    {/* <Button
                       variant="contained"
                       color="secondary"
                       onClick={handleUserFollow}
                     >
                       Follow
-                    </Button>
+                    </Button> */}
                   </div>
-                  <div id="profile-about">{profileData.bio}</div>
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "center",
+                      width: "100%"
+                    }}
+                  >
+                    <div id="profile-about" style={{ margin: "1em" }}>
+                      {profileData.bio}
+                    </div>
+                  </div>
+                  {/* </div> */}
                 </div>
 
                 {/* -------------FRIENDS------------------------------------------------- */}
@@ -267,15 +431,24 @@ function Profile({ profileInfo, httpServer, loginStatus, socket, match }) {
                       display: "flex",
                       flexDirection: "row",
                       height: "100%"
+                      // justifyContent: "flex-end",
+                      // width: "100%",
+                      // border: "solid"
                     }}
                   >
                     {profileData.friends.map(friend => {
+                      // console.log("logging....: ", profileData.background);
                       return (
                         <ListItem
                           key={`friend-${friend.username}`}
-                          style={{ height: "100%" }}
+                          style={{
+                            height: "100%",
+                            // border: "solid green",
+                            display: "flex",
+                            justifyContent: "center"
+                          }}
                         >
-                          <Link
+                          {/* <Link
                             to={`/user/${friend.username}`}
                             // to="/aboutus"
                             onClick={() => {
@@ -293,6 +466,42 @@ function Profile({ profileInfo, httpServer, loginStatus, socket, match }) {
                               style={{ borderRadius: "50%", height: "100%" }}
                               src={friend.avatar}
                             ></img>
+                          </Link> */}
+                          <Link
+                            to={`/user/${friend.username}`}
+                            // to="/aboutus"
+                            onClick={() => {
+                              setToOtherUser({
+                                trigger: true,
+                                username: friend.username
+                              });
+                            }}
+                            // style={{
+                            //   height: "100%",
+                            //   borderRadius: "50%"
+                            // }}
+                          >
+                            <div
+                              // className="imageCropper"
+                              style={{
+                                width: "10vh",
+                                height: "10vh",
+                                position: "relative",
+                                overflow: "hidden",
+                                borderRadius: "50%"
+                              }}
+                            >
+                              <img
+                                // className="croppedImage"
+                                style={{
+                                  display: "inline",
+                                  margin: "0 auto",
+                                  height: "100%",
+                                  width: "auto"
+                                }}
+                                src={friend.avatar}
+                              ></img>
+                            </div>
                           </Link>
                         </ListItem>
                       );
@@ -316,17 +525,22 @@ function Profile({ profileInfo, httpServer, loginStatus, socket, match }) {
                     }}
                   >
                     {profileData.followers.map(follower => {
+                      // console.log("FLOWERRRRR: ", profileData.background);
                       return (
                         <ListItem
                           key={`follower-${follower.username}`}
-                          style={{ height: "100%" }}
+                          style={{
+                            height: "100%",
+                            display: "flex",
+                            justifyContent: "center"
+                          }}
                         >
                           <Link
                             to={`/user/${follower.username}`}
-                            style={{
-                              height: "100%",
-                              borderRadius: "50%"
-                            }}
+                            // style={{
+                            //   height: "100%",
+                            //   borderRadius: "50%"
+                            // }}
                             onClick={() => {
                               setToOtherUser({
                                 trigger: true,
@@ -334,10 +548,35 @@ function Profile({ profileInfo, httpServer, loginStatus, socket, match }) {
                               });
                             }}
                           >
-                            <img
-                              style={{ borderRadius: "50%", height: "100%" }}
+                            <div
+                              // className="imageCropper"
+                              style={{
+                                width: "10vh",
+                                height: "10vh",
+                                position: "relative",
+                                overflow: "hidden",
+                                borderRadius: "50%"
+                              }}
+                            >
+                              <img
+                                // className="croppedImage"
+                                style={{
+                                  display: "inline",
+                                  margin: "0 auto",
+                                  height: "100%",
+                                  width: "auto"
+                                }}
+                                src={follower.avatar}
+                              ></img>
+                            </div>
+                            {/* <img
+                              style={{
+                                borderRadius: "50%",
+                                height: "100%"
+                                // width: "auto"
+                              }}
                               src={follower.avatar}
-                            ></img>
+                            ></img> */}
                           </Link>
                         </ListItem>
                       );
@@ -363,7 +602,11 @@ function Profile({ profileInfo, httpServer, loginStatus, socket, match }) {
                       return (
                         <ListItem
                           key={`following-${following.username}`}
-                          style={{ height: "100%" }}
+                          style={{
+                            height: "100%",
+                            display: "flex",
+                            justifyContent: "center"
+                          }}
                         >
                           <Link
                             to={`/user/${following.username}`}
@@ -373,15 +616,36 @@ function Profile({ profileInfo, httpServer, loginStatus, socket, match }) {
                                 username: following.username
                               });
                             }}
-                            style={{
-                              height: "100%",
-                              borderRadius: "50%"
-                            }}
+                            // style={{
+                            //   height: "100%",
+                            //   borderRadius: "50%"
+                            // }}
                           >
-                            <img
+                            <div
+                              // className="imageCropper"
+                              style={{
+                                width: "10vh",
+                                height: "10vh",
+                                position: "relative",
+                                overflow: "hidden",
+                                borderRadius: "50%"
+                              }}
+                            >
+                              <img
+                                // className="croppedImage"
+                                style={{
+                                  display: "inline",
+                                  margin: "0 auto",
+                                  height: "100%",
+                                  width: "auto"
+                                }}
+                                src={following.avatar}
+                              ></img>
+                            </div>
+                            {/* <img
                               style={{ borderRadius: "50%", height: "100%" }}
                               src={following.avatar}
-                            ></img>
+                            ></img> */}
                           </Link>
                         </ListItem>
                       );
@@ -413,19 +677,19 @@ function Profile({ profileInfo, httpServer, loginStatus, socket, match }) {
                   {wall
                     .slice(0)
                     .reverse()
-                    .map(post => {
+                    .map((post, index) => {
                       // console.log(post, "army");
                       return (
                         <ListItem
-                          key={`wall${post.username}${post.time_of_post}`}
+                          key={`wall${post.username}${post.time_of_post}${index}`}
                         >
                           <div>
                             <Link
                               to={`/user/${post.username}`}
-                              style={{
-                                height: "100%",
-                                borderRadius: "50%"
-                              }}
+                              // style={{
+                              //   height: "100%",
+                              //   borderRadius: "50%"
+                              // }}
                               onClick={() => {
                                 setToOtherUser({
                                   trigger: true,
@@ -433,7 +697,28 @@ function Profile({ profileInfo, httpServer, loginStatus, socket, match }) {
                                 });
                               }}
                             >
-                              <img
+                              <div
+                                // className="imageCropper"
+                                style={{
+                                  width: "10vh",
+                                  height: "10vh",
+                                  position: "relative",
+                                  overflow: "hidden",
+                                  borderRadius: "50%"
+                                }}
+                              >
+                                <img
+                                  // className="croppedImage"
+                                  style={{
+                                    display: "inline",
+                                    margin: "0 auto",
+                                    height: "100%",
+                                    width: "auto"
+                                  }}
+                                  src={post.avatar}
+                                ></img>
+                              </div>
+                              {/* <img
                                 src={post.avatar}
                                 alt={post.avatar}
                                 width="70vw"
@@ -441,7 +726,7 @@ function Profile({ profileInfo, httpServer, loginStatus, socket, match }) {
                                   borderRadius: "50%",
                                   marginRight: "0.5em"
                                 }}
-                              ></img>
+                              ></img> */}
                             </Link>
                             <h4
                               style={{
@@ -470,7 +755,7 @@ function Profile({ profileInfo, httpServer, loginStatus, socket, match }) {
                               }}
                             ></Chip>
 
-                            <p style={{ color: "black" }}>
+                            <p style={{ color: "black", margin: "1em" }}>
                               {post.sent_message}
                             </p>
                             <p

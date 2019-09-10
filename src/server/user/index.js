@@ -8,7 +8,8 @@ const {
   getFriendReceiverList,
   getFriendSenderList,
   getFollowingList,
-  getFollowerList
+  getFollowerList,
+  getIdFromUsername
 } = require("../../../db/queries/allQueries");
 
 const profileServerData = function(app, pool) {
@@ -57,6 +58,8 @@ const profileServerData = function(app, pool) {
             username: userData.username,
             avatar: userData.avatar,
             bio: userData.bio,
+            friendship: null,
+            background: userData.background,
             posts: response[0] ? response[0] : [],
             friends: {
               receivers: response[1] ? response[1] : [],
@@ -65,9 +68,138 @@ const profileServerData = function(app, pool) {
             followings: response[3] ? response[3] : [], //getfollowers function
             followers: response[4] ? response[4] : [] // get follows function
           };
+
+          // ==============================TRYING TO FIGURE OUT RELATIONSHIP==================================
+          // ==============================TRYING TO FIGURE OUT RELATIONSHIP==================================
+          // ==============================TRYING TO FIGURE OUT RELATIONSHIP==================================
+          // ==============================TRYING TO FIGURE OUT RELATIONSHIP==================================
+          // ==============================TRYING TO FIGURE OUT RELATIONSHIP==================================
+          // ==============================TRYING TO FIGURE OUT RELATIONSHIP==================================
+          // ==============================TRYING TO FIGURE OUT RELATIONSHIP==================================
+          // ==============================TRYING TO FIGURE OUT RELATIONSHIP==================================
+          // ==============================TRYING TO FIGURE OUT RELATIONSHIP==================================
+          console.log("=========TRYING TO FIGURE OUT RELATIONSHIP===========");
+          // let friendship;
+
+          if (req.body.requester) {
+            // console.log(
+            //   "Friendship is being attempted!!!!",
+            //   req.body.requester
+            // );
+            if (
+              profileData.friends.receivers
+                .map(friend => friend.username)
+                .includes(req.body.requester) ||
+              profileData.friends.senders
+                .map(friend => friend.username)
+                .includes(req.body.requester)
+            ) {
+              // console.log("This guy is a friend");
+              profileData.friendship = "established";
+              res.send(profileData);
+            } else {
+              // console.log("gotta check further for request status");
+              if (req.body.requester === req.body.username) {
+                // console.log("looking at your own now");
+                profileData.friendship = "self";
+                res.send(profileData);
+              } else {
+                // console.log(
+                //   "now for this part, I gotta check for any possible pending friendship"
+                // );
+
+                //--------------------------------------------------------------------------
+                //--------------------------------------------------------------------------
+                //--------------------------------------------------------------------------
+                //--------------------------------------------------------------------------
+                //--------------------------------------------------------------------------
+                //--------------------------------------------------------------------------
+                //--------------------------------------------------------------------------
+
+                let ids = { requester: null, profile: null };
+
+                Promise.all([
+                  getIdFromUsername(req.body.requester),
+                  getIdFromUsername(req.body.username)
+                ]).then(res1 => {
+                  // console.log("res1: ", res1);
+                  ids.requester = res1[0];
+                  ids.profile = res1[1];
+                  return pool
+                    .query({
+                      text: `SELECT id FROM friendship WHERE user_id = $1 AND receiver_id = $2`,
+                      values: [ids.requester, ids.profile]
+                    })
+                    .then(res2 => res2.rows)
+                    .then(res3 => {
+                      // console.log("res3: ", res3);
+                      if (res3.length >= 1) {
+                        // console.log("friend request has already been sent!");
+                        profileData.friendship = "pending";
+                        res.send(profileData);
+                      } else {
+                        // console.log(
+                        //   "Last check is to check whether friend request has come yet"
+                        // );
+                        pool
+                          .query({
+                            text: `SELECT id FROM friendship WHERE user_id = $1 AND receiver_id = $2`,
+                            values: [ids.profile, ids.requester]
+                          })
+                          .then(res4 => res4.rows)
+                          .then(res5 => {
+                            // console.log("res5: ", res5);
+                            if (res5.length >= 1) {
+                              // console.log("receiving");
+                              profileData.friendship = "received";
+                              res.send(profileData);
+                            } else {
+                              // console.log("no friendship");
+                              profileData.friendship = "none";
+                              res.send(profileData);
+                            }
+                          });
+                      }
+                    });
+                });
+
+                // pool
+                //   .query({
+                //     text: `SELECT id FROM friendship WHERE user_id = $1 AND receiver_id = $2`,
+                //     values: [req.body.requester, req.body.username]
+                //   })
+                //   .then(res1 => res1.rows)
+                //   .then(res2 => {
+                //     console.log("res2: ", res2);
+                //   });
+
+                //--------------------------------------------------------------------------
+                //--------------------------------------------------------------------------
+                //--------------------------------------------------------------------------
+                //--------------------------------------------------------------------------
+                //--------------------------------------------------------------------------
+                //--------------------------------------------------------------------------
+              }
+            }
+          } else {
+            // console.log("not logged in");
+            // friendship = null;
+            res.send(profileData);
+          }
+
+          // =================================================================================================
+          // =================================================================================================
+          // =================================================================================================
+          // =================================================================================================
+          // =================================================================================================
+          // =================================================================================================
+          // =================================================================================================
+          // =================================================================================================
+          // =================================================================================================
+          // =================================================================================================
+
           // console.log("profileData", profileData);
           // console.log("in deapth", profileData.friends);
-          res.send(profileData);
         });
       } else {
         console.log("The user does not exists!");

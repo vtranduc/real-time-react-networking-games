@@ -13,7 +13,7 @@ pool.connect();
 const getUserProfile = function(username) {
   return pool
     .query({
-      text: `SELECT id, username, avatar, bio
+      text: `SELECT id, username, avatar, bio, background
 	FROM users WHERE username = $1`,
 
       values: [username]
