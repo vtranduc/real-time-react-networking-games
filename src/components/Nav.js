@@ -98,7 +98,6 @@ function NavBar({
                     // setPageName("Register Page");
                   }}
                 >
-                  
                   <li>Phaser Games</li>
                 </Link>
                 <Link
@@ -106,7 +105,9 @@ function NavBar({
                   onClick={() => {
                     // setPageName("Games Lobby");
                   }}
-                >Chat World</Link >
+                >
+                  Chat World
+                </Link>
               </ul>
             </div>
           </div>
@@ -175,6 +176,14 @@ function NavBar({
                   <li>Game Lobby</li>
                 </Link>
                 <Link
+                  to="/chatworld"
+                  onClick={() => {
+                    // setPageName("Games Lobby");
+                  }}
+                >
+                  Chat World
+                </Link>
+                <Link
                   to="/"
                   onClick={() => {
                     cookies.remove("profile");
@@ -183,12 +192,6 @@ function NavBar({
                     setLoginStatus(false);
                   }}
                 >
-                   <Link
-                  to="/chatworld"
-                  onClick={() => {
-                    // setPageName("Games Lobby");
-                  }}
-                >Chat World</Link>
                   <li>Logout</li>
                 </Link>
               </ul>
