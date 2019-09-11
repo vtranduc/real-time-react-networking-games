@@ -63,12 +63,12 @@ import "../styles/register.css";
 import axios from "axios";
 function Register({ httpServer }) {
 	const [user, setUser] = useState({
-		firstName: null,
-		lastName: null,
-		email: null,
-		username: null,
-		password: null,
-		confirmPassword: null
+		firstName: "",
+		lastName: "",
+		email: "",
+		username: "",
+		password: "",
+		confirmPassword: ""
 	});
 	function createUserSubmit() {
 		if (
@@ -120,7 +120,7 @@ function Register({ httpServer }) {
 
 	function handleSubmit(event) {
 		console.log("submit handled");
-		
+
 		event.preventDefault();
 
 		createUserSubmit();
@@ -162,127 +162,120 @@ function Register({ httpServer }) {
 		}
 	}
 	return (
-		<div class="limiter">
-			<div class="container-login100">
-				<div class="wrap-login100 p-t-85 p-b-20" id="joieiscute">
-					<form class="login100-form validate-form">
-						<span class="login100-form-title p-b-70">Welcome</span>
+		<div className="limiter">
+			<div className="container-login100">
+				<div className="wrap-login100 p-t-85 p-b-20" id="joieiscute">
+					<span className="login100-form-title p-b-70">Welcome</span>
 
-						<form onSubmit={handleSubmit}>
-							<div
-								class="wrap-input100 validate-input m-t-85 m-b-35"
-								data-validate="Enter username"
-							>
-								<input
-									class="input100"
-									type="text"
-									value={user.firstName}
-									name="firstName"
-									onChange={updateInput}
-								/>
-								<span
-									class="focus-input100"
-									data-placeholder="First Name"
-								></span>
-							</div>
+					<form onSubmit={handleSubmit}>
+						<div
+							className="wrap-input100 validate-input m-t-85 m-b-35"
+							data-validate="Enter username">
+							<input
+								className="input100"
+								type="text"
+								value={user.firstName}
+								name="firstName"
+								onChange={updateInput}
+							/>
+							<span
+								className="focus-input100"
+								data-placeholder="First Name"></span>
+						</div>
 
-							<div
-								class="wrap-input100 validate-input m-b-50"
-								data-validate="Enter password"
-							>
-								<input
-									class="input100"
-									type="text"
-									name="lastName"
-									value={user.lastName}
-									onChange={updateInput}
-								/>
-								<span
-									class="focus-input100"
-									data-placeholder="Last Name"
-								></span>
-							</div>
+						<div
+							className="wrap-input100 validate-input m-b-50"
+							data-validate="Enter password">
+							<input
+								className="input100"
+								type="text"
+								name="lastName"
+								value={user.lastName}
+								onChange={updateInput}
+							/>
+							<span
+								className="focus-input100"
+								data-placeholder="Last Name"></span>
+						</div>
 
-							<div
-								class="wrap-input100 validate-input m-b-50"
-								data-validate="Enter password"
-							>
-								<input
-									class="input100"
-									type="email"
-									name="email"
-									value={user.email}
-									onChange={updateInput}
-								/>
-								<span class="focus-input100" data-placeholder="Email"></span>
-							</div>
+						<div
+							className="wrap-input100 validate-input m-b-50"
+							data-validate="Enter password">
+							<input
+								className="input100"
+								type="email"
+								name="email"
+								value={user.email}
+								onChange={updateInput}
+							/>
+							<span className="focus-input100" data-placeholder="Email"></span>
+						</div>
 
-							<div
-								class="wrap-input100 validate-input m-b-50"
-								data-validate="Enter password"
-							>
-								<input
-									class="input100"
-									type="text"
-									name="username"
-									value={user.username}
-									onChange={updateInput}
-								/>
-								<span class="focus-input100" data-placeholder="Username"></span>
-							</div>
-							<div
-								class="wrap-input100 validate-input m-b-50"
-								data-validate="Enter password"
-							>
-								<input
-									class="input100"
-									type="password"
-									name="password"
-									value={user.password}
-									onChange={updateInput}
-								/>
-								<span class="focus-input100" data-placeholder="Password"></span>
-							</div>
-							<div
-								class="wrap-input100 validate-input m-b-50"
-								data-validate="Enter password"
-							>
-								<input
-									class="input100"
-									type="password"
-									name="confirmPassword"
-									value={user.confirmPassword}
-									onChange={updateInput}
-								/>
-								<span
-									class="focus-input100"
-									data-placeholder="Confirm Password"
-								></span>
-							</div>
+						<div
+							className="wrap-input100 validate-input m-b-50"
+							data-validate="Enter password">
+							<input
+								className="input100"
+								type="text"
+								name="username"
+								value={user.username}
+								onChange={updateInput}
+							/>
+							<span
+								className="focus-input100"
+								data-placeholder="Username"></span>
+						</div>
+						<div
+							className="wrap-input100 validate-input m-b-50"
+							data-validate="Enter password">
+							<input
+								className="input100"
+								type="password"
+								name="password"
+								value={user.password}
+								onChange={updateInput}
+							/>
+							<span
+								className="focus-input100"
+								data-placeholder="Password"></span>
+						</div>
+						<div
+							className="wrap-input100 validate-input m-b-50"
+							data-validate="Enter password">
+							<input
+								className="input100"
+								type="password"
+								name="confirmPassword"
+								value={user.confirmPassword}
+								onChange={updateInput}
+							/>
+							<span
+								className="focus-input100"
+								data-placeholder="Confirm Password"></span>
+						</div>
 
-							<div class="container-login100-form-btn">
-								<button class="login100-form-btn">Login</button>
-							</div>
-						</form>
-
-						<ul class="login-more p-t-190">
-							<li class="m-b-8">
-								<span class="txt1">Forgot </span>
-
-								<a href="#" class="txt2">
-									Username / Password?
-								</a>
-							</li>
-
-							<li>
-								<span class="txt1">Don’t have an account? </span>
-
-								<a href="#" class="txt2">
-									Sign up
-								</a>
-							</li>
-						</ul>
+						<div className="container-login100-form-btn">
+							<button className="login100-form-btn">Login</button>
+						</div>
 					</form>
+
+					<ul className="login-more p-t-190">
+						<li className="m-b-8">
+							<span className="txt1">Forgot </span>
+
+							<a href="#" className="txt2">
+								Username / Password?
+							</a>
+						</li>
+
+						<li>
+							<span className="txt1">Don’t have an account? </span>
+
+							<a href="#" className="txt2">
+								Sign up
+							</a>
+						</li>
+					</ul>
 				</div>
 			</div>
 		</div>
