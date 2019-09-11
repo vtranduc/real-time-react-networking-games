@@ -8,7 +8,7 @@
 
 .speech-bubble-white {
 	position: relative;
-	background: grey;
+	background: white;
 	border-radius: 0.4em;
 }
 
@@ -17,10 +17,11 @@
 	position: absolute;
 	bottom: 0;
 	left: 50%;
+	color: black;
 	width: 0;
 	height: 0;
 	border: 20px solid transparent;
-	border-top-color: gray;
+	border-top-color: white;
 	border-bottom: 0;
 	border-left: 0;
 	margin-left: -10px;
