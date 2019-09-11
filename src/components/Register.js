@@ -89,8 +89,7 @@ function Register({ httpServer }) {
 					avatar: "alsdjfalsdjfalsjf"
 				})
 				.then(response => {
-					if (response.data.length) {
-					}
+					console.log("added to database");
 				});
 		}
 	}
