@@ -204,6 +204,7 @@ export default function World({ socket }) {
         // console.log("updating everyone's pos NOW", data);
         // console.log("DOWN", Object.keys(players));
         // console.log("UP", Object.keys(data));
+        // console.log("hello all?");
         // console.log(data);
         for (let socketId in data) {
           if (players[socketId]) {

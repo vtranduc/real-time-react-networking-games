@@ -54,6 +54,7 @@ const world = function(io, socket, sockets, rooms, worldData) {
 
   socket.on("worldUpdatePlayerPosition", movementInfo => {
     worldData[movementInfo.room].pos[socket.id] = movementInfo.xy;
+    worldData[movementInfo.room].trigger = true;
   });
 
   // ========POSITIONS ABOVE======================
@@ -70,7 +71,7 @@ const world = function(io, socket, sockets, rooms, worldData) {
 module.exports = world; //--------------------------------------------------------------
 
 const initializeWorldRoom = function(worldData, room) {
-  worldData[room] = { interval: null, pos: {} };
+  worldData[room] = { interval: null, pos: {}, trigger: false };
 };
 
 const initializeWorldPlayer = function(roomData, socketId, startingPoint) {
@@ -83,6 +84,9 @@ const worldStartGame = function(worldData, room, sockets) {
   //==================================
   worldData[room].interval = setInterval(() => {
     // console.log("just logging something");
-    sockets.to(room).emit("worldUpdatePlayerPosition", worldData[room].pos);
+    if (worldData[room].trigger) {
+      sockets.to(room).emit("worldUpdatePlayerPosition", worldData[room].pos);
+      worldData[room].trigger = false;
+    }
   }, refreshRate);
 };
