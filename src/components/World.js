@@ -12,11 +12,12 @@ let room = "worldGameRoom";
 
 export default function World({ socket }) {
   let players = {};
+  let posTracker = {};
   let platforms;
-  let texts = {};
-  let w, a, s, d, spacebar;
-
+  // let texts = {};
+  let w, a, s, d;
   //=START=============================================
+  const chatBubbleDuration = 2000;
   const [chatMode, setChatMode] = useState({
     inQueue: false,
     mode: false,
@@ -25,10 +26,12 @@ export default function World({ socket }) {
 
   const [bubble, setBubble] = useState({});
   const [bubbleTrigger, setBubbleTrigger] = useState(null);
+  const [playersPos, setPlayersPos] = useState({});
+
   // worldChatTextField
   let Enter = useKeyPress("Enter");
   useEffect(() => {
-    console.log("Enter is: ", Enter);
+    // console.log("Enter is: ", Enter);
     if (Enter) {
       if (chatMode.mode) {
         if (chatMode.msg) {
@@ -53,20 +56,43 @@ export default function World({ socket }) {
   }, [chatMode.inQueue]);
 
   useEffect(() => {
-    console.log("see you sarah", bubbleTrigger);
+    // console.log("see you sarah", bubbleTrigger);
     if (bubbleTrigger) {
       console.log("add the bubble NOW");
 
       setBubble(oldBubble => {
+        if (
+          oldBubble[bubbleTrigger.socketId] &&
+          oldBubble[bubbleTrigger.socketId].interval
+        ) {
+          clearTimeout(oldBubble[bubbleTrigger.socketId].interval);
+        }
         return {
           ...oldBubble,
-          [bubbleTrigger.socketId]: { msg: bubbleTrigger.msg, interval: null }
+          [bubbleTrigger.socketId]: {
+            msg: bubbleTrigger.msg,
+            interval: setTimeout(() => {
+              // console.log("what is up with you");
+              // setBubble(()
+              setBubble(oldBubble => {
+                return {
+                  ...oldBubble,
+                  [bubbleTrigger.socketId]: { msg: null, interval: null }
+                };
+              });
+            }, chatBubbleDuration)
+          }
         };
       });
 
       setBubbleTrigger(null);
     }
   }, [bubbleTrigger]);
+
+  // useEffect(() => {
+  //   // console.log("update?", playersPos);
+  //   console.log("WATCH", playersPos);
+  // }, [playersPos]);
 
   //=FIN===================================================
 
@@ -85,9 +111,11 @@ export default function World({ socket }) {
     //===========================================================
 
     console.log("THE WORLD IS MOUNTING!!!!!!!!!!!!!!!");
-
+    const startingPoint = { x: 100, y: 100 };
+    posTracker.x = startingPoint.x;
+    posTracker.y = startingPoint.y;
     const handleReceiveBubble = function(data) {
-      console.log("what do I need", data);
+      // console.log("what do I need", data);
       setBubbleTrigger(data);
     };
     socket.on("worldShowBubble", handleReceiveBubble);
@@ -137,37 +165,72 @@ export default function World({ socket }) {
 
       //----------------------------------------------------------
 
-      socket.emit("worldRequestPlayers", { socketID: socket.id, room: room });
+      socket.emit("worldRequestPlayers", { room, startingPoint });
 
       socket.on("worldLoadPlayers", socketList => {
         //this loads all players including the client itself into the game
+        // console.log("loaded chiecke: ", socketList);
         for (let socketID in socketList) {
-          players[socketID] = this.physics.add.image(100, 100, "player");
+          players[socketID] = this.physics.add.image(
+            socketList[socketID].x,
+            socketList[socketID].y,
+            "player"
+          );
           players[socketID].setScale(0.2);
           if (players[socketID] != players[socket.id]) {
             players[socketID].body.setAllowGravity(false);
+          } else {
+            this.physics.add.collider(players[socketID], platforms);
+            // players[socketID].physics.arcade.gravity.y = 400;
+            players[socketID].setCollideWorldBounds(true);
           }
-
-          this.physics.add.collider(players[socketID], platforms);
-          players[socketID].setCollideWorldBounds(true);
         }
       });
-      socket.on("worldInsertPlayer", socketID => {
-        players[socketID] = this.physics.add.image(100, 100, "player");
-        if (players[socketID] != players[socket.id]) {
-          players[socketID].body.setAllowGravity(false);
+      socket.on("worldInsertPlayer", data => {
+        players[data.socketID] = this.physics.add.image(
+          data.startingPoint.x,
+          data.startingPoint.y,
+          "player"
+        );
+        // This should always be true
+        if (players[data.socketID] != players[socket.id]) {
+          players[data.socketID].body.setAllowGravity(false);
         }
-        players[socketID].setScale(0.2);
-        players[socketID].setCollideWorldBounds(true);
-        this.physics.add.collider(players[socketID], platforms);
+        players[data.socketID].setScale(0.2);
+        // players[data.socketID].setCollideWorldBounds(true);
+        // this.physics.add.collider(players[data.socketID], platforms);
       });
       socket.on("worldUpdatePlayerPosition", data => {
-        if (players[data.playerID]) {
-          players[data.playerID].x = data.posX;
-          players[data.playerID].y = data.posY;
-        } else {
-          console.log("why doesnt this work");
+        // console.log("updating everyone's pos NOW", data);
+        // console.log("DOWN", Object.keys(players));
+        // console.log("UP", Object.keys(data));
+        // console.log(data);
+        for (let socketId in data) {
+          if (players[socketId]) {
+            if (socketId !== socket.id) {
+              players[socketId].x = data[socketId].x;
+              players[socketId].y = data[socketId].y;
+            }
+          }
         }
+        setPlayersPos(data);
+
+        // if (players[data.playerID]) {
+        //   players[data.playerID].x = data.posX;\
+
+        //   players[data.playerID].y = data.posY;
+        //   setPlayersPos(oldPos => {
+        //     return {
+        //       ...oldPos,
+        //       [data.playerID]: {
+        //         x: players[data.playerID].x,
+        //         y: players[data.playerID].y
+        //       }
+        //     };
+        //   });
+        // } else {
+        //   console.log("why doesnt this work");
+        // }
       });
       socket.on("worldCleanup", player => {
         console.log("WORLD CLEANUP HAS BEEN TRIGGERED", player);
@@ -180,32 +243,89 @@ export default function World({ socket }) {
       // if (!testVar) {
 
       if (players[socket.id]) {
+        // console.log("is this not true?");
         if (d.isDown) {
           players[socket.id].x = players[socket.id].x + 2;
+          // socket.emit("worldUpdatePlayerPosition", {
+          //   room,
+          //   xy: { x: players[socket.id].x, y: players[socket.id].y }
+          // });
           // console.log(players[socket.id].x + ":" + players[socket.id].y);
+          // setPlayersPos(oldPos => {
+          //   return {
+          //     ...oldPos,
+          //     [socket.id]: { x: players[socket.id].x, y: players[socket.id].y }
+          //   };
+          // });
         }
 
         if (a.isDown) {
           players[socket.id].x = players[socket.id].x - 2;
+          // socket.emit("worldUpdatePlayerPosition", {
+          //   room,
+          //   xy: { x: players[socket.id].x, y: players[socket.id].y }
+          // });
+          // setPlayersPos(oldPos => {
+          //   return {
+          //     ...oldPos,
+          //     [socket.id]: { x: players[socket.id].x, y: players[socket.id].y }
+          //   };
+          // });
         }
         if (s.isDown) {
           players[socket.id].y = players[socket.id].y + 2;
+          // socket.emit("worldUpdatePlayerPosition", {
+          //   room,
+          //   xy: { x: players[socket.id].x, y: players[socket.id].y }
+          // });
+          // setPlayersPos(oldPos => {
+          //   return {
+          //     ...oldPos,
+          //     [socket.id]: { x: players[socket.id].x, y: players[socket.id].y }
+          //   };
+          // });
         }
         if (w.isDown) {
           players[socket.id].setVelocityY(-330);
+
+          // setPlayersPos(oldPos => {
+          //   return {
+          //     ...oldPos,
+          //     [socket.id]: { x: players[socket.id].x, y: players[socket.id].y }
+          //   };
+          // });
         }
 
-        socket.emit("worldUpdatePlayerPosition", {
-          playerID: socket.id,
-          posX: players[socket.id].x,
-          posY: players[socket.id].y
-        });
-      }
+        // IF STATEMENT HEREEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE------------------------------------
 
-      if (players[socket.id]) {
-      }
+        // if (posTracker[])
+        if (
+          posTracker.x !== players[socket.id].x ||
+          posTracker.y !== players[socket.id].y
+        ) {
+          // console.log("MOVING");
+          posTracker.x = players[socket.id].x;
+          posTracker.y = players[socket.id].y;
+          socket.emit("worldUpdatePlayerPosition", {
+            room,
+            xy: posTracker
+          });
+        }
 
-      // }
+        // console.log("push position");
+
+        // socket.emit("worldUpdatePlayerPosition", {
+        //   playerID: socket.id,
+        //   posX: players[socket.id].x,
+        //   posY: players[socket.id].y
+        // });
+        // setPlayersPos(oldPos => {
+        //   return {
+        //     ...oldPos,
+        //     [socket.id]: { x: players[socket.id].x, y: players[socket.id].y }
+        //   };
+        // });
+      }
     }
 
     const config = {
@@ -231,7 +351,7 @@ export default function World({ socket }) {
     game = new Phaser.Game(config);
 
     return function cleanup() {
-      socket.emit("worldDestroyPlayer", { playerID: socket.id });
+      socket.emit("worldDestroyPlayer", { room });
       socket.removeListener("worldUpdatePlayerPosition");
       socket.removeListener("worldLoadPlayers");
       socket.removeListener("worldRequestPlayers");
@@ -244,11 +364,45 @@ export default function World({ socket }) {
   return (
     <div>
       <div id="game" style={{ position: "relative" }}>
-        <div style={{ position: "absolute" }}>
-          {/* {bubble[socket.id] && (
-            <p style={{ color: "black" }}>{bubble[socket.id].msg}</p>
-          )} */}
-          {bubble[socket.id] && (
+        {Object.keys(bubble).map(socketId => {
+          // console.log("show you", socketId);
+          return (
+            <div key={`charbubbling${socketId}`}>
+              {bubble[socketId] && bubble[socketId].msg && (
+                <div
+                  style={{
+                    position: "absolute",
+                    left: playersPos[socketId].x,
+                    top: playersPos[socketId].y - 90
+                  }}
+                >
+                  <div className="playerBubble">
+                    <div
+                      style={{
+                        marginBottom: "2vh",
+                        margingTop: "-60px"
+                      }}
+                    >
+                      <div className="speech-buble-wrapper-white">
+                        <div className="speech-bubble-white">
+                          <p>{bubble[socketId].msg}</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+          );
+        })}
+        {/* {bubble[socket.id] && bubble[socket.id].msg && (
+          <div
+            style={{
+              position: "absolute",
+              left: playersPos[socket.id].x,
+              top: playersPos[socket.id].y - 90
+            }}
+          >
             <div className="playerBubble">
               <div
                 style={{
@@ -263,8 +417,8 @@ export default function World({ socket }) {
                 </div>
               </div>
             </div>
-          )}
-        </div>
+          </div>
+        )} */}
       </div>
       <div
         style={{
