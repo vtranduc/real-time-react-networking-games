@@ -3,9 +3,11 @@ import "../styles/chatworld.css";
 import Phaser from "phaser";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
+import useKeyPress from "../helpers/useKeyPress";
 
 let game;
 let room = "worldGameRoom";
+// let testVar = false;
 
 export default function World({ socket }) {
   let players = {};
@@ -13,11 +15,16 @@ export default function World({ socket }) {
   let texts = {};
   let w, a, s, d, spacebar;
 
-  const [chatMode, setChatMode] = useState({
-    inQueue: false,
-    mode: false,
-    msg: ""
-  });
+  let Enter = useKeyPress("Enter");
+  useEffect(() => {
+    console.log("Enter is: ", Enter);
+  }, [Enter]);
+
+  // const [chatMode, setChatMode] = useState({
+  //   inQueue: false,
+  //   mode: false,
+  //   msg: ""
+  // });
   // const chatMode = false;
 
   useEffect(() => {
@@ -28,13 +35,13 @@ export default function World({ socket }) {
     }
 
     function create() {
-      w = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
-      a = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
-      s = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
-      d = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
-      spacebar = this.input.keyboard.addKey(
-        Phaser.Input.Keyboard.KeyCodes.SPACE
-      );
+      w = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.UP);
+      a = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT);
+      s = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.DOWN);
+      d = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT);
+      // spacebar = this.input.keyboard.addKey(
+      //   Phaser.Input.Keyboard.KeyCodes.UP
+      // );
       this.add.image(config.width / 2, config.height / 2, "background");
       //--------------------platforms----------------------------
       platforms = this.physics.add.staticGroup();
@@ -57,6 +64,10 @@ export default function World({ socket }) {
         for (let socketID in socketList) {
           players[socketID] = this.physics.add.image(100, 100, "player");
           players[socketID].setScale(0.2);
+          if (!players[socketID] == players[socket.id]) {
+            players[socketID].body.setAllowGravity(false);
+          }
+
           this.physics.add.collider(players[socketID], platforms);
           players[socketID].setCollideWorldBounds(true);
         }
@@ -82,61 +93,34 @@ export default function World({ socket }) {
       });
     }
     function update() {
-      if (!chatMode.mode) {
-        if (d.isDown) {
-          console.log("hello world", chatMode.mode);
-          if (players[socket.id]) {
-            players[socket.id].x = players[socket.id].x + 2;
+      // if (!testVar) {
 
-            socket.emit("worldUpdatePlayerPosition", {
-              playerID: socket.id,
-              posX: players[socket.id].x,
-              posY: players[socket.id].y
-            });
-          }
+      if (players[socket.id]) {
+        if (d.isDown) {
+          players[socket.id].x = players[socket.id].x + 2;
         }
+
         if (a.isDown) {
-          if (players[socket.id]) {
-            players[socket.id].x = players[socket.id].x - 2;
-            socket.emit("worldUpdatePlayerPosition", {
-              playerID: socket.id,
-              posX: players[socket.id].x,
-              posY: players[socket.id].y
-            });
-          }
-        }
-        if (w.isDown) {
-          if (players[socket.id]) {
-            players[socket.id].y = players[socket.id].y - 2;
-            socket.emit("worldUpdatePlayerPosition", {
-              playerID: socket.id,
-              posX: players[socket.id].x,
-              posY: players[socket.id].y
-            });
-          }
+          players[socket.id].x = players[socket.id].x - 2;
         }
         if (s.isDown) {
-          if (players[socket.id]) {
-            players[socket.id].y = players[socket.id].y + 2;
-            socket.emit("worldUpdatePlayerPosition", {
-              playerID: socket.id,
-              posX: players[socket.id].x,
-              posY: players[socket.id].y
-            });
-          }
+          players[socket.id].y = players[socket.id].y + 2;
+        }
+        if (w.isDown) {
+          players[socket.id].setVelocityY(-330);
         }
 
-        if (spacebar.isDown) {
-          if (players[socket.id]) {
-            players[socket.id].setVelocityY(-330);
-            socket.emit("worldUpdatePlayerPosition", {
-              playerID: socket.id,
-              posX: players[socket.id].x,
-              posY: players[socket.id].y
-            });
-          }
-        }
+        socket.emit("worldUpdatePlayerPosition", {
+          playerID: socket.id,
+          posX: players[socket.id].x,
+          posY: players[socket.id].y
+        });
       }
+
+      if (players[socket.id]) {
+      }
+
+      // }
     }
 
     const config = {
@@ -188,22 +172,28 @@ export default function World({ socket }) {
           label="Send a chat!"
           style={{ width: "100%", marginRight: "1em" }}
           // value={chatMode.msg}
-          onFocus={() => {
-            // setChatMode({ ...chatMode, mode: true });
-            console.log("FOCUSSING", chatMode.mode);
-            setChatMode({ ...chatMode, mode: true });
-            console.log("FOCUSSING", chatMode.mode);
-          }}
-          onBlur={() => {
-            // setChatMode({ ...chatMode, mode: false });
-            console.log("SHOWQ ME");
-            // setChatMode(false);
-            setChatMode({ ...chatMode, mode: false });
-          }}
-          onChange={e => {
-            // setChatMode({ ...chatMode, msg: e.target.value });
-            setChatMode({ ...chatMode, msg: e.target.value });
-          }}
+          // onFocus={() => {
+          //   // setChatMode({ ...chatMode, mode: true });
+          //   console.log("FOCUSSING", chatMode.mode);
+          //   // testVa
+          //   testVar = true;
+          //   setChatMode(oldChatMode => {
+          //     return { ...oldChatMode, mode: true };
+          //   });
+          //   console.log("FOCUSSING", chatMode.mode);
+          // }}
+          // onBlur={() => {
+          //   testVar = false;
+          //   // setChatMode({ ...chatMode, mode: false });
+          //   // testVar=
+          //   console.log("SHOWQ ME");
+          //   // setChatMode(false);
+          //   setChatMode({ ...chatMode, mode: false });
+          // }}
+          // onChange={e => {
+          //   // setChatMode({ ...chatMode, msg: e.target.value });
+          //   setChatMode({ ...chatMode, msg: e.target.value });
+          // }}
         ></TextField>
         <Button
           variant="contained"
