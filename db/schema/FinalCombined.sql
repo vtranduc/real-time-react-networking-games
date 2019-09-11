@@ -11,6 +11,8 @@ DROP TABLE IF EXISTS friendship
 CASCADE;
 DROP TABLE IF EXISTS user_posts
 CASCADE;
+DROP TABLE IF EXISTS private_message
+CASCADE;
 -- 
 CREATE TABLE users
 (
@@ -22,7 +24,8 @@ CREATE TABLE users
   email VARCHAR(255) NOT NULL,
   pass VARCHAR(255) NOT NULL,
   avatar TEXT NOT NULL,
-  background TEXT NOT NULL
+  background TEXT NOT NULL,
+  game_character TEXT NOT NULL
 
 );
 -- 
@@ -66,6 +69,17 @@ CREATE TABLE friendship
 );
 -- 
 CREATE TABLE user_posts
+(
+  id SERIAL PRIMARY KEY NOT NULL,
+  sender_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+  receiver_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+  message_title TEXT NOT NULL,
+  sent_message TEXT NOT NULL,
+  time_of_post TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+
+CREATE TABLE private_message
 (
   id SERIAL PRIMARY KEY NOT NULL,
   sender_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
