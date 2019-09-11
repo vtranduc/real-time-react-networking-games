@@ -19,7 +19,8 @@ import axios from "axios";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import io from "socket.io-client";
 import Cookies from "universal-cookie";
-
+import Pmbox from "./components/pmbox/Pmbox";
+import TestPm from "./components/TestPm";
 
 const serverPORT = 3001;
 
@@ -121,6 +122,26 @@ function App() {
           }}
         /> */}
         <Route path="/about" exact component={About} />
+        {/* <Route path="/test" exact component={TestPm} /> */}
+        <Route
+          path="/test"
+          exact
+          render={() => {
+            return (
+              <div>
+                {profileInfo && socket ? (
+                  <TestPm
+                    socket={socket}
+                    // setRoom={setRoom}
+                    profileInfo={profileInfo}
+                  />
+                ) : (
+                  <h3>Retrieving user info...</h3>
+                )}
+              </div>
+            );
+          }}
+        />
         <Route
           path="/lobby"
           exact
@@ -168,8 +189,7 @@ function App() {
         <Route
           path="/chatworld"
           render={props => {
-
-            return socket? <World socket = {socket} />:<h3>Loading...</h3>
+            return socket ? <World socket={socket} /> : <h3>Loading...</h3>;
           }}
         />
         <Route

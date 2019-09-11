@@ -8,6 +8,7 @@ const eggCatchGame = require("./eggCatch/index");
 const world = require("./world/index");
 const rockPaperScissorsGame = require("./rockPaperScissors/index");
 const lobby = require("./lobby/index");
+const privateMessage = require("./privateMessage/index");
 //--------------------------------
 
 //----App configuration-----------
@@ -331,6 +332,7 @@ io.on("connection", socket => {
   eggCatchGame(socket, io.sockets, io.sockets.adapter.rooms, gameData.eggCatch);
   lobby(socket, io.sockets, gameData, io);
   userProfileServerSocket(socket, io.sockets, io, pool);
+  privateMessage(socket, io.sockets, io, pool);
 });
 
 // const getGuestId = function(socketId, defaultAvatars) {
