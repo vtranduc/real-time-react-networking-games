@@ -13,7 +13,6 @@ let count = 0;
 // let testVar = false;
 
 export default function World({ socket, count, setCount }) {
-  
   let players = {};
   let posTracker = {};
   let platforms;
@@ -151,10 +150,10 @@ export default function World({ socket, count, setCount }) {
       this.load.image("sideladder", "assets/world/sideladder.png");
       this.load.image("sideladder2", "assets/world/sideladder2.png");
       this.load.image("grass", "assets/world/grass.png");
-      
+
       setCount(count + 1);
-      console.log("this is the count: " + count)
-      if(count > 2){
+      console.log("this is the count: " + count);
+      if (count > 2) {
         setCount(0);
       }
     }
@@ -167,37 +166,44 @@ export default function World({ socket, count, setCount }) {
       // spacebar = this.input.keyboard.addKey(
       //   Phaser.Input.Keyboard.KeyCodes.UP
       // );
-      this.add.image(config.width / 2, config.height / 2, "background").setScale(1.6);
+      this.add
+        .image(config.width / 2, config.height / 2, "background")
+        .setScale(1.6);
       //--------------------platforms----------------------------
       platforms = this.physics.add.staticGroup();
-      
+
       platforms
         .create(400, 800, "ground")
         .setScale(3.8)
         .refreshBody();
-        this.add.image(0,780, 'grass')
-        this.add.image(600,780, 'grass')
-        this.add.image(1200,780, 'grass')
+      this.add.image(0, 780, "grass");
+      this.add.image(600, 780, "grass");
+      this.add.image(1200, 780, "grass");
       //platforms.create(300, 600, "ground").setScale(1.5);
       platforms.create(1000, 600, "ground").setVisible(false);
-      platforms.create(550, 300, "ground").setScale(1.3).setVisible(false);
+      platforms
+        .create(550, 300, "ground")
+        .setScale(1.3)
+        .setVisible(false);
       platforms.create(200, 500, "ground").setVisible(false);
 
       //----------------------------------------------------------
-      this.add.image(550,260, "stairs");
-      this.add.image(1000,450, "temple");
-      this.add.image(800, 720, 'chair')
-      this.add.image(200, 720, 'chair2r')
-     
-      this.add.image(300, 500, 'sideladder2')
-      this.add.image(100, 500, 'sideladder')
+      this.add.image(550, 260, "stairs");
+      this.add.image(1000, 450, "temple");
+      this.add.image(800, 720, "chair");
+      this.add.image(200, 720, "chair2r");
 
-      this.add.image(720, 300, 'sideladder2')
-      this.add.image(420, 300, 'sideladder')
+      this.add.image(300, 500, "sideladder2");
+      this.add.image(100, 500, "sideladder");
 
-      this.add.image(1120, 600, 'sideladder2')
-      this.add.image(840, 600, 'sideladder')
+      this.add.image(720, 300, "sideladder2");
+      this.add.image(420, 300, "sideladder");
+
+      this.add.image(1120, 600, "sideladder2");
+      this.add.image(840, 600, "sideladder");
       socket.emit("worldRequestPlayers", { room, startingPoint });
+
+      // const handleWorldLoadPlayers = function(socketList) {};
 
       socket.on("worldLoadPlayers", socketList => {
         //this loads all players including the client itself into the game
@@ -247,7 +253,7 @@ export default function World({ socket, count, setCount }) {
           }
         }
         setPlayersPos(data);
-       
+
         // if (players[data.playerID]) {
         //   players[data.playerID].x = data.posX;\
 
@@ -264,8 +270,6 @@ export default function World({ socket, count, setCount }) {
         // } else {
         //   console.log("why doesnt this work");
         // }
-
-       
       });
       socket.on("worldCleanup", player => {
         console.log("WORLD CLEANUP HAS BEEN TRIGGERED", player);
@@ -388,10 +392,12 @@ export default function World({ socket, count, setCount }) {
     game = new Phaser.Game(config);
 
     return function cleanup() {
+      console.log("destroy the entire game");
       socket.emit("worldDestroyPlayer", { room });
       socket.removeListener("worldUpdatePlayerPosition");
       socket.removeListener("worldLoadPlayers");
       socket.removeListener("worldRequestPlayers");
+      socket.removeListener("worldInsertPlayer");
       socket.removeListener("worldShowBubble", handleReceiveBubble);
       game.destroy();
       console.log("game destroy");

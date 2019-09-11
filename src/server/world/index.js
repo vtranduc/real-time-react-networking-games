@@ -27,8 +27,8 @@ const world = function(io, socket, sockets, rooms, worldData) {
       }
       if (Object.keys(worldData[data.room].pos).length === 0) {
         console.log("delete not by switching tab");
-        clearInterval(worldData[room].interval);
-        delete worldData[room];
+        clearInterval(worldData[data.room].interval);
+        delete worldData[data.room];
       }
     }
   });
@@ -60,7 +60,7 @@ const world = function(io, socket, sockets, rooms, worldData) {
   // ========POSITIONS ABOVE======================
 
   socket.on("worldReceiveMsg", data => {
-    console.log("message received is: ", data);
+    // console.log("message received is: ", data);
     // sockets.to("worldGameRoom").emit("worldShowBubble");
     sockets
       .to(data.room)
