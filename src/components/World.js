@@ -140,7 +140,7 @@ export default function World({ socket, count, setCount }) {
 
     function preload() {
       this.load.image("background", "assets/world/background.png");
-      this.load.image("player", `assets/world/mage${count}.png`);
+      this.load.image("player", `assets/world/mage0.png`);
       this.load.image("ground", "assets/world/platform.png");
       this.load.image("stairs", "assets/world/stairs.png");
       this.load.image("chair", "assets/world/chair.png");
@@ -150,12 +150,6 @@ export default function World({ socket, count, setCount }) {
       this.load.image("sideladder", "assets/world/sideladder.png");
       this.load.image("sideladder2", "assets/world/sideladder2.png");
       this.load.image("grass", "assets/world/grass.png");
-
-      setCount(count + 1);
-      console.log("this is the count: " + count);
-      if (count > 2) {
-        setCount(0);
-      }
     }
 
     function create() {

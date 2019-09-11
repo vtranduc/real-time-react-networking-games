@@ -92,14 +92,7 @@ function NavBar({
                 >
                   <li>Register</li>
                 </Link>
-                <Link
-                  to="/externalgames"
-                  onClick={() => {
-                    // setPageName("Register Page");
-                  }}
-                >
-                  <li>Phaser Games</li>
-                </Link>
+
                 <Link
                   to="/chatworld"
                   onClick={() => {
