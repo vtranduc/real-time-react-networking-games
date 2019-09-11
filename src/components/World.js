@@ -4,6 +4,7 @@ import Phaser from "phaser";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 import useKeyPress from "../helpers/useKeyPress";
+import "../styles/chatBubbleWhite.css";
 
 let game;
 let room = "worldGameRoom";
@@ -15,10 +16,59 @@ export default function World({ socket }) {
   let texts = {};
   let w, a, s, d, spacebar;
 
+  //=START=============================================
+  const [chatMode, setChatMode] = useState({
+    inQueue: false,
+    mode: false,
+    msg: ""
+  });
+
+  const [bubble, setBubble] = useState({});
+  const [bubbleTrigger, setBubbleTrigger] = useState(null);
+  // worldChatTextField
   let Enter = useKeyPress("Enter");
   useEffect(() => {
     console.log("Enter is: ", Enter);
+    if (Enter) {
+      if (chatMode.mode) {
+        if (chatMode.msg) {
+          setChatMode({ ...chatMode, inQueue: true });
+        } else {
+          console.log("NEEDS TO REACH HERE");
+          document.getElementById("worldChatTextField").blur();
+        }
+      } else {
+        document.getElementById("worldChatTextField").focus();
+      }
+    }
   }, [Enter]);
+
+  useEffect(() => {
+    if (chatMode.inQueue) {
+      // socket.emit("rpsReceiveMsg", { room: room, msg: chatMode.msg });
+      // console.log("Emit message Please!");
+      socket.emit("worldReceiveMsg", { room: room, msg: chatMode.msg });
+      setChatMode({ ...chatMode, inQueue: false, msg: "" });
+    }
+  }, [chatMode.inQueue]);
+
+  useEffect(() => {
+    console.log("see you sarah", bubbleTrigger);
+    if (bubbleTrigger) {
+      console.log("add the bubble NOW");
+
+      setBubble(oldBubble => {
+        return {
+          ...oldBubble,
+          [bubbleTrigger.socketId]: { msg: bubbleTrigger.msg, interval: null }
+        };
+      });
+
+      setBubbleTrigger(null);
+    }
+  }, [bubbleTrigger]);
+
+  //=FIN===================================================
 
   // const [chatMode, setChatMode] = useState({
   //   inQueue: false,
@@ -28,6 +78,36 @@ export default function World({ socket }) {
   // const chatMode = false;
 
   useEffect(() => {
+    //===========================================================
+    //===========================================================
+    //===========================================================
+    //===========================================================
+    //===========================================================
+
+    console.log("THE WORLD IS MOUNTING!!!!!!!!!!!!!!!");
+
+    const handleReceiveBubble = function(data) {
+      console.log("what do I need", data);
+      setBubbleTrigger(data);
+    };
+    socket.on("worldShowBubble", handleReceiveBubble);
+
+    //===========================================================
+    //===========================================================
+    //===========================================================
+    //===========================================================
+    //===========================================================
+    //===========================================================
+    //===========================================================
+    //===========================================================
+    //===========================================================
+
+    /* FIND THE LINES OF CODE THAT HAVE BEEN DELETED.
+     *
+     *
+     *
+     */
+
     function preload() {
       this.load.image("background", "assets/background/plainblue.jpg");
       this.load.image("player", "assets/world/mage.png");
@@ -64,7 +144,7 @@ export default function World({ socket }) {
         for (let socketID in socketList) {
           players[socketID] = this.physics.add.image(100, 100, "player");
           players[socketID].setScale(0.2);
-          if (!players[socketID] == players[socket.id]) {
+          if (players[socketID] != players[socket.id]) {
             players[socketID].body.setAllowGravity(false);
           }
 
@@ -74,7 +154,9 @@ export default function World({ socket }) {
       });
       socket.on("worldInsertPlayer", socketID => {
         players[socketID] = this.physics.add.image(100, 100, "player");
-
+        if (players[socketID] != players[socket.id]) {
+          players[socketID].body.setAllowGravity(false);
+        }
         players[socketID].setScale(0.2);
         players[socketID].setCollideWorldBounds(true);
         this.physics.add.collider(players[socketID], platforms);
@@ -89,7 +171,9 @@ export default function World({ socket }) {
       });
       socket.on("worldCleanup", player => {
         console.log("WORLD CLEANUP HAS BEEN TRIGGERED", player);
-        players[player.socketID].destroy();
+        if (players[player.socketID]) {
+          players[player.socketID].destroy();
+        }
       });
     }
     function update() {
@@ -98,6 +182,7 @@ export default function World({ socket }) {
       if (players[socket.id]) {
         if (d.isDown) {
           players[socket.id].x = players[socket.id].x + 2;
+          // console.log(players[socket.id].x + ":" + players[socket.id].y);
         }
 
         if (a.isDown) {
@@ -150,6 +235,7 @@ export default function World({ socket }) {
       socket.removeListener("worldUpdatePlayerPosition");
       socket.removeListener("worldLoadPlayers");
       socket.removeListener("worldRequestPlayers");
+      socket.removeListener("worldShowBubble", handleReceiveBubble);
       game.destroy();
       console.log("game destroy");
     };
@@ -157,7 +243,29 @@ export default function World({ socket }) {
 
   return (
     <div>
-      <div id="game"></div>
+      <div id="game" style={{ position: "relative" }}>
+        <div style={{ position: "absolute" }}>
+          {/* {bubble[socket.id] && (
+            <p style={{ color: "black" }}>{bubble[socket.id].msg}</p>
+          )} */}
+          {bubble[socket.id] && (
+            <div className="playerBubble">
+              <div
+                style={{
+                  marginBottom: "2vh",
+                  margingTop: "-60px"
+                }}
+              >
+                <div className="speech-buble-wrapper-white">
+                  <div className="speech-bubble-white">
+                    <p>{bubble[socket.id].msg}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
       <div
         style={{
           marginLeft: "2vw",
@@ -168,40 +276,27 @@ export default function World({ socket }) {
         }}
       >
         <TextField
-          id="rpsChatTextField"
+          id="worldChatTextField"
           label="Send a chat!"
           style={{ width: "100%", marginRight: "1em" }}
-          // value={chatMode.msg}
-          // onFocus={() => {
-          //   // setChatMode({ ...chatMode, mode: true });
-          //   console.log("FOCUSSING", chatMode.mode);
-          //   // testVa
-          //   testVar = true;
-          //   setChatMode(oldChatMode => {
-          //     return { ...oldChatMode, mode: true };
-          //   });
-          //   console.log("FOCUSSING", chatMode.mode);
-          // }}
-          // onBlur={() => {
-          //   testVar = false;
-          //   // setChatMode({ ...chatMode, mode: false });
-          //   // testVar=
-          //   console.log("SHOWQ ME");
-          //   // setChatMode(false);
-          //   setChatMode({ ...chatMode, mode: false });
-          // }}
-          // onChange={e => {
-          //   // setChatMode({ ...chatMode, msg: e.target.value });
-          //   setChatMode({ ...chatMode, msg: e.target.value });
-          // }}
+          value={chatMode.msg}
+          onFocus={() => {
+            setChatMode({ ...chatMode, mode: true });
+          }}
+          onBlur={() => {
+            setChatMode({ ...chatMode, mode: false });
+          }}
+          onChange={e => {
+            setChatMode({ ...chatMode, msg: e.target.value });
+          }}
         ></TextField>
         <Button
           variant="contained"
           color="primary"
           onClick={() => {
-            // if (chatMode.msg) {
-            //   // setChatMode({ ...chatMode, inQueue: true });
-            // }
+            if (chatMode.msg) {
+              setChatMode({ ...chatMode, inQueue: true });
+            }
           }}
         >
           Chat!
