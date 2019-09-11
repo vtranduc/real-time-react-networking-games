@@ -8,9 +8,12 @@ import "../styles/chatBubbleWhite.css";
 
 let game;
 let room = "worldGameRoom";
+let count = 0;
+
 // let testVar = false;
 
-export default function World({ socket }) {
+export default function World({ socket, count, setCount }) {
+  
   let players = {};
   let posTracker = {};
   let platforms;
@@ -137,9 +140,23 @@ export default function World({ socket }) {
      */
 
     function preload() {
-      this.load.image("background", "assets/background/plainblue.jpg");
-      this.load.image("player", "assets/world/mage.png");
+      this.load.image("background", "assets/world/background.png");
+      this.load.image("player", `assets/world/mage${count}.png`);
       this.load.image("ground", "assets/world/platform.png");
+      this.load.image("stairs", "assets/world/stairs.png");
+      this.load.image("chair", "assets/world/chair.png");
+      this.load.image("chair2", "assets/world/chair2.png");
+      this.load.image("chair2r", "assets/world/chair2r.png");
+      this.load.image("temple", "assets/world/temple.png");
+      this.load.image("sideladder", "assets/world/sideladder.png");
+      this.load.image("sideladder2", "assets/world/sideladder2.png");
+      this.load.image("grass", "assets/world/grass.png");
+      
+      setCount(count + 1);
+      console.log("this is the count: " + count)
+      if(count > 2){
+        setCount(0);
+      }
     }
 
     function create() {
@@ -150,21 +167,36 @@ export default function World({ socket }) {
       // spacebar = this.input.keyboard.addKey(
       //   Phaser.Input.Keyboard.KeyCodes.UP
       // );
-      this.add.image(config.width / 2, config.height / 2, "background");
+      this.add.image(config.width / 2, config.height / 2, "background").setScale(1.6);
       //--------------------platforms----------------------------
       platforms = this.physics.add.staticGroup();
-
+      
       platforms
         .create(400, 800, "ground")
         .setScale(3.8)
         .refreshBody();
+        this.add.image(0,780, 'grass')
+        this.add.image(600,780, 'grass')
+        this.add.image(1200,780, 'grass')
       //platforms.create(300, 600, "ground").setScale(1.5);
-      platforms.create(1000, 600, "ground");
-      platforms.create(550, 300, "ground").setScale(1.3);
-      platforms.create(200, 500, "ground");
+      platforms.create(1000, 600, "ground").setVisible(false);
+      platforms.create(550, 300, "ground").setScale(1.3).setVisible(false);
+      platforms.create(200, 500, "ground").setVisible(false);
 
       //----------------------------------------------------------
+      this.add.image(550,260, "stairs");
+      this.add.image(1000,450, "temple");
+      this.add.image(800, 720, 'chair')
+      this.add.image(200, 720, 'chair2r')
+     
+      this.add.image(300, 500, 'sideladder2')
+      this.add.image(100, 500, 'sideladder')
 
+      this.add.image(720, 300, 'sideladder2')
+      this.add.image(420, 300, 'sideladder')
+
+      this.add.image(1120, 600, 'sideladder2')
+      this.add.image(840, 600, 'sideladder')
       socket.emit("worldRequestPlayers", { room, startingPoint });
 
       socket.on("worldLoadPlayers", socketList => {
@@ -214,7 +246,7 @@ export default function World({ socket }) {
           }
         }
         setPlayersPos(data);
-
+       
         // if (players[data.playerID]) {
         //   players[data.playerID].x = data.posX;\
 
@@ -231,6 +263,8 @@ export default function World({ socket }) {
         // } else {
         //   console.log("why doesnt this work");
         // }
+
+       
       });
       socket.on("worldCleanup", player => {
         console.log("WORLD CLEANUP HAS BEEN TRIGGERED", player);
@@ -246,6 +280,7 @@ export default function World({ socket }) {
         // console.log("is this not true?");
         if (d.isDown) {
           players[socket.id].x = players[socket.id].x + 2;
+          players[socket.id].flipX = true;
           // socket.emit("worldUpdatePlayerPosition", {
           //   room,
           //   xy: { x: players[socket.id].x, y: players[socket.id].y }
@@ -261,6 +296,7 @@ export default function World({ socket }) {
 
         if (a.isDown) {
           players[socket.id].x = players[socket.id].x - 2;
+          players[socket.id].flipX = false;
           // socket.emit("worldUpdatePlayerPosition", {
           //   room,
           //   xy: { x: players[socket.id].x, y: players[socket.id].y }
@@ -337,7 +373,7 @@ export default function World({ socket }) {
         arcade: {
           debug: false,
           fps: 40,
-          gravity: { y: 400 }
+          gravity: { y: 800 }
         }
       },
       scene: {

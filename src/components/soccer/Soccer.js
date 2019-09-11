@@ -217,7 +217,7 @@ export default function Soccer({ socket, room }) {
 						return (
 							<img
 								key={socketId}
-								src={`assets/soccer/player${gameStat.players[socketId].team}left.gif`}
+								src={`assets/soccer/dog${gameStat.players[socketId].team}left.gif`}
 								style={{
 									height: Math.floor(playerSpec.height * fieldSpec.width) * 1.4,
 									width: Math.floor(playerSpec.width * fieldSpec.width) * 1.4,
