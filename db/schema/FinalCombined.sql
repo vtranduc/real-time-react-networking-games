@@ -84,7 +84,7 @@ CREATE TABLE private_message
   id SERIAL PRIMARY KEY NOT NULL,
   sender_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
   receiver_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
-  message_title TEXT NOT NULL,
+  message_title TEXT,
   sent_message TEXT NOT NULL,
   time_of_post TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );

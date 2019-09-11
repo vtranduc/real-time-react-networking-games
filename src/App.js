@@ -20,6 +20,10 @@ import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import io from "socket.io-client";
 import Cookies from "universal-cookie";
 
+import Pmbox from "./components/pmbox/Pmbox";
+import TestPm from "./components/TestPm";
+
+
 const serverPORT = 3001;
 
 function App() {
@@ -120,122 +124,140 @@ function App() {
             );
           }}
         /> */}
-				<Route path="/about" exact component={About} />
-				<Route
-					path="/lobby"
-					exact
-					render={() => {
-						return (
-							<div>
-								{profileInfo && socket ? (
-									<Lobby
-										socket={socket}
-										setRoom={setRoom}
-										profileInfo={profileInfo}
-									/>
-								) : (
-									<h3>Retrieving user info...</h3>
-								)}
-							</div>
-						);
-					}}
-				/>
-				<Route
-					path="/aboutus"
-					exact
-					render={() => {
-						return <Aboutus />;
-					}}
-				/>
-				<Route
-					path="/login"
-					exact
-					render={() => {
-						return socket ? (
-							<Login
-								loginStatus={loginStatus}
-								setLoginStatus={setLoginStatus}
-								setProfileInfo={setProfileInfo}
-								socket={socket}
-								httpServer={httpServer}
-							/>
-						) : (
-							<h3>Waiting for socket</h3>
-						);
-					}}
-				/>
-				{/* <Route path="/world/:username" exact component={World} /> */}
-				<Route
-					path="/chatworld"
-					render={props => {
-						return socket ? (
-							<World socket={socket} count={count} setCount={setCount} />
-						) : (
-							<h3>Loading...</h3>
-						);
-					}}
-				/>
-				<Route
-					path="/register"
-					exact
-					render={() => {
-						return <Register httpServer={httpServer} />;
-					}}
-				/>
-				<Route
-					path="/user/:username"
-					exact
-					render={props => {
-						return profileInfo && loginStatus !== null && socket ? (
-							<Profile
-								profileInfo={profileInfo}
-								httpServer={httpServer}
-								loginStatus={loginStatus}
-								socket={socket}
-								toOtherUser={toOtherUser}
-								setToOtherUser={setToOtherUser}
-								{...props}
-							/>
-						) : (
-							<h3>Waiting for the server response...</h3>
-						);
-					}}
-				/>
-				<Route
-					path="/soccer"
-					exact
-					render={() => {
-						return socket ? (
-							<Soccer socket={socket} room={room} />
-						) : (
-							<h3>Waiting for socket</h3>
-						);
-					}}
-				/>
-				<Route
-					path="/rockpaperscissors"
-					exact
-					render={() => {
-						return socket && profileInfo ? (
-							<RockPaperScissors socket={socket} profileInfo={profileInfo} />
-						) : (
-							<h3>Waiting to generate socket</h3>
-						);
-					}}
-				/>
-				<Route
-					path="/chansey"
-					exact
-					render={() => {
-						return socket ? (
-							<EggCatchGame socket={socket} />
-						) : (
-							<h3>Waiting for socket</h3>
-						);
-					}}
-				/>
-				<Route path="/phaser-game" exact component={PhaserGame} />
-				{/* <Route
+
+        <Route path="/about" exact component={About} />
+        {/* <Route path="/test" exact component={TestPm} /> */}
+        <Route
+          path="/test"
+          exact
+          render={() => {
+            return (
+              <div>
+                {profileInfo && socket ? (
+                  <TestPm
+                    socket={socket}
+                    // setRoom={setRoom}
+                    profileInfo={profileInfo}
+                  />
+                ) : (
+                  <h3>Retrieving user info...</h3>
+                )}
+              </div>
+            );
+          }}
+        />
+        <Route
+          path="/lobby"
+          exact
+          render={() => {
+            return (
+              <div>
+                {profileInfo && socket ? (
+                  <Lobby
+                    socket={socket}
+                    setRoom={setRoom}
+                    profileInfo={profileInfo}
+                  />
+                ) : (
+                  <h3>Retrieving user info...</h3>
+                )}
+              </div>
+            );
+          }}
+        />
+        <Route
+          path="/aboutus"
+          exact
+          render={() => {
+            return <Aboutus />;
+          }}
+        />
+        <Route
+          path="/login"
+          exact
+          render={() => {
+            return socket ? (
+              <Login
+                loginStatus={loginStatus}
+                setLoginStatus={setLoginStatus}
+                setProfileInfo={setProfileInfo}
+                socket={socket}
+                httpServer={httpServer}
+              />
+            ) : (
+              <h3>Waiting for socket</h3>
+            );
+          }}
+        />
+        {/* <Route path="/world/:username" exact component={World} /> */}
+        <Route
+          path="/chatworld"
+          render={props => {
+            return socket ? <World socket={socket} /> : <h3>Loading...</h3>;
+          }}
+        />
+        <Route
+          path="/register"
+          exact
+          render={() => {
+            return <Register httpServer={httpServer} />;
+          }}
+        />
+        <Route
+          path="/user/:username"
+          exact
+          render={props => {
+            return profileInfo && loginStatus !== null && socket ? (
+              <Profile
+                profileInfo={profileInfo}
+                httpServer={httpServer}
+                loginStatus={loginStatus}
+                socket={socket}
+                toOtherUser={toOtherUser}
+                setToOtherUser={setToOtherUser}
+                {...props}
+              />
+            ) : (
+              <h3>Waiting for the server response...</h3>
+            );
+          }}
+        />
+        <Route
+          path="/soccer"
+          exact
+          render={() => {
+            return socket ? (
+              <Soccer socket={socket} room={room} />
+            ) : (
+              <h3>Waiting for socket</h3>
+            );
+          }}
+        />
+        <Route
+          path="/rockpaperscissors"
+          exact
+          render={() => {
+            return socket && profileInfo ? (
+              <RockPaperScissors socket={socket} profileInfo={profileInfo} />
+            ) : (
+              <h3>Waiting to generate socket</h3>
+            );
+          }}
+        />
+        <Route
+          path="/chansey"
+          exact
+          render={() => {
+            return socket ? (
+              <EggCatchGame socket={socket} />
+            ) : (
+              <h3>Waiting for socket</h3>
+            );
+          }}
+        />
+        <Route path="/phaser-game" exact component={PhaserGame} />
+        {/* <Route
+
           path="/profile"
           exact
           render={() => {

@@ -15,6 +15,7 @@
 		"pg-native": "^3.0.0",
 		"phaser": "^3.19.0",
 		"react": "^16.9.0",
+		"react-chat-widget": "^2.1.4-1",
 		"react-dom": "^16.9.0",
 		"react-mdl": "^1.11.0",
 		"react-router-dom": "^5.0.1",
