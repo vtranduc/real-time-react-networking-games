@@ -1,63 +1,3 @@
-// 	return (
-// 		<div className="main">
-// 			<div id="register">
-// 				<h3>Register</h3>
-// 				<form onSubmit={handleSubmit}>
-// 					First Name:
-// 					<br />
-// 					<input
-// 						name="firstName"
-// 						value={user.firstName}
-// 						onChange={updateInput}
-// 					></input>
-// 					<br></br>
-// 					Last Name:
-// 					<br />
-// 					<input
-// 						name="lastName"
-// 						value={user.lastName}
-// 						onChange={updateInput}
-// 					></input>
-// 					<br></br>
-// 					Email:
-// 					<br />
-// 					<input name="email" value={user.email} onChange={updateInput}></input>
-// 					<br></br>
-// 					Username:
-// 					<br />
-// 					<input
-// 						name="username"
-// 						value={user.username}
-// 						onChange={updateInput}
-// 					></input>
-// 					<br></br>
-// 					Password:
-// 					<br />
-// 					<input
-// 						name="password"
-// 						value={user.password}
-// 						onChange={updateInput}
-// 					></input>
-// 					<br></br>
-// 					Confirm password:
-// 					<br />
-// 					<input
-// 						name="confirmPassword"
-// 						value={user.confirmPassword}
-// 						onChange={updateInput}
-// 					></input>
-// 					<br></br>
-// 					<input id="submit" type="submit" value="Submit" />
-// 				</form>
-// 			</div>
-// 		</div>
-// 	);
-// }
-
-// export default Register;
-
-// ------
-
 import React, { useState } from "react";
 import "../styles/register.css";
 import axios from "axios";
@@ -92,10 +32,12 @@ function Register({ httpServer }) {
 					avatar: "alsdjfalsdjfalsjf"
 				})
 				.then(response => {
+
 					if (response.data.length) {
 						setRedirectStatus(user.username);
 						//console.log("something here");
 					}
+
 				});
 		}
 	}
@@ -129,6 +71,7 @@ function Register({ httpServer }) {
 		event.preventDefault();
 
 		createUserSubmit();
+		if (user.username != "") setRedirectStatus(user.username);
 	}
 	function updateInput(event) {
 		switch (event.target.name) {
