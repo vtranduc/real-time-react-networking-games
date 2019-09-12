@@ -5,46 +5,47 @@ import Cookies from "universal-cookie";
 import getLastItemFromURL from "../helpers/getLastItemFromURL";
 
 function NavBar({
-	loginStatus,
-	setLoginStatus,
-	profileInfo,
-	socket,
-	setProfileInfo,
-	toOtherUser,
-	setToOtherUser
-	// Profile
+  loginStatus,
+  setLoginStatus,
+  profileInfo,
+  socket,
+  setProfileInfo,
+  toOtherUser,
+  setToOtherUser
+  // Profile
 }) {
-	const [pageName, setPageName] = useState("The Best Website");
-	let cookies = new Cookies();
-	useEffect(() => {
-		const handleCatchGuestProfile = function(data) {
-			console.log("getting guest profile");
-			setLoginStatus(false);
-			setProfileInfo({
-				username: data.username,
-				avatar: data.avatar,
-				firstName: "",
-				lastName: ""
-			});
+  const [pageName, setPageName] = useState("The Best Website");
+  let cookies = new Cookies();
+  useEffect(() => {
+    const handleCatchGuestProfile = function(data) {
+      console.log("getting guest profile");
+      setLoginStatus(false);
+      setProfileInfo({
+        username: data.username,
+        avatar: data.avatar,
+        firstName: "",
+        lastName: ""
+      });
 
-			socket.on("catchGuestProfile", handleCatchGuestProfile);
-		};
+      socket.on("catchGuestProfile", handleCatchGuestProfile);
+    };
 
-		return () => {
-			if (socket && handleCatchGuestProfile) {
-				socket.removeListener("catchGuestProfile", handleCatchGuestProfile);
-			}
-		};
-	}, []);
+    return () => {
+      if (socket && handleCatchGuestProfile) {
+        socket.removeListener("catchGuestProfile", handleCatchGuestProfile);
+      }
+    };
+  }, []);
 
-	return (
-		<div id="sep">
-			{profileInfo && (
-				<div id="navprofile">
-					<img src={profileInfo.avatar} id="navimage"></img>
-					<h3 id="welcomeprompt">{profileInfo.username}</h3>
-				</div>
-			)}
+  return (
+    <div id="sep">
+      {profileInfo && (
+        <div id="navprofile">
+          <img src={profileInfo.avatar} id="navimage"></img>
+          <h3 id="welcomeprompt">{profileInfo.username}</h3>
+        </div>
+      )}
+
 
 			{!loginStatus && (
 				<nav>
@@ -180,6 +181,7 @@ function NavBar({
 			)}
 		</div>
 	);
+
 }
 
 export default NavBar;

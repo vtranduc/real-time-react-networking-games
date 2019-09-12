@@ -1,3 +1,5 @@
+const getJoinedRooms = require("../helpers/getJoinedRooms");
+
 const rockPaperScissorsGame = function(socket, sockets, rps, io) {
   // console.log("readying server for RPS game!");
 
@@ -64,8 +66,9 @@ const rockPaperScissorsGame = function(socket, sockets, rps, io) {
     if (rps[data.room]) {
       rps[data.room].chats.unshift({
         id: `rps${data.room}${socket.id}${rps[data.room].chats.length + 1}`,
-        user: socket.id,
-        msg: data.msg
+        user: data.username,
+        msg: data.msg,
+        avatar: data.avatar
       });
       sockets.to(data.room).emit("rpsAddBubble", {
         gameData: rpsGetStat(rps[data.room]),
@@ -100,16 +103,18 @@ const rockPaperScissorsGame = function(socket, sockets, rps, io) {
 
   socket.on("disconnect", () => {
     //----------------------Literals FIXXXXXXXXXXXXX
-    const room = "testRockPaperScissors123qweasd";
-    //----------------------
-    if (rps[room] && rps[room].players[socket.id]) {
-      delete rps[room].players[socket.id];
-      if (Object.keys(rps[room].players).length === 0) {
-        delete rps[room];
-        console.log("Deleted the entire room in Rock Paper Scissor!");
-      } else {
-        rpsUpdateId(rps[room].players);
-        updateRpsGame(sockets, rps[room], room);
+    // const room = "testRockPaperScissors123qweasd";
+    for (let room of getJoinedRooms(rps, socket.id)) {
+      //----------------------
+      if (rps[room] && rps[room].players[socket.id]) {
+        delete rps[room].players[socket.id];
+        if (Object.keys(rps[room].players).length === 0) {
+          delete rps[room];
+          console.log("Deleted the entire room in Rock Paper Scissor!");
+        } else {
+          rpsUpdateId(rps[room].players);
+          updateRpsGame(sockets, rps[room], room);
+        }
       }
     }
   });

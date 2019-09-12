@@ -23,7 +23,12 @@ import Cookies from "universal-cookie";
 import Pmbox from "./components/pmbox/Pmbox";
 import TestPm from "./components/TestPm";
 
+import { addResponseMessage } from "react-chat-widget";
+
 const serverPORT = 3001;
+
+let viewer;
+let target;
 
 function App() {
   //--------------------global states----------------------
@@ -37,22 +42,24 @@ function App() {
     trigger: false,
     username: null
   });
+  const [pm, setPm] = useState(null);
+  const [lobbyNavigation, setLobbyNavigation] = useState(null);
   //-------------------------------------------------------
   // let socket;
-  console.log("initializing app");
+  // console.log("initializing app");
 
   useEffect(() => {
     setSocket(io(`:${serverPORT}`));
   }, []);
   useEffect(() => {
     // socket = io(`:${serverPORT}`);
-    console.log("after socket setup. This is to be printed only twice!");
+    // console.log("after socket setup. This is to be printed only twice!");
     let handleCatchGuestProfile;
     if (socket) {
       // setSocket(io(`:${serverPORT}`));
       let cookies = new Cookies();
       if (cookies.get("profile")) {
-        console.log("LOGGED IN HERE BABY!");
+        // console.log("LOGGED IN HERE BABY!");
         axios
           .post(`${httpServer}loggedInStatus`, {
             cookie: cookies.get("profile")
@@ -70,10 +77,12 @@ function App() {
                 username: response.data[0].username,
                 avatar: response.data[0].avatar
               });
+              socket.emit("whoIsOnlinePlayer", cookies.get("profile"));
             } else {
               console.log("did not find the user!");
               cookies.remove("profile");
               socket.emit("requestGuestProfile");
+              socket.emit("whoIsOnlinePlayer", null);
             }
           });
       } else {
@@ -93,12 +102,32 @@ function App() {
       };
       socket.on("catchGuestProfile", handleCatchGuestProfile);
     }
+    const handleCatchPmFromAUser = function(data) {
+      console.log("caught the response", data, pm);
+      if (viewer === data.target && target === data.viewer) {
+        addResponseMessage(data.msg);
+      }
+    };
+    if (socket) {
+      socket.on("catchPmFromAuser", handleCatchPmFromAUser);
+    }
     return () => {
-      if (socket && handleCatchGuestProfile) {
-        socket.removeListener("catchGuestProfile", handleCatchGuestProfile);
+      if (socket) {
+        socket.removeListener("catchPmFromAuser", handleCatchPmFromAUser);
+        if (handleCatchGuestProfile) {
+          socket.removeListener("catchGuestProfile", handleCatchGuestProfile);
+        }
       }
     };
   }, [socket]);
+
+  useEffect(() => {
+    // console.log("change in pm state");
+    if (pm) {
+      viewer = pm.viewer;
+      target = pm.target;
+    }
+  }, [pm]);
 
   return (
     <Router>
@@ -106,12 +135,13 @@ function App() {
         loginStatus={loginStatus}
         setLoginStatus={setLoginStatus}
         profileInfo={profileInfo}
+        setProfileInfo={setProfileInfo}
         socket={socket}
         toOtherUser={toOtherUser}
         setToOtherUser={setToOtherUser}
         Profile={Profile}
       />
-
+      {pm && <Pmbox pm={pm} socket={socket}></Pmbox>}
       <Switch>
         <Route path="/" exact component={Home} />
         {/* <Route
@@ -156,6 +186,8 @@ function App() {
                     socket={socket}
                     setRoom={setRoom}
                     profileInfo={profileInfo}
+                    lobbyNavigation={lobbyNavigation}
+                    setLobbyNavigation={setLobbyNavigation}
                   />
                 ) : (
                   <h3>Retrieving user info...</h3>
@@ -213,6 +245,8 @@ function App() {
             return profileInfo && loginStatus !== null && socket ? (
               <Profile
                 profileInfo={profileInfo}
+                setProfileInfo={setProfileInfo}
+                setPm={setPm}
                 httpServer={httpServer}
                 loginStatus={loginStatus}
                 socket={socket}
@@ -230,7 +264,13 @@ function App() {
           exact
           render={() => {
             return socket ? (
-              <Soccer socket={socket} room={room} />
+              <Soccer
+                socket={socket}
+                room={room}
+                profileInfo={profileInfo}
+                lobbyNavigation={lobbyNavigation}
+                setLobbyNavigation={setLobbyNavigation}
+              />
             ) : (
               <h3>Waiting for socket</h3>
             );
@@ -241,13 +281,18 @@ function App() {
           exact
           render={() => {
             return socket && profileInfo ? (
-              <RockPaperScissors socket={socket} profileInfo={profileInfo} />
+              <RockPaperScissors
+                socket={socket}
+                profileInfo={profileInfo}
+                lobbyNavigation={lobbyNavigation}
+                setLobbyNavigation={setLobbyNavigation}
+              />
             ) : (
               <h3>Waiting to generate socket</h3>
             );
           }}
         />
-        <Route
+        {/* <Route
           path="/chansey"
           exact
           render={() => {
@@ -257,7 +302,7 @@ function App() {
               <h3>Waiting for socket</h3>
             );
           }}
-        />
+        /> */}
         <Route path="/phaser-game" exact component={PhaserGame} />
         {/* <Route
 

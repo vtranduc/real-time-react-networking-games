@@ -1,4 +1,4 @@
-const lobby = function(socket, sockets, gameData, io) {
+const lobby = function(socket, sockets, gameData, io, onlinePlayers) {
   socket.on("lobbyConnect", () => {
     socket.join("lobby");
     sockets.to("lobby").emit("lobbyUpdate", getLobbyStatus(gameData));
@@ -52,7 +52,35 @@ const lobby = function(socket, sockets, gameData, io) {
     try {
       gameData[data.game].lobby[data.room].players[socket.id].ready =
         data.ready;
+      // HANDLE REDIRECT HEREEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE=============
+      console.log(
+        "SHOW ME ONE ",
+        Object.keys(gameData[data.game].lobby[data.room].players).filter(
+          e => gameData[data.game].lobby[data.room].players[e].ready === true
+        )
+      );
+      if (
+        Object.keys(gameData[data.game].lobby[data.room].players).length >= 2 &&
+        Object.keys(gameData[data.game].lobby[data.room].players).length ===
+          Object.keys(gameData[data.game].lobby[data.room].players).filter(
+            e => gameData[data.game].lobby[data.room].players[e].ready === true
+          ).length
+      ) {
+        // console.log("GAME REDIRECT NOW PLEASE!");
+        for (let player of Object.keys(
+          gameData[data.game].lobby[data.room].players
+        )) {
+          // console.log("COmmand to: ", player);
+          io.to(player).emit("lobbyRedirect", {
+            room: data.room,
+            game: data.game
+          });
+          // onlinePlayers[player].rooms.push(`${data.game}-${data.room}`);
+        }
+        delete gameData[data.game].lobby[data.room];
+      }
       sockets.to("lobby").emit("lobbyUpdate", getLobbyStatus(gameData));
+      //===========================================================================================
     } catch (err) {
       console.log("Room is not ready!");
     }

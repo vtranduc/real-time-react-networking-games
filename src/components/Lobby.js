@@ -10,9 +10,9 @@ import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 import useKeyPress from "../helpers/useKeyPress";
 import "../styles/lobby.css";
+import { Redirect } from "react-router-dom";
 
-
-import Cookies from "universal-cookie";
+// import Cookies from "universal-cookie";
 //=======================================
 // import FormControl from "@material-ui/core/FormControl";
 // import InputLabel from "@material-ui/core/InputLabel";
@@ -23,7 +23,13 @@ import Cookies from "universal-cookie";
 // import ToggleButtonGroup from "@material-ui/lab/ToggleButtonGroup";
 // import MenuItem from "@material-ui/core/MenuItem";
 
-export default function Lobby({ socket, setRoom, profileInfo }) {
+export default function Lobby({
+  socket,
+  setRoom,
+  profileInfo,
+  lobbyNavigation,
+  setLobbyNavigation
+}) {
   // function handle
 
   const [lobbyData, setLobbyData] = useState(null);
@@ -35,7 +41,7 @@ export default function Lobby({ socket, setRoom, profileInfo }) {
   const [passcodeMode, setPasscodeMode] = useState(false);
   // const [roomStatus, getRoomStatys] = useState(null);
 
-  let cookies = new Cookies();
+  // let cookies = new Cookies();
 
   const handlePasscodeSend = function() {
     socket.emit("lobbyValidatePasscode", {
@@ -68,7 +74,9 @@ export default function Lobby({ socket, setRoom, profileInfo }) {
 
   useEffect(() => {
     socket.emit("lobbyConnect");
-
+    //================DO I NEED THIS?===============
+    setLobbyNavigation(null);
+    //===============================================
     const handleLobbyUpdate = function(data) {
       setLobbyData(data);
     };
@@ -85,7 +93,7 @@ export default function Lobby({ socket, setRoom, profileInfo }) {
     // };
     // socket.on("lobbyUserJoin", handleLobbyUserJoin);
 
-    console.log("watch meeeeeeeeeeeeeeee: ", cookies.get("profile"));
+    // console.log("watch meeeeeeeeeeeeeeee: ", cookies.get("profile"));
 
     //===================================
     const handleLobbyRoomCreation = function(data) {
@@ -124,10 +132,17 @@ export default function Lobby({ socket, setRoom, profileInfo }) {
       }
     };
     socket.on("lobbyPasscodeValidation", handleLobbyPasscodeValidation);
+    const handleLobbyRedirect = function(data) {
+      console.log("handleLobbyRedirect", data);
+      setLobbyNavigation(`${data.game}-${data.room}`);
+    };
+    socket.on("lobbyRedirect", handleLobbyRedirect);
 
     return () => {
+      console.log("lobby dismount");
       socket.emit("lobbyDisconnect", "maybe add something later");
       socket.removeListener("lobbyUpdate", handleLobbyUpdate);
+      socket.removeListener("lobbyRedirect", handleLobbyRedirect);
       socket.removeListener("lobbyRoomCreation", handleLobbyRoomCreation);
       socket.removeListener(
         "lobbyJoinedUserUpdate",
@@ -200,6 +215,7 @@ export default function Lobby({ socket, setRoom, profileInfo }) {
 
   return (
     <>
+      {lobbyNavigation && <Redirect to={`/${selectedGame}`} />}
       {lobbyData ? (
         <Paper
           id="paper"
@@ -213,226 +229,217 @@ export default function Lobby({ socket, setRoom, profileInfo }) {
           }}
         >
           {/* 1--------------------------------------------- */}
-          <div className = "games-rooms-seperate">
-            <div
-            
-          >
-            
-            <h3
-              className = "room-header"
-            >
-              Games
-            </h3>
-            <List>
-              {Object.keys(lobbyData).map(game => {
-                return (
-                  <ListItem
-                    selected={game === selectedGame}
-                    key={`lobby${game}`}
-                    onClick={e => {
-                      if (
-                        selectedGame &&
-                        selectedRoom &&
-                        Object.keys(
-                          lobbyData[selectedGame][selectedRoom].players
-                        ).length === 1 &&
-                        lobbyData[selectedGame][selectedRoom].status ===
-                          "closed"
-                      ) {
-                        alert("Room's passcode will be removed!");
-                      }
-                      if (selectedRoom) {
-                        socket.emit("lobbyJoinLeaveRoom", null);
-                      }
-                      setSelectedGame(e.target.innerText);
-                      setSelectedRoom(null);
-                      setCreateRoomMode(false);
-                      setPasscodeMode(false);
-                      // setEntry({ ...entry, msg: "" });
-                    }}
-                    button
-                  >
-                    {game}
-                  </ListItem>
-                );
-              })}
-            </List>
-          </div>
-          {/* 2--------------------------------------------- */}
-          <div
-            
-          >
-            <h3 className = "room-header">Rooms</h3>
-            {passcodeMode ? (
-              <div
-                style={{
-                  backgroundColor: "rgba(0,0,0,0.1)",
-                  // border: "solid",
-                  height: "16vh"
-                }}
-              >
-                <div style={{ fontSize: "0.8em", margin: "0.5em" }}>
-                  Passcode is required
-                </div>
-                <TextField
-                  id="lobbyPasscodeInputField"
-                  label="Passcode"
-                  style={{ marginLeft: "1em" }}
-                ></TextField>
-                {/* <FormControl>
+          <div className="games-rooms-seperate">
+            <div>
+              <h3 className="room-header">Games</h3>
+              <List>
+                {Object.keys(lobbyData).map(game => {
+                  return (
+                    <ListItem
+                      selected={game === selectedGame}
+                      key={`lobby${game}`}
+                      onClick={e => {
+                        if (
+                          selectedGame &&
+                          selectedRoom &&
+                          Object.keys(
+                            lobbyData[selectedGame][selectedRoom].players
+                          ).length === 1 &&
+                          lobbyData[selectedGame][selectedRoom].status ===
+                            "closed"
+                        ) {
+                          alert("Room's passcode will be removed!");
+                        }
+                        if (selectedRoom) {
+                          socket.emit("lobbyJoinLeaveRoom", null);
+                        }
+                        setSelectedGame(e.target.innerText);
+                        setSelectedRoom(null);
+                        setCreateRoomMode(false);
+                        setPasscodeMode(false);
+                        // setEntry({ ...entry, msg: "" });
+                      }}
+                      button
+                    >
+                      {game}
+                    </ListItem>
+                  );
+                })}
+              </List>
+            </div>
+            {/* 2--------------------------------------------- */}
+            <div>
+              <h3 className="room-header">Rooms</h3>
+              {passcodeMode ? (
+                <div
+                  style={{
+                    backgroundColor: "rgba(0,0,0,0.1)",
+                    // border: "solid",
+                    height: "16vh"
+                  }}
+                >
+                  <div style={{ fontSize: "0.8em", margin: "0.5em" }}>
+                    Passcode is required
+                  </div>
+                  <TextField
+                    id="lobbyPasscodeInputField"
+                    label="Passcode"
+                    style={{ marginLeft: "1em" }}
+                  ></TextField>
+                  {/* <FormControl>
                 <InputLabel htmlFor="my-input">Email address</InputLabel>
                 <Input id="my-input" aria-describedby="my-helper-text" />
                 <FormHelperText id="my-helper-text">
                   We'll never share your email.
                 </FormHelperText>
               </FormControl> */}
-                {/* <form> */}
-                <div
-                  style={{
-                    margin: "0.5em",
-                    display: "flex",
-                    justifyContent: "space-evenly"
-                  }}
-                >
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    onClick={handlePasscodeSend}
-                  >
-                    Join
-                  </Button>
-                  <Button
-                    variant="contained"
-                    color="secondary"
-                    onClick={() => {
-                      setPasscodeMode(false);
+                  {/* <form> */}
+                  <div
+                    style={{
+                      margin: "0.5em",
+                      display: "flex",
+                      justifyContent: "space-evenly"
                     }}
                   >
-                    Cancel
-                  </Button>
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      onClick={handlePasscodeSend}
+                    >
+                      Join
+                    </Button>
+                    <Button
+                      variant="contained"
+                      color="secondary"
+                      onClick={() => {
+                        setPasscodeMode(false);
+                      }}
+                    >
+                      Cancel
+                    </Button>
+                  </div>
+                  {/* </form> */}
                 </div>
-                {/* </form> */}
-              </div>
-            ) : (
-              <List
-                style={{
-                  display: "flex",
-                  justifyContent: "center",
-                  width: "100%"
-                }}
-              >
-                {selectedGame ? (
-                  <div style={{ width: "100%" }}>
-                    {createRoomMode ? (
-                      <div style={{ margin: "1em", marginTop: 0 }}>
-                        <TextField
-                          id="lobbyNewRoomName"
-                          label="Room name"
-                        ></TextField>
-                        <TextField
-                          id="lobbyNewPasscode"
-                          label="Passcode (Optional)"
-                        ></TextField>
-                        <div
-                          style={{
-                            display: "flex",
-                            justifyContent: "space-evenly",
-                            marginTop: "0.8em"
-                          }}
-                        >
-                          <Button
-                            variant="contained"
-                            color="primary"
-                            onClick={handleCreateRoom}
-                          >
-                            Create
-                          </Button>
-                          <Button
-                            variant="contained"
-                            color="secondary"
-                            onClick={() => {
-                              setCreateRoomMode(false);
-                            }}
-                          >
-                            Cancel
-                          </Button>
-                        </div>
-                      </div>
-                    ) : (
-                      <Button
-                        variant="contained"
-                        color="primary"
-                        style={{ margin: "1em" }}
-                        onClick={() => {
-                          setCreateRoomMode(true);
-                        }}
-                      >
-                        Start a new room!
-                      </Button>
-                    )}
-                    {Object.keys(lobbyData[selectedGame]).map(room => {
-                      return (
-                        <ListItem
-                          selected={room === selectedRoom}
-                          key={`lobbyroom${selectedGame}${room}`}
-                          button
-                          onClick={() => {
-                            if (
-                              selectedGame &&
-                              selectedRoom &&
-                              Object.keys(
-                                lobbyData[selectedGame][selectedRoom].players
-                              ).length === 1 &&
-                              lobbyData[selectedGame][selectedRoom].status ===
-                                "closed"
-                            ) {
-                              alert("Room's passcode will be removed!");
-                            }
-                            if (
-                              lobbyData[selectedGame][room].status === "open"
-                            ) {
-                              setSelectedRoom(room);
-                              setCreateRoomMode(false);
-                              socket.emit("lobbyJoinLeaveRoom", {
-                                game: selectedGame,
-                                room: room,
-                                username: profileInfo.username,
-                                avatar: profileInfo.avatar
-                              });
-                              setEntry({ ...entry, msg: "" });
-                            } else {
-                              setPasscodeMode(room);
-                            }
-                          }}
-                        >
+              ) : (
+                <List
+                  style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    width: "100%"
+                  }}
+                >
+                  {selectedGame ? (
+                    <div style={{ width: "100%" }}>
+                      {createRoomMode ? (
+                        <div style={{ margin: "1em", marginTop: 0 }}>
+                          <TextField
+                            id="lobbyNewRoomName"
+                            label="Room name"
+                          ></TextField>
+                          <TextField
+                            id="lobbyNewPasscode"
+                            label="Passcode (Optional)"
+                          ></TextField>
                           <div
                             style={{
                               display: "flex",
-                              justifyContent: "space-between",
-                              width: "100%"
+                              justifyContent: "space-evenly",
+                              marginTop: "0.8em"
                             }}
                           >
-                            {room}
-                            {lobbyData[selectedGame][room].status ===
-                              "closed" && (
-                              <p style={{ fontSize: "0.8em", color: "grey" }}>
-                                Locked
-                              </p>
-                            )}
+                            <Button
+                              variant="contained"
+                              color="primary"
+                              onClick={handleCreateRoom}
+                            >
+                              Create
+                            </Button>
+                            <Button
+                              variant="contained"
+                              color="secondary"
+                              onClick={() => {
+                                setCreateRoomMode(false);
+                              }}
+                            >
+                              Cancel
+                            </Button>
                           </div>
-                        </ListItem>
-                      );
-                    })}
-                  </div>
-                ) : (
-                  <ListItem style={{ color: "gray" }}>
-                    Please select a game
-                  </ListItem>
-                )}
-              </List>
-            )}
+                        </div>
+                      ) : (
+                        <Button
+                          variant="contained"
+                          color="primary"
+                          style={{ margin: "1em" }}
+                          onClick={() => {
+                            setCreateRoomMode(true);
+                          }}
+                        >
+                          Start a new room!
+                        </Button>
+                      )}
+                      {Object.keys(lobbyData[selectedGame]).map(room => {
+                        return (
+                          <ListItem
+                            selected={room === selectedRoom}
+                            key={`lobbyroom${selectedGame}${room}`}
+                            button
+                            onClick={() => {
+                              if (
+                                selectedGame &&
+                                selectedRoom &&
+                                Object.keys(
+                                  lobbyData[selectedGame][selectedRoom].players
+                                ).length === 1 &&
+                                lobbyData[selectedGame][selectedRoom].status ===
+                                  "closed"
+                              ) {
+                                alert("Room's passcode will be removed!");
+                              }
+                              if (
+                                lobbyData[selectedGame][room].status === "open"
+                              ) {
+                                setSelectedRoom(room);
+                                setCreateRoomMode(false);
+                                socket.emit("lobbyJoinLeaveRoom", {
+                                  game: selectedGame,
+                                  room: room,
+                                  username: profileInfo.username,
+                                  avatar: profileInfo.avatar
+                                });
+                                setEntry({ ...entry, msg: "" });
+                              } else {
+                                setPasscodeMode(room);
+                              }
+                            }}
+                          >
+                            <div
+                              style={{
+                                display: "flex",
+                                justifyContent: "space-between",
+                                width: "100%"
+                              }}
+                            >
+                              {room}
+                              {lobbyData[selectedGame][room].status ===
+                                "closed" && (
+                                <p style={{ fontSize: "0.8em", color: "grey" }}>
+                                  Locked
+                                </p>
+                              )}
+                            </div>
+                          </ListItem>
+                        );
+                      })}
+                    </div>
+                  ) : (
+                    <ListItem style={{ color: "gray" }}>
+                      Please select a game
+                    </ListItem>
+                  )}
+                </List>
+              )}
+            </div>
           </div>
-          </div >
           {/* 3--------------------------------------------- */}
           <div
             style={{
@@ -445,11 +452,7 @@ export default function Lobby({ socket, setRoom, profileInfo }) {
               // border: "solid"
             }}
           >
-            <h3
-              className = "room-header"
-            >
-              Currently joined
-            </h3>
+            <h3 className="room-header">Currently joined</h3>
             <List
               style={{
                 display: "flex",
@@ -582,11 +585,7 @@ export default function Lobby({ socket, setRoom, profileInfo }) {
               marginBottom: "1em"
             }}
           >
-            <h3
-              className = "room-header"
-            >
-              Chats
-            </h3>
+            <h3 className="room-header">Chats</h3>
             <List
               style={{
                 display: "flex",

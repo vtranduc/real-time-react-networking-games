@@ -43,7 +43,9 @@ app.set("trust proxy", 1); // trust first proxy
 const { Pool } = require("pg");
 //const dbParams = require("../lib/db.js");
 const pool = new Pool({
+
 	user: "postgres",
+
 	host: "localhost",
 	database: "gamefinal",
 	password: 123
@@ -156,22 +158,23 @@ app.get("/getuser/:username", (req, res) => {
 });
 
 app.post("/login", (req, res) => {
-	console.log("000000000000000000000000000000000000000000");
-	console.log("FORM VALUES:", req.body);
-	// -----------------------------------
-	getUser(req.body.email, req.body.password)
-		.then(result => {
-			console.log(result);
-			if (result.length) {
-				result[0].cookie = cookieEncrypt(result[0].username);
-				res.send(result);
-			} else {
-				res.send([]);
-			}
-		})
-		.catch(err => {
-			console.log(err);
-		});
+
+
+  getUser(req.body.email, req.body.password)
+    .then(result => {
+      console.log(result);
+      if (result.length) {
+        result[0].cookie = cookieEncrypt(result[0].username);
+        res.send(result);
+      } else {
+        res.send([]);
+      }
+    })
+    .catch(err => {
+      console.log(err);
+    });
+
+
 });
 
 // app.get()
@@ -219,6 +222,7 @@ defaultAvatars = [
 	"https://avatarfiles.alphacoders.com/715/71560.jpg",
 	"https://avatarfiles.alphacoders.com/106/10638.gif",
 	"https://avatarfiles.alphacoders.com/893/89303.gif",
+
 	"https://img.freepik.com/free-vector/abstract-dynamic-pattern-wallpaper-vector_53876-59131.jpg?size=338&ext=jpg",
 	"https://avatarfiles.alphacoders.com/633/63329.png",
 	"https://i.pinimg.com/originals/53/54/f7/5354f750a2816333f42efbeeacb4e244.jpg",
@@ -286,60 +290,81 @@ const gameData = {
 	rockPaperScissors: {
 		lobby: {}
 	}
+
 };
 
 //------------------------------------------------------------------------
 
 io.on("connection", socket => {
-	console.log("A user has been connected: ", socket.id);
-	onlinePlayers[socket.id] = { username: null };
-	console.log(onlinePlayers);
-	socket.on("disconnect", () => {
-		console.log("a user has been disconnected", socket.id);
-		if (onlinePlayers[socket.id]) {
-			delete onlinePlayers[socket.id];
-		}
-		// delete onlinePlayers[socket.id];
-	});
-	//-----------------LOGGING------------------------------------
-	// socket.on("setUpGuestProfile", () => {
-	//   console.log("ADDING A GUEST HERE!!!");
-	//   onlinePlayers[socket.id] = getGuestId(socket.id, defaultAvatars);
-	// });
-	// socket.on("login", data => {
-	//   console.log("adding people HERE!", data);
-	//   onlinePlayers[socket.id] = { username: data.username, avatar: data.avatar };
-	//   // console.log("onlinePlayers", onlinePlayers);
-	//   // socket.handshake.session.userData = data;
-	//   // socket.handshake.session.save();
-	// });
 
-	socket.on("requestGuestProfile", () => {
-		// console.log("SET UP GUEST ON THE SERVER");
-		io.to(socket.id).emit("catchGuestProfile", {
-			username: `Guest_${socket.id.slice(0, 3)}`,
-			avatar: defaultAvatars[Math.floor(Math.random() * defaultAvatars.length)]
-		});
-	});
 
-	// Have not implemented yet!------------------------
-	// socket.on("logout", function(userdata) {
-	//   if (socket.handshake.session.userdata) {
-	//     delete socket.handshake.session.userdata;
-	//     socket.handshake.session.save();
-	//   }
-	// });
+  console.log("A user has been connected: ", socket.id);
+  onlinePlayers[socket.id] = { username: null };
+  console.log(onlinePlayers);
+  socket.on("disconnect", () => {
+    console.log("a user has been disconnected", socket.id);
+    if (onlinePlayers[socket.id]) {
+      delete onlinePlayers[socket.id];
+    }
+  });
+  socket.on("whoIsOnlinePlayer", encryptedCookie => {
+    console.log("username ASSIGNING: ", encryptedCookie);
+    onlinePlayers[socket.id].username = cookieDecrypt(encryptedCookie);
+  });
+  //-----------------LOGGING------------------------------------
+  // socket.on("setUpGuestProfile", () => {
+  //   console.log("ADDING A GUEST HERE!!!");
+  //   onlinePlayers[socket.id] = getGuestId(socket.id, defaultAvatars);
+  // });
+  // socket.on("login", data => {
+  //   console.log("adding people HERE!", data);
+  //   onlinePlayers[socket.id] = { username: data.username, avatar: data.avatar };
+  //   // console.log("onlinePlayers", onlinePlayers);
+  //   // socket.handshake.session.userData = data;
+  //   // socket.handshake.session.save();
+  // });
 
-	// https://www.npmjs.com/package/express-socket.io-session
+  socket.on("requestGuestProfile", () => {
+    // console.log("SET UP GUEST ON THE SERVER");
+    io.to(socket.id).emit("catchGuestProfile", {
+      username: `Guest_${socket.id.slice(0, 3)}`,
+      avatar: defaultAvatars[Math.floor(Math.random() * defaultAvatars.length)]
+    });
+  });
 
-	//--------------------------------------------------------------
-	world(io, socket, io.sockets, io.sockets.adapter.rooms, gameData.world);
-	soccerGame(socket, io.sockets, io.sockets.adapter.rooms, gameData.soccer, io);
-	rockPaperScissorsGame(socket, io.sockets, gameData.rockPaperScissors, io);
-	eggCatchGame(socket, io.sockets, io.sockets.adapter.rooms, gameData.eggCatch);
-	lobby(socket, io.sockets, gameData, io);
-	userProfileServerSocket(socket, io.sockets, io, pool);
-	privateMessage(socket, io.sockets, io, pool);
+  // Have not implemented yet!------------------------
+  // socket.on("logout", function(userdata) {
+  //   if (socket.handshake.session.userdata) {
+  //     delete socket.handshake.session.userdata;
+  //     socket.handshake.session.save();
+  //   }
+  // });
+
+  // https://www.npmjs.com/package/express-socket.io-session
+
+  //--------------------------------------------------------------
+  world(
+    io,
+    socket,
+    io.sockets,
+    io.sockets.adapter.rooms,
+    gameData.world,
+    onlinePlayers
+  );
+  soccerGame(
+    socket,
+    io.sockets,
+    io.sockets.adapter.rooms,
+    gameData.soccer,
+    io,
+    onlinePlayers
+  );
+  rockPaperScissorsGame(socket, io.sockets, gameData.rockPaperScissors, io);
+  // eggCatchGame(socket, io.sockets, io.sockets.adapter.rooms, gameData.eggCatch);
+  lobby(socket, io.sockets, gameData, io, onlinePlayers);
+  userProfileServerSocket(socket, io.sockets, io, pool);
+  privateMessage(socket, io.sockets, io, pool, onlinePlayers);
+
 });
 
 // const getGuestId = function(socketId, defaultAvatars) {

@@ -20,22 +20,24 @@ const {
 const detectGoal = function(roomData) {
   // console.log("hello dude?");
   // console.log(roomData.ball.pos.x <= roomData.config.goalPos.teamA);
-  if (
-    roomData.ball.pos.x <= roomData.config.goalPos.teamA &&
-    roomData.ball.pos.y >= roomData.config.goalPos.top &&
-    roomData.ball.pos.y <= roomData.config.goalPos.bottom
-  ) {
-    // console.log("goal for team B!");
-    roomData.score.B += 1;
-    resetBall(roomData);
-  } else if (
-    roomData.ball.pos.x >= roomData.config.goalPos.teamB &&
-    roomData.ball.pos.y >= roomData.config.goalPos.top &&
-    roomData.ball.pos.y <= roomData.config.goalPos.bottom
-  ) {
-    // console.log("goal for team A");
-    roomData.score.A += 1;
-    resetBall(roomData);
+  if (roomData.timeRemaining >= 0) {
+    if (
+      roomData.ball.pos.x <= roomData.config.goalPos.teamA &&
+      roomData.ball.pos.y >= roomData.config.goalPos.top &&
+      roomData.ball.pos.y <= roomData.config.goalPos.bottom
+    ) {
+      // console.log("goal for team B!");
+      roomData.score.B += 1;
+      resetBall(roomData);
+    } else if (
+      roomData.ball.pos.x >= roomData.config.goalPos.teamB &&
+      roomData.ball.pos.y >= roomData.config.goalPos.top &&
+      roomData.ball.pos.y <= roomData.config.goalPos.bottom
+    ) {
+      // console.log("goal for team A");
+      roomData.score.A += 1;
+      resetBall(roomData);
+    }
   }
 };
 

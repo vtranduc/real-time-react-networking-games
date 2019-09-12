@@ -1,5 +1,5 @@
 const { getIdFromUsername } = require("../../../db/queries/allQueries");
-const privateMessage = function(socket, sockets, io, pool) {
+const privateMessage = function(socket, sockets, io, pool, onlinePlayers) {
   // console.log("starting the socket for pm");
 
   socket.on("pmRetrieveChat", data => {
@@ -54,8 +54,17 @@ const privateMessage = function(socket, sockets, io, pool) {
       })
       .then(() => {
         console.log("UPDATE TO THE RECIPIENT NEXT");
+        for (let targetId of getTargetSocketIds(data.target, onlinePlayers)) {
+          io.to(targetId).emit("catchPmFromAuser", data);
+        }
       });
   });
 };
 
 module.exports = privateMessage;
+
+const getTargetSocketIds = function(username, onlinePlayers) {
+  return Object.keys(onlinePlayers).filter(
+    socketId => onlinePlayers[socketId].username === username
+  );
+};

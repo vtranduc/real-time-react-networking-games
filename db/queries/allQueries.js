@@ -1,7 +1,7 @@
 const { Pool } = require("pg");
 //const dbParams = require("../lib/db.js");
 const pool = new Pool({
-  user: "postgres",
+  user: "JJ",
   host: "localhost",
   database: "gamefinal",
   password: 123
@@ -424,9 +424,9 @@ const getMessage = function(receiverUsername) {
   return getIdFromUsername(receiverUsername).then(res => {
     return pool
       .query({
-        text: `SELECT users.username, users.avatar, user_posts.sent_message, 
+        text: `SELECT user_posts.id, users.username, users.avatar, user_posts.sent_message, 
         user_posts.message_title, user_posts.time_of_post FROM users JOIN 
-        user_posts ON user_posts.sender_id = users.id WHERE user_posts.receiver_id = $1`,
+        user_posts ON user_posts.sender_id = users.id WHERE user_posts.receiver_id = $1 ORDER BY user_posts.time_of_post ASC`,
         values: [res]
       })
       .then(res => res.rows)
