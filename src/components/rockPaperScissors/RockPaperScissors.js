@@ -23,10 +23,16 @@ const useStyles = makeStyles(theme => ({
 }));
 
 // const bubbleMirror = {};
+let room;
 
-export default function RockPaperScissors({ socket, profileInfo }) {
+export default function RockPaperScissors({
+  socket,
+  profileInfo,
+  lobbyNavigation,
+  setLobbyNavigation
+}) {
   //---Temporary data---
-  const room = "testRockPaperScissors123qweasd";
+  // const room = lobbyNavigation;
   const nPlayers = 2;
   //--------------------
 
@@ -50,6 +56,8 @@ export default function RockPaperScissors({ socket, profileInfo }) {
   };
 
   useEffect(() => {
+    room = lobbyNavigation;
+    setLobbyNavigation(null);
     socket.emit("rpsInitialize", {
       room,
       nPlayers,

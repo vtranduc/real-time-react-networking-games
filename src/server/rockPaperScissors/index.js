@@ -1,3 +1,5 @@
+const getJoinedRooms = require("../helpers/getJoinedRooms");
+
 const rockPaperScissorsGame = function(socket, sockets, rps, io) {
   // console.log("readying server for RPS game!");
 
@@ -101,16 +103,18 @@ const rockPaperScissorsGame = function(socket, sockets, rps, io) {
 
   socket.on("disconnect", () => {
     //----------------------Literals FIXXXXXXXXXXXXX
-    const room = "testRockPaperScissors123qweasd";
-    //----------------------
-    if (rps[room] && rps[room].players[socket.id]) {
-      delete rps[room].players[socket.id];
-      if (Object.keys(rps[room].players).length === 0) {
-        delete rps[room];
-        console.log("Deleted the entire room in Rock Paper Scissor!");
-      } else {
-        rpsUpdateId(rps[room].players);
-        updateRpsGame(sockets, rps[room], room);
+    // const room = "testRockPaperScissors123qweasd";
+    for (let room of getJoinedRooms(rps, socket.id)) {
+      //----------------------
+      if (rps[room] && rps[room].players[socket.id]) {
+        delete rps[room].players[socket.id];
+        if (Object.keys(rps[room].players).length === 0) {
+          delete rps[room];
+          console.log("Deleted the entire room in Rock Paper Scissor!");
+        } else {
+          rpsUpdateId(rps[room].players);
+          updateRpsGame(sockets, rps[room], room);
+        }
       }
     }
   });

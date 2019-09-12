@@ -10,6 +10,7 @@ import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 import useKeyPress from "../helpers/useKeyPress";
 import "../styles/lobby.css";
+import { Redirect } from "react-router-dom";
 
 // import Cookies from "universal-cookie";
 //=======================================
@@ -22,7 +23,13 @@ import "../styles/lobby.css";
 // import ToggleButtonGroup from "@material-ui/lab/ToggleButtonGroup";
 // import MenuItem from "@material-ui/core/MenuItem";
 
-export default function Lobby({ socket, setRoom, profileInfo }) {
+export default function Lobby({
+  socket,
+  setRoom,
+  profileInfo,
+  lobbyNavigation,
+  setLobbyNavigation
+}) {
   // function handle
 
   const [lobbyData, setLobbyData] = useState(null);
@@ -67,7 +74,9 @@ export default function Lobby({ socket, setRoom, profileInfo }) {
 
   useEffect(() => {
     socket.emit("lobbyConnect");
-
+    //================DO I NEED THIS?===============
+    setLobbyNavigation(null);
+    //===============================================
     const handleLobbyUpdate = function(data) {
       setLobbyData(data);
     };
@@ -123,10 +132,17 @@ export default function Lobby({ socket, setRoom, profileInfo }) {
       }
     };
     socket.on("lobbyPasscodeValidation", handleLobbyPasscodeValidation);
+    const handleLobbyRedirect = function(data) {
+      console.log("handleLobbyRedirect", data);
+      setLobbyNavigation(`${data.game}-${data.room}`);
+    };
+    socket.on("lobbyRedirect", handleLobbyRedirect);
 
     return () => {
+      console.log("lobby dismount");
       socket.emit("lobbyDisconnect", "maybe add something later");
       socket.removeListener("lobbyUpdate", handleLobbyUpdate);
+      socket.removeListener("lobbyRedirect", handleLobbyRedirect);
       socket.removeListener("lobbyRoomCreation", handleLobbyRoomCreation);
       socket.removeListener(
         "lobbyJoinedUserUpdate",
@@ -199,6 +215,7 @@ export default function Lobby({ socket, setRoom, profileInfo }) {
 
   return (
     <>
+      {lobbyNavigation && <Redirect to={`/${selectedGame}`} />}
       {lobbyData ? (
         <Paper
           id="paper"

@@ -43,6 +43,7 @@ function App() {
     username: null
   });
   const [pm, setPm] = useState(null);
+  const [lobbyNavigation, setLobbyNavigation] = useState(null);
   //-------------------------------------------------------
   // let socket;
   // console.log("initializing app");
@@ -185,6 +186,8 @@ function App() {
                     socket={socket}
                     setRoom={setRoom}
                     profileInfo={profileInfo}
+                    lobbyNavigation={lobbyNavigation}
+                    setLobbyNavigation={setLobbyNavigation}
                   />
                 ) : (
                   <h3>Retrieving user info...</h3>
@@ -261,7 +264,13 @@ function App() {
           exact
           render={() => {
             return socket ? (
-              <Soccer socket={socket} room={room} profileInfo={profileInfo} />
+              <Soccer
+                socket={socket}
+                room={room}
+                profileInfo={profileInfo}
+                lobbyNavigation={lobbyNavigation}
+                setLobbyNavigation={setLobbyNavigation}
+              />
             ) : (
               <h3>Waiting for socket</h3>
             );
@@ -272,13 +281,18 @@ function App() {
           exact
           render={() => {
             return socket && profileInfo ? (
-              <RockPaperScissors socket={socket} profileInfo={profileInfo} />
+              <RockPaperScissors
+                socket={socket}
+                profileInfo={profileInfo}
+                lobbyNavigation={lobbyNavigation}
+                setLobbyNavigation={setLobbyNavigation}
+              />
             ) : (
               <h3>Waiting to generate socket</h3>
             );
           }}
         />
-        <Route
+        {/* <Route
           path="/chansey"
           exact
           render={() => {
@@ -288,7 +302,7 @@ function App() {
               <h3>Waiting for socket</h3>
             );
           }}
-        />
+        /> */}
         <Route path="/phaser-game" exact component={PhaserGame} />
         {/* <Route
 

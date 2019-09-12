@@ -3,8 +3,16 @@ const {
   initializeNewPlayer
 } = require("./initializeNewPlayerRoom");
 const startGame = require("./startGame");
+const getJoinedRooms = require("../helpers/getJoinedRooms");
 
-const soccerGame = function(socket, sockets, rooms, soccerData, io) {
+const soccerGame = function(
+  socket,
+  sockets,
+  rooms,
+  soccerData,
+  io,
+  onlinePlayers
+) {
   // console.log("this is a soccer game");
   socket.on("soccerHandleKeyPress", data => {
     try {
@@ -96,16 +104,19 @@ const soccerGame = function(socket, sockets, rooms, soccerData, io) {
 
   socket.on("disconnect", () => {
     //----------------------Literals
-    const room = "testingSoccer";
+    // const room = "testingSoccer";
+    // console.log("WATCH ON TERMINAL: ", getJoinedRooms(soccerData, socket.id));
     //----------------------
-    if (soccerData[room] && soccerData[room].players[socket.id]) {
-      delete soccerData[room].players[socket.id];
-      console.log("deleted: " + socket.id + ": ", soccerData);
-      console.log("Remaining users: ", Object.keys(soccerData[room].players));
-      if (Object.keys(soccerData[room].players).length === 0) {
-        clearInterval(soccerData[room].interval);
-        delete soccerData[room];
-        console.log("Deleted the entire room!");
+    for (let room of getJoinedRooms(soccerData, socket.id)) {
+      if (soccerData[room] && soccerData[room].players[socket.id]) {
+        delete soccerData[room].players[socket.id];
+        console.log("deleted: " + socket.id + ": ", soccerData);
+        console.log("Remaining users: ", Object.keys(soccerData[room].players));
+        if (Object.keys(soccerData[room].players).length === 0) {
+          clearInterval(soccerData[room].interval);
+          delete soccerData[room];
+          console.log("Deleted the entire room!");
+        }
       }
     }
   });

@@ -3,9 +3,19 @@ import useKeyPressMultiple from "../../helpers/useKeyPressMultiple";
 import useKeyPress from "../../helpers/useKeyPress";
 import ChatBox from "../chatBox/ChatBox";
 
-export default function Soccer({ socket, room, profileInfo }) {
+let room;
+let soccerGameTextId;
+
+export default function Soccer({
+  socket,
+  // room,
+  profileInfo,
+  lobbyNavigation,
+  setLobbyNavigation
+}) {
   //----------------------Literals
-  const soccerGameTextId = "soccerGameTextId";
+  // const soccerGameTextId = lobbyNavigation;
+  // const room = lobbyNavigation;
   // const temporaryRoom = "testingSoccer";
   // All values for this myst be integers
   // goalSize is realtive to height
@@ -49,6 +59,9 @@ export default function Soccer({ socket, room, profileInfo }) {
   const [entry, setEntry] = useState({ inQueue: false, msg: "" });
 
   useEffect(() => {
+    soccerGameTextId = lobbyNavigation;
+    room = lobbyNavigation;
+    setLobbyNavigation(null);
     socket.emit("soccerInit", {
       room: room,
       fieldSpec,

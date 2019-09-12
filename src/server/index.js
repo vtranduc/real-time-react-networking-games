@@ -281,7 +281,7 @@ const gameData = {
       }
     }
   },
-  eggCatch: { lobby: {} },
+  // eggCatch: { lobby: {} },
   world: { lobby: {} },
   rockPaperScissors: {
     lobby: {}
@@ -336,11 +336,25 @@ io.on("connection", socket => {
   // https://www.npmjs.com/package/express-socket.io-session
 
   //--------------------------------------------------------------
-  world(io, socket, io.sockets, io.sockets.adapter.rooms, gameData.world);
-  soccerGame(socket, io.sockets, io.sockets.adapter.rooms, gameData.soccer, io);
+  world(
+    io,
+    socket,
+    io.sockets,
+    io.sockets.adapter.rooms,
+    gameData.world,
+    onlinePlayers
+  );
+  soccerGame(
+    socket,
+    io.sockets,
+    io.sockets.adapter.rooms,
+    gameData.soccer,
+    io,
+    onlinePlayers
+  );
   rockPaperScissorsGame(socket, io.sockets, gameData.rockPaperScissors, io);
-  eggCatchGame(socket, io.sockets, io.sockets.adapter.rooms, gameData.eggCatch);
-  lobby(socket, io.sockets, gameData, io);
+  // eggCatchGame(socket, io.sockets, io.sockets.adapter.rooms, gameData.eggCatch);
+  lobby(socket, io.sockets, gameData, io, onlinePlayers);
   userProfileServerSocket(socket, io.sockets, io, pool);
   privateMessage(socket, io.sockets, io, pool, onlinePlayers);
 });
