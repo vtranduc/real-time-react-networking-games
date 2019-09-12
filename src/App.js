@@ -39,20 +39,20 @@ function App() {
   });
   //-------------------------------------------------------
   // let socket;
-  console.log("initializing app");
+  // console.log("initializing app");
 
   useEffect(() => {
     setSocket(io(`:${serverPORT}`));
   }, []);
   useEffect(() => {
     // socket = io(`:${serverPORT}`);
-    console.log("after socket setup. This is to be printed only twice!");
+    // console.log("after socket setup. This is to be printed only twice!");
     let handleCatchGuestProfile;
     if (socket) {
       // setSocket(io(`:${serverPORT}`));
       let cookies = new Cookies();
       if (cookies.get("profile")) {
-        console.log("LOGGED IN HERE BABY!");
+        // console.log("LOGGED IN HERE BABY!");
         axios
           .post(`${httpServer}loggedInStatus`, {
             cookie: cookies.get("profile")
@@ -106,6 +106,7 @@ function App() {
         loginStatus={loginStatus}
         setLoginStatus={setLoginStatus}
         profileInfo={profileInfo}
+        setProfileInfo={setProfileInfo}
         socket={socket}
         toOtherUser={toOtherUser}
         setToOtherUser={setToOtherUser}
@@ -213,6 +214,7 @@ function App() {
             return profileInfo && loginStatus !== null && socket ? (
               <Profile
                 profileInfo={profileInfo}
+                setProfileInfo={setProfileInfo}
                 httpServer={httpServer}
                 loginStatus={loginStatus}
                 socket={socket}

@@ -11,7 +11,8 @@ export default function CustomizePopover({
   background,
   bio,
   socket,
-  username
+  username,
+  setProfileInfo
 }) {
   const [open, setOpen] = React.useState(false);
 
@@ -91,6 +92,16 @@ export default function CustomizePopover({
 
               socket.emit("userEditProfile", customization);
               setOpen(false);
+              setProfileInfo(oldProfileInfo => {
+                console.log("WHOSSSSSSSSSSSSS BUYT UI", oldProfileInfo);
+                return {
+                  ...oldProfileInfo,
+                  avatar: document.getElementById("customizeProfileImageURL")
+                    .value
+                };
+              });
+              // console.log("happy birddddddddddddddd", profileInfo);
+              // setProfileInfo()
 
               //   if (imgExists(customization.avatar)) {
               //     if (imgExists(customization.background)) {

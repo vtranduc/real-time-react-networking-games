@@ -156,8 +156,8 @@ app.get("/getuser/:username", (req, res) => {
 });
 
 app.post("/login", (req, res) => {
-  console.log("000000000000000000000000000000000000000000");
-  console.log("FORM VALUES:", req.body);
+  // console.log("000000000000000000000000000000000000000000");
+  // console.log("FORM VALUES:", req.body);
   // -----------------------------------
   getUser(req.body.email, req.body.password)
     .then(result => {

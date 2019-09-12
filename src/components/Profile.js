@@ -30,6 +30,7 @@ const useStyles = makeStyles(theme => ({
 
 function Profile({
   profileInfo,
+  setProfileInfo,
   httpServer,
   loginStatus,
   socket,
@@ -102,6 +103,8 @@ function Profile({
   const [pmMode, setPmMode] = useState(false);
 
   useEffect(() => {
+    // console.log("profileInfo: ", profileInfo);
+
     setToOtherUser({ trigger: true, username: match.params.username });
     const handleProfileReload = function() {
       // console.log("triggering reload chain reaction!");
@@ -131,7 +134,7 @@ function Profile({
   }, []);
 
   useEffect(() => {
-    console.log("changed trigger");
+    // console.log("changed trigger");
     if (toOtherUser.trigger) {
       setPmMode(false);
       setToOtherUser({ ...toOtherUser, trigger: false });
@@ -175,14 +178,14 @@ function Profile({
             //     .includes(profileInfo.username)
             // );
 
-            console.log("SHOW MY RELATIONSHIP HERE", {
-              friendship: loginStatus ? res.data.friendship : null,
-              follow: loginStatus
-                ? userData.followers
-                    .map(follower => follower.username)
-                    .includes(profileInfo.username)
-                : null
-            });
+            // console.log("SHOW MY RELATIONSHIP HERE", {
+            //   friendship: loginStatus ? res.data.friendship : null,
+            //   follow: loginStatus
+            //     ? userData.followers
+            //         .map(follower => follower.username)
+            //         .includes(profileInfo.username)
+            //     : null
+            // });
 
             setRelationship({
               friendship: loginStatus ? res.data.friendship : null,
@@ -383,7 +386,8 @@ function Profile({
                       style={{
                         color: "white",
                         backgroundColor: "rgba(0, 0, 0, 0.8)",
-                        borderRadius: "20px"
+                        borderRadius: "20px",
+                        marginBottom: "0.5em"
                         // opacity: 0.8
                       }}
                     >
@@ -487,6 +491,7 @@ function Profile({
                         bio={profileData.bio}
                         socket={socket}
                         username={profileInfo.username}
+                        setProfileInfo={setProfileInfo}
                       />
                       // <Button
                       //   variant="contained"
@@ -938,7 +943,7 @@ function Profile({
                                     color="secondary"
                                     onClick={() => {
                                       // console.log("handle delete post");
-                                      socket.emit("userDeletePost");
+                                      socket.emit("userDeletePost", post.id);
                                     }}
                                   >
                                     X
