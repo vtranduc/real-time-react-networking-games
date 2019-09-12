@@ -32,7 +32,12 @@ function Register({ httpServer }) {
 					avatar: "alsdjfalsdjfalsjf"
 				})
 				.then(response => {
-					console.log("nothing is here");
+
+					if (response.data.length) {
+						setRedirectStatus(user.username);
+						//console.log("something here");
+					}
+
 				});
 		}
 	}
@@ -114,7 +119,8 @@ function Register({ httpServer }) {
 					<form onSubmit={handleSubmit}>
 						<div
 							className="wrap-input100 validate-input m-t-85 m-b-35"
-							data-validate="Enter username">
+							data-validate="Enter username"
+						>
 							<input
 								className="input100"
 								type="text"
@@ -124,12 +130,14 @@ function Register({ httpServer }) {
 							/>
 							<span
 								className="focus-input100"
-								data-placeholder="First Name"></span>
+								data-placeholder="First Name"
+							></span>
 						</div>
 
 						<div
 							className="wrap-input100 validate-input m-b-50"
-							data-validate="Enter password">
+							data-validate="Enter password"
+						>
 							<input
 								className="input100"
 								type="text"
@@ -139,12 +147,14 @@ function Register({ httpServer }) {
 							/>
 							<span
 								className="focus-input100"
-								data-placeholder="Last Name"></span>
+								data-placeholder="Last Name"
+							></span>
 						</div>
 
 						<div
 							className="wrap-input100 validate-input m-b-50"
-							data-validate="Enter password">
+							data-validate="Enter password"
+						>
 							<input
 								className="input100"
 								type="email"
@@ -157,7 +167,8 @@ function Register({ httpServer }) {
 
 						<div
 							className="wrap-input100 validate-input m-b-50"
-							data-validate="Enter password">
+							data-validate="Enter password"
+						>
 							<input
 								className="input100"
 								type="text"
@@ -167,11 +178,13 @@ function Register({ httpServer }) {
 							/>
 							<span
 								className="focus-input100"
-								data-placeholder="Username"></span>
+								data-placeholder="Username"
+							></span>
 						</div>
 						<div
 							className="wrap-input100 validate-input m-b-50"
-							data-validate="Enter password">
+							data-validate="Enter password"
+						>
 							<input
 								className="input100"
 								type="password"
@@ -181,11 +194,13 @@ function Register({ httpServer }) {
 							/>
 							<span
 								className="focus-input100"
-								data-placeholder="Password"></span>
+								data-placeholder="Password"
+							></span>
 						</div>
 						<div
 							className="wrap-input100 validate-input m-b-50"
-							data-validate="Enter password">
+							data-validate="Enter password"
+						>
 							<input
 								className="input100"
 								type="password"
@@ -195,7 +210,8 @@ function Register({ httpServer }) {
 							/>
 							<span
 								className="focus-input100"
-								data-placeholder="Confirm Password"></span>
+								data-placeholder="Confirm Password"
+							></span>
 						</div>
 
 						<div className="container-login100-form-btn">
