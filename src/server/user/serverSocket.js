@@ -276,8 +276,13 @@ const userProfileServerSocket = function(socket, sockets, io, pool) {
       });
   });
 
-  socket.on("userDeletePost", data => {
-    console.log("deletion on server");
+  socket.on("userDeletePost", id => {
+    // console.log("deletion on server", id);
+    pool
+      .query({ text: `DELETE FROM user_posts WHERE id = $1`, values: [id] })
+      .then(() => {
+        io.to(socket.id).emit("profileReload");
+      });
   });
 };
 
