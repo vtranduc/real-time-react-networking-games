@@ -21,7 +21,7 @@ import io from "socket.io-client";
 import Cookies from "universal-cookie";
 
 import Pmbox from "./components/pmbox/Pmbox";
-import TestPm from "./components/TestPm";
+// import TestPm from "./components/TestPm";
 
 import { addResponseMessage } from "react-chat-widget";
 
@@ -162,7 +162,7 @@ function App() {
           render={() => {
             return (
               <div>
-                {profileInfo && socket ? (
+                {/* {profileInfo && socket ? (
                   <TestPm
                     socket={socket}
                     // setRoom={setRoom}
@@ -170,7 +170,7 @@ function App() {
                   />
                 ) : (
                   <h3>Retrieving user info...</h3>
-                )}
+                )} */}
               </div>
             );
           }}
@@ -246,11 +246,11 @@ function App() {
               <Profile
                 profileInfo={profileInfo}
                 setProfileInfo={setProfileInfo}
-                setPm={setPm}
                 httpServer={httpServer}
                 loginStatus={loginStatus}
                 socket={socket}
                 toOtherUser={toOtherUser}
+                setPm={setPm}
                 setToOtherUser={setToOtherUser}
                 {...props}
               />

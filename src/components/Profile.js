@@ -36,8 +36,8 @@ function Profile({
   socket,
   toOtherUser,
   setToOtherUser,
-  match,
-  setPm
+  setPm,
+  match
 }) {
   // const [postList, setPostList] = useState([]);
   //axios call to get user messages
@@ -537,26 +537,38 @@ function Profile({
                       </Button>
                     )}
 
-                    <Button
-                      variant="contained"
-                      color="primary"
-                      onClick={() => {
-                        console.log("Handle pm HERE");
-                        // setPmMode(true); //=====================
+                    {relationship.friendship !== "self" && (
+                      <Button
+                        variant="contained"
+                        color="primary"
+                        onClick={() => {
+                          console.log("Handle pm HERE");
+                          // setPmMode(true); //=====================
 
-                        if (loginStatus) {
-                          console.log("Prepare the message plkease");
-                          setPm({
-                            target: profileData.username,
-                            viewer: profileInfo.username
-                          });
-                        } else {
-                          alert("You must log in to use this feature!");
-                        }
-                      }}
-                    >
-                      Send message
-                    </Button>
+                          if (loginStatus) {
+                            // console.log("Prepare the message plkease");
+                            // console.log(
+                            //   profileData.username,
+                            //   profileInfo.username
+                            // );
+                            setPm({
+                              target: profileData.username,
+                              viewer: profileInfo.username
+                            });
+
+                            // {
+                            //   target: profileData.username,
+                            //   viewer: profileInfo.username
+                            // }
+                            console.log("hello peon");
+                          } else {
+                            alert("You must log in to use this feature!");
+                          }
+                        }}
+                      >
+                        Send message
+                      </Button>
+                    )}
                     {/* <Button
                       variant="contained"
                       color="secondary"

@@ -3088,11 +3088,3 @@ insert into private_message
   (sender_id, receiver_id, message_title, sent_message, time_of_post)
 values
   (15, 15, 'Cervus elaphus', 'Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Donec pharetra, magna vestibulum aliquet ultrices, erat tortor sollicitudin mi, sit amet lobortis sapien sapien non mi. Integer ac neque. Duis bibendum. Morbi non quam nec dui luctus rutrum. Nulla tellus. In sagittis dui vel nisl. Duis ac nibh. Fusce lacus purus, aliquet at, feugiat non, pretium quis, lectus. Suspendisse potenti.', '2019-02-02 04:32:32');
-
-
-
-
-
-
-
-
