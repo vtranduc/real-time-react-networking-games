@@ -1,67 +1,10 @@
-// 	return (
-// 		<div className="main">
-// 			<div id="register">
-// 				<h3>Register</h3>
-// 				<form onSubmit={handleSubmit}>
-// 					First Name:
-// 					<br />
-// 					<input
-// 						name="firstName"
-// 						value={user.firstName}
-// 						onChange={updateInput}
-// 					></input>
-// 					<br></br>
-// 					Last Name:
-// 					<br />
-// 					<input
-// 						name="lastName"
-// 						value={user.lastName}
-// 						onChange={updateInput}
-// 					></input>
-// 					<br></br>
-// 					Email:
-// 					<br />
-// 					<input name="email" value={user.email} onChange={updateInput}></input>
-// 					<br></br>
-// 					Username:
-// 					<br />
-// 					<input
-// 						name="username"
-// 						value={user.username}
-// 						onChange={updateInput}
-// 					></input>
-// 					<br></br>
-// 					Password:
-// 					<br />
-// 					<input
-// 						name="password"
-// 						value={user.password}
-// 						onChange={updateInput}
-// 					></input>
-// 					<br></br>
-// 					Confirm password:
-// 					<br />
-// 					<input
-// 						name="confirmPassword"
-// 						value={user.confirmPassword}
-// 						onChange={updateInput}
-// 					></input>
-// 					<br></br>
-// 					<input id="submit" type="submit" value="Submit" />
-// 				</form>
-// 			</div>
-// 		</div>
-// 	);
-// }
-
-// export default Register;
-
-// ------
-
 import React, { useState } from "react";
 import "../styles/register.css";
 import axios from "axios";
+import { Redirect } from "react-router-dom";
 function Register({ httpServer }) {
+	const [redirectStatus, setRedirectStatus] = useState(false);
+
 	const [user, setUser] = useState({
 		firstName: "",
 		lastName: "",
@@ -89,8 +32,7 @@ function Register({ httpServer }) {
 					avatar: "alsdjfalsdjfalsjf"
 				})
 				.then(response => {
-					if (response.data.length) {
-					}
+					console.log("nothing is here");
 				});
 		}
 	}
@@ -124,6 +66,7 @@ function Register({ httpServer }) {
 		event.preventDefault();
 
 		createUserSubmit();
+		if (user.username != "") setRedirectStatus(user.username);
 	}
 	function updateInput(event) {
 		switch (event.target.name) {
@@ -163,6 +106,7 @@ function Register({ httpServer }) {
 	}
 	return (
 		<div className="limiter">
+			{redirectStatus && <Redirect to={`/user/${redirectStatus}`} />}
 			<div className="container-login100">
 				<div className="wrap-login100 p-t-85 p-b-20" id="joieiscute">
 					<span className="login100-form-title p-b-70">Welcome</span>
