@@ -2,9 +2,10 @@ import React, { useEffect, useState } from "react";
 import useKeyPressMultiple from "../../helpers/useKeyPressMultiple";
 import useKeyPress from "../../helpers/useKeyPress";
 import ChatBox from "../chatBox/ChatBox";
+import Button from "@material-ui/core/Button";
 
 let room;
-let soccerGameTextId;
+let soccerGameTextId = "soccerGameTextIdForChatting";
 
 export default function Soccer({
   socket,
@@ -59,7 +60,7 @@ export default function Soccer({
   const [entry, setEntry] = useState({ inQueue: false, msg: "" });
 
   useEffect(() => {
-    soccerGameTextId = lobbyNavigation;
+    // soccerGameTextId = lobbyNavigation;
     room = lobbyNavigation;
     setLobbyNavigation(null);
     socket.emit("soccerInit", {
@@ -223,14 +224,43 @@ export default function Soccer({
             }}
           >
             {gameStat.timeRemaining > 0 ? (
-              <h3>
+              <h3
+                style={{
+                  width: "100%",
+                  marginLeft: "0.5em"
+                  // display: "flex",
+                  // justifyContent: "center"
+                }}
+              >
                 Score: {gameStat.score.A} - {gameStat.score.B} Time remaining:{" "}
                 {gameStat.timeRemaining} s
               </h3>
             ) : (
-              <h3>
-                Score: {gameStat.score.A} - {gameStat.score.B} Game Over
-              </h3>
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "row",
+                  justifyContent: "space-evenly"
+                }}
+              >
+                <h3>
+                  Score: {gameStat.score.A} - {gameStat.score.B} Game Over
+                </h3>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={() => {
+                    console.log("Restart counter now!");
+                    socket.emit("soccerRestartTheTimer", {
+                      gameTime: config.gameTime,
+                      room: room
+                    });
+                  }}
+                >
+                  Rematch
+                </Button>
+              </div>
+              //================HEREEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE
             )}
           </div>
 

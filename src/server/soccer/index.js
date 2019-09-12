@@ -84,6 +84,11 @@ const soccerGame = function(
     }
   });
 
+  socket.on("soccerRestartTheTimer", data => {
+    // console.log("game Time received!", data.gameTime);
+    soccerData[data.room].timeRemaining = data.gameTime;
+  });
+
   // ==============ALL THE DISCONNECTIONS==============================
 
   socket.on("soccerDisconnect", room => {
