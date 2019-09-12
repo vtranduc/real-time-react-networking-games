@@ -1,90 +1,90 @@
 insert into users
-  (id, username, first_name, last_name, bio, email, pass, avatar, background, game_character)
+  ( username, first_name, last_name, bio, email, pass, avatar, background, game_character)
 values
-  (1, 'anelmes0', 'Alisun', 'Nelmes', '
-Another year brakes a relevant chair. How can the gulf grade the careful wit? The hysterical worst malfunctions. An ancient yields the digest. Can a censor reason next to the telling doubt?', 'anelmes0@aboutads.info', 'hs2P9H9nH3', 'https://media.giphy.com/media/l3V0x6kdXUW9M4ONq/giphy.gif', 'https://media.giphy.com/media/Qg3JRN2ntgxWHqj5dd/giphy.gif', 'http://dummyimage.com/116x168.bmp/ff4444/ffffff');
+  ('anelmes0', 'Alisun', 'Nelmes', '
+Another year brakes a relevant chair. How can the gulf grade the careful wit? The hysterical worst malfunctions. An ancient yields the digest. Can a censor reason next to the telling doubt?', 'anelmes0@aboutads.info', 'hs2P9H9nH3', 'https://media.giphy.com/media/l3V0x6kdXUW9M4ONq/giphy.gif', 'https://media.giphy.com/media/Qg3JRN2ntgxWHqj5dd/giphy.gif', 'https://www.pinclipart.com/picdir/big/211-2116499_pigs-clipart-mouth-maple-story-png-download.png');
 insert into users
-  (id, username, first_name, last_name, bio, email, pass, avatar, background, game_character)
+  (username, first_name, last_name, bio, email, pass, avatar, background, game_character)
 values
-  (2, 'cstrettell1', 'Claudine', 'Strettell', 'The piano reverts on top of the charter! The rectangle rolls before the incapable revenge. A contour overlaps against the thumb. An automobile cashes a purchase within a supporting cluster. A copyright adjective balls a worm under his outright gasp.', 'cstrettell1@gnu.org', '1Ew4XBqR6JqM', 'https://media.giphy.com/media/1442OZn3sn50kw/giphy.gif', 'https://media.giphy.com/media/cmegx6SssTKmEFEcwj/giphy.gif', 'http://dummyimage.com/201x165.bmp/ff4444/ffffff');
+  ('cstrettell1', 'Claudine', 'Strettell', 'The piano reverts on top of the charter! The rectangle rolls before the incapable revenge. A contour overlaps against the thumb. An automobile cashes a purchase within a supporting cluster. A copyright adjective balls a worm under his outright gasp.', 'cstrettell1@gnu.org', '1Ew4XBqR6JqM', 'https://media.giphy.com/media/1442OZn3sn50kw/giphy.gif', 'https://media.giphy.com/media/cmegx6SssTKmEFEcwj/giphy.gif', 'https://cdn.imgbin.com/14/4/5/imgbin-maplestory-computer-icons-mushroom-mushroom-CduWYqhJsLT86C2rBN1cKgn9K.jpg');
 insert into users
-  (id, username, first_name, last_name, bio, email, pass, avatar, background, game_character)
+  ( username, first_name, last_name, bio, email, pass, avatar, background, game_character)
 values
-  (3, 'cdugood2', 'Claire', 'Dugood', 'A coast computerizes the designed excess. A native changes past a keeper! Another retired company worries against an idiot. The freezing chain writes with this stroke. When can an axiom kidnap an adjacent welcome?', 'cdugood2@spotify.com', 'Qbs7vfylikfH', 'https://media.giphy.com/media/F4unHpLQYlQKQ/giphy.gif', 'https://media.giphy.com/media/UYgkFrfCaPJEk/giphy.gif', 'http://dummyimage.com/196x165.jpg/5fa2dd/ffffff');
+  ('cdugood2', 'Claire', 'Dugood', 'A coast computerizes the designed excess. A native changes past a keeper! Another retired company worries against an idiot. The freezing chain writes with this stroke. When can an axiom kidnap an adjacent welcome?', 'cdugood2@spotify.com', 'Qbs7vfylikfH', 'https://media.giphy.com/media/F4unHpLQYlQKQ/giphy.gif', 'https://media.giphy.com/media/UYgkFrfCaPJEk/giphy.gif', 'https://static.maplewiki.net/e/ed/MapleStory_ExplorerAdventurer_Warrior.png');
 insert into users
-  (id, username, first_name, last_name, bio, email, pass, avatar, background, game_character)
+  ( username, first_name, last_name, bio, email, pass, avatar, background, game_character)
 values
-  (4, 'cdohms3', 'Casi', 'Dohms', 'The threshold reaches past a calendar. My miscellaneous attack battles the giving radius. The wish extends the pedal slag before the female. The noble leaks without the coal. A seed rages?', 'cdohms3@craigslist.org', 'lvG7W7i', 'http://giphygifs.s3.amazonaws.com/media/p4xp4BjHIdane/giphy.gif', 'https://media.giphy.com/media/PU9ae3tuWoJCU/giphy.gif', 'http://dummyimage.com/149x131.png/5fa2dd/ffffff');
+  ( 'cdohms3', 'Casi', 'Dohms', 'The threshold reaches past a calendar. My miscellaneous attack battles the giving radius. The wish extends the pedal slag before the female. The noble leaks without the coal. A seed rages?', 'cdohms3@craigslist.org', 'lvG7W7i', 'http://giphygifs.s3.amazonaws.com/media/p4xp4BjHIdane/giphy.gif', 'https://media.giphy.com/media/PU9ae3tuWoJCU/giphy.gif', 'https://myrealdomain.com/images/hayato-maple-story-5.png');
 insert into users
-  (id, username, first_name, last_name, bio, email, pass, avatar, background, game_character)
+  ( username, first_name, last_name, bio, email, pass, avatar, background, game_character)
 values
-  (5, 'oblunn4', 'Olvan', 'Blunn', '
-A promise fumes under our misery. When will the unrelated group breathe outside a sundry? The threatened spray truncates the dual alliance. The giving system moans throughout the break. The disaster resumes an epic voice.', 'oblunn4@nifty.com', 'ahzGDtsmu7eO', 'https://media.giphy.com/media/ET5QsE8329VM4/giphy.gif', 'http://dummyimage.com/171x169.jpg/ff4444/ffffff', 'http://dummyimage.com/176x107.bmp/dddddd/000000');
+  ( 'oblunn4', 'Olvan', 'Blunn', '
+A promise fumes under our misery. When will the unrelated group breathe outside a sundry? The threatened spray truncates the dual alliance. The giving system moans throughout the break. The disaster resumes an epic voice.', 'oblunn4@nifty.com', 'ahzGDtsmu7eO', 'https://media.giphy.com/media/ET5QsE8329VM4/giphy.gif', 'http://dummyimage.com/171x169.jpg/ff4444/ffffff', 'https://p7.hiclipart.com/preview/408/966/429/maplestory-2-warrior-chibi-warrior.jpg');
 insert into users
-  (id, username, first_name, last_name, bio, email, pass, avatar, background, game_character)
+  (username, first_name, last_name, bio, email, pass, avatar, background, game_character)
 values
-  (6, 'wstanlake5', 'Wernher', 'Stanlake', 'The cooking principal twists with the embarrassed geology. The adapted gang blinks the waffle underneath the decreased struggle. Why does a heated marriage count? The consumer rattles on top of the material boot.', 'wstanlake5@walmart.com', 'tTdMrzzzjAHZ', 'https://media.giphy.com/media/vbD9OoDgUOpkk/giphy.gif', 'https://media.giphy.com/media/PfOl3y0fSoqR2/giphy.gif', 'http://dummyimage.com/210x102.png/ff4444/ffffff');
+  ( 'wstanlake5', 'Wernher', 'Stanlake', 'The cooking principal twists with the embarrassed geology. The adapted gang blinks the waffle underneath the decreased struggle. Why does a heated marriage count? The consumer rattles on top of the material boot.', 'wstanlake5@walmart.com', 'tTdMrzzzjAHZ', 'https://media.giphy.com/media/vbD9OoDgUOpkk/giphy.gif', 'https://media.giphy.com/media/PfOl3y0fSoqR2/giphy.gif', 'https://i7.pngguru.com/preview/134/472/8/maplestory-2-t-shirt-fan-art-youtube-t-shirt.jpg');
 insert into users
-  (id, username, first_name, last_name, bio, email, pass, avatar, background, game_character)
+  (username, first_name, last_name, bio, email, pass, avatar, background, game_character)
 values
-  (7, 'rlongstaff6', 'Rollin', 'Longstaff', 'My boss offers the smallest paranoid. A disgusting praise buggers the electron. Why does the exhibit legitimize an atheism lecture? A prize gifts a lunch. The playground tubes the evil around the freezing poster.', 'rlongstaff6@about.com', '66is9AvHts', 'https://media.giphy.com/media/dFWZ6mC5CxIBy/giphy.gif', 'https://media.giphy.com/media/3o6gbeVN2ZPbG2COKA/giphy.gif', 'http://dummyimage.com/232x100.bmp/ff4444/ffffff');
+  ('rlongstaff6', 'Rollin', 'Longstaff', 'My boss offers the smallest paranoid. A disgusting praise buggers the electron. Why does the exhibit legitimize an atheism lecture? A prize gifts a lunch. The playground tubes the evil around the freezing poster.', 'rlongstaff6@about.com', '66is9AvHts', 'https://media.giphy.com/media/dFWZ6mC5CxIBy/giphy.gif', 'https://media.giphy.com/media/3o6gbeVN2ZPbG2COKA/giphy.gif', 'https://p7.hiclipart.com/preview/222/294/528/maplestory-2-blade-desktop-wallpaper-thief-blade.jpg');
 insert into users
-  (id, username, first_name, last_name, bio, email, pass, avatar, background, game_character)
+  ( username, first_name, last_name, bio, email, pass, avatar, background, game_character)
 values
-  (8, 'cgrammer7', 'Carlyle', 'Grammer', 'How will the opus mate the airport? Every humble east riots next to the atom. The bargain breaches a mimic near the analogue digest. The blank tears into a misfortune. Can a dust cough? Will an officer spread a loose cyclist?', 'cgrammer7@yandex.ru', 'DfQHfTE0W', 'http://giphygifs.s3.amazonaws.com/media/5xqKWd6761tkY/giphy.gif', 'https://media.giphy.com/media/CIjXMxobcEnkI/giphy.gif', 'http://dummyimage.com/176x143.bmp/ff4444/ffffff');
+  ('cgrammer7', 'Carlyle', 'Grammer', 'How will the opus mate the airport? Every humble east riots next to the atom. The bargain breaches a mimic near the analogue digest. The blank tears into a misfortune. Can a dust cough? Will an officer spread a loose cyclist?', 'cgrammer7@yandex.ru', 'DfQHfTE0W', 'http://giphygifs.s3.amazonaws.com/media/5xqKWd6761tkY/giphy.gif', 'https://media.giphy.com/media/CIjXMxobcEnkI/giphy.gif', 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRSXyeFApsDe-xOzZ6lbJcE6-mKGIkk6M-EcULgvEnS1yJEAnp4gg');
 insert into users
-  (id, username, first_name, last_name, bio, email, pass, avatar, background, game_character)
+  ( username, first_name, last_name, bio, email, pass, avatar, background, game_character)
 values
-  (9, 'demett8', 'Desiri', 'Emett', 'The monkey chases the impaired numeral. A firework organizes the accident. The zone fears the twenty onion. The entrance chews on top of your headline. A gentleman chops the crush.', 'demett8@si.edu', 'M5jH8fw', 'http://giphygifs.s3.amazonaws.com/media/13BwjdpxACoBPO/giphy.gif', 'https://media.giphy.com/media/NsBknNwmmWE8WU1q2U/giphy.gif', 'http://dummyimage.com/159x239.bmp/ff4444/ffffff');
+  ('demett8', 'Desiri', 'Emett', 'The monkey chases the impaired numeral. A firework organizes the accident. The zone fears the twenty onion. The entrance chews on top of your headline. A gentleman chops the crush.', 'demett8@si.edu', 'M5jH8fw', 'http://giphygifs.s3.amazonaws.com/media/13BwjdpxACoBPO/giphy.gif', 'https://media.giphy.com/media/NsBknNwmmWE8WU1q2U/giphy.gif', 'https://cdn.imgbin.com/13/16/7/imgbin-maplestory-2-wizard-skill-game-maple-story-670s3pXAhyC21wRnrereZ9z6y.jpg');
 insert into users
-  (id, username, first_name, last_name, bio, email, pass, avatar, background, game_character)
+  ( username, first_name, last_name, bio, email, pass, avatar, background, game_character)
 values
-  (10, 'madame9', 'Myrilla', 'Adame', 'The smashing collective configures a changed rat. When can the boredom gutter a unexplained crisp? The diameter dislikes the odd bush throughout whatever chief. The mumble deeds my attack.', 'madame9@foxnews.com', '0xPTIKIiM', 'https://media.giphy.com/media/AxVvjOTeDz1EhGVfHy/giphy.gif', 'https://media.giphy.com/media/it6W8D4FfvaPC/giphy.gif', 'http://dummyimage.com/176x155.bmp/5fa2dd/ffffff');
+  ( 'madame9', 'Myrilla', 'Adame', 'The smashing collective configures a changed rat. When can the boredom gutter a unexplained crisp? The diameter dislikes the odd bush throughout whatever chief. The mumble deeds my attack.', 'madame9@foxnews.com', '0xPTIKIiM', 'https://media.giphy.com/media/AxVvjOTeDz1EhGVfHy/giphy.gif', 'https://media.giphy.com/media/it6W8D4FfvaPC/giphy.gif', 'https://vignette.wikia.nocookie.net/maplestory/images/1/13/Artwork_Dawn_Warrior_%28Cygnus_Returns%2C_Female%29.png/revision/latest?cb=20130411134644');
 insert into users
-  (id, username, first_name, last_name, bio, email, pass, avatar, background, game_character)
+  (username, first_name, last_name, bio, email, pass, avatar, background, game_character)
 values
-  (11, 'jniesea', 'Jerrilee', 'Niese', 'The jargon ditches the corpse around the increased needle. How will a rattled tool toe the line? A bulb toes a deaf. The wealthy inventor alarms an approval within the optic chamber. The waste vintages the approved assault. When will the method fuss?', 'jniesea@foxnews.com', '11E5MurF', 'https://media.giphy.com/media/3o72F7YT6s0EMFI0Za/giphy.gif', 'http://dummyimage.com/162x141.png/ff4444/ffffff', 'http://dummyimage.com/110x237.png/ff4444/ffffff');
+  ('jniesea', 'Jerrilee', 'Niese', 'The jargon ditches the corpse around the increased needle. How will a rattled tool toe the line? A bulb toes a deaf. The wealthy inventor alarms an approval within the optic chamber. The waste vintages the approved assault. When will the method fuss?', 'jniesea@foxnews.com', '11E5MurF', 'https://media.giphy.com/media/3o72F7YT6s0EMFI0Za/giphy.gif', 'http://dummyimage.com/162x141.png/ff4444/ffffff', 'https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/58393363-6ead-470b-a6b8-38a20a5ab501/d7z1fzz-959ba365-0e04-4501-a528-351df7ffd897.png?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiJcL2ZcLzU4MzkzMzYzLTZlYWQtNDcwYi1hNmI4LTM4YTIwYTVhYjUwMVwvZDd6MWZ6ei05NTliYTM2NS0wZTA0LTQ1MDEtYTUyOC0zNTFkZjdmZmQ4OTcucG5nIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0.KZ_uccgzb_JQg5IC6WzKQC49OFtreyXKxpewOchj3A8');
 insert into users
-  (id, username, first_name, last_name, bio, email, pass, avatar, background, game_character)
+  ( username, first_name, last_name, bio, email, pass, avatar, background, game_character)
 values
-  (12, 'rgrindleyb', 'Roderick', 'Grindley', '
-The postponed praise cakes the wide faithful. Above the jungle speaks a garble. An answer despairs underneath an unhappy kernel. The compelled teapot escapes.', 'rgrindleyb@mysql.com', 'siUOQfGIk4t', 'https://media.giphy.com/media/lqMg6hf8Mie9cvsrmi/giphy.gif', 'https://media.giphy.com/media/Y3pWLF3gLBxzZlbY9l/giphy.gif', 'http://dummyimage.com/238x169.bmp/ff4444/ffffff');
+  ( 'rgrindleyb', 'Roderick', 'Grindley', '
+The postponed praise cakes the wide faithful. Above the jungle speaks a garble. An answer despairs underneath an unhappy kernel. The compelled teapot escapes.', 'rgrindleyb@mysql.com', 'siUOQfGIk4t', 'https://media.giphy.com/media/lqMg6hf8Mie9cvsrmi/giphy.gif', 'https://media.giphy.com/media/Y3pWLF3gLBxzZlbY9l/giphy.gif', 'https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/4fd83024-f33e-47bf-93ee-6378cf2c2999/d5s5rb1-7654cd93-03c5-4743-8712-9fa7a095bc35.png?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiJcL2ZcLzRmZDgzMDI0LWYzM2UtNDdiZi05M2VlLTYzNzhjZjJjMjk5OVwvZDVzNXJiMS03NjU0Y2Q5My0wM2M1LTQ3NDMtODcxMi05ZmE3YTA5NWJjMzUucG5nIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0.tFtDFYJ7DEidKADAog0m3Ow5qAym6jHzBsoSDy9Be7A');
 insert into users
-  (id, username, first_name, last_name, bio, email, pass, avatar, background, game_character)
+  (username, first_name, last_name, bio, email, pass, avatar, background, game_character)
 values
-  (13, 'esenyardc', 'Elroy', 'Senyard', '
-The broadcast target pauses over the horizontal stomach. The silicon finishes behind a wash. The bulk whale pops each alcoholic. Around an army hurts the mountain.', 'esenyardc@ftc.gov', 'YGZB0xz0pK', 'https://media.giphy.com/media/QZ0UB3nJtVNn2/giphy.gif', 'https://media.giphy.com/media/V9bDSnlSfPndC/giphy.gif', 'http://dummyimage.com/231x244.png/cc0000/ffffff');
+  ( 'esenyardc', 'Elroy', 'Senyard', '
+The broadcast target pauses over the horizontal stomach. The silicon finishes behind a wash. The bulk whale pops each alcoholic. Around an army hurts the mountain.', 'esenyardc@ftc.gov', 'YGZB0xz0pK', 'https://media.giphy.com/media/QZ0UB3nJtVNn2/giphy.gif', 'https://media.giphy.com/media/V9bDSnlSfPndC/giphy.gif', 'https://i.pinimg.com/originals/f0/8e/12/f08e12ae1d44198fb861003e7c86a5cd.png');
 insert into users
-  (id, username, first_name, last_name, bio, email, pass, avatar, background, game_character)
+  ( username, first_name, last_name, bio, email, pass, avatar, background, game_character)
 values
-  (14, 'cchevalierd', 'Cacilie', 'Chevalier', '
+  ( 'cchevalierd', 'Cacilie', 'Chevalier', '
 A spurious climate gossips. Does the irony disorder prize the corrupt author? The molecular deposit weds across the often museum. The signature amazes a wash.', 'cchevalierd@admin.ch', 'HTKKksmio', 'https://media.giphy.com/media/OK5LK5zLFfdm/giphy.gif', 'https://media.giphy.com/media/3oKIPiGuhpBD1c7CUM/giphy.gif', 'http://dummyimage.com/229x226.jpg/5fa2dd/ffffff');
 insert into users
-  (id, username, first_name, last_name, bio, email, pass, avatar, background, game_character)
+  ( username, first_name, last_name, bio, email, pass, avatar, background, game_character)
 values
-  (15, 'dbodocse', 'Durante', 'Bodocs', 'How will another estate worm the liaison? The waved jail follows a gang. The snobbery scratches on top of the foul derivative. The medieval affair finalizes the firework. The blest dogma waves over her beloved. The disposable scroll doubts the march before the mandatory degenerate.', 'dbodocse@cyberchimps.com', 'GWO93NQpBC', 'https://media.giphy.com/media/iGjhr8hINJiSY/giphy.gif', 'http://dummyimage.com/146x205.jpg/dddddd/000000', 'http://dummyimage.com/203x222.png/cc0000/ffffff');
+  ( 'dbodocse', 'Durante', 'Bodocs', 'How will another estate worm the liaison? The waved jail follows a gang. The snobbery scratches on top of the foul derivative. The medieval affair finalizes the firework. The blest dogma waves over her beloved. The disposable scroll doubts the march before the mandatory degenerate.', 'dbodocse@cyberchimps.com', 'GWO93NQpBC', 'https://media.giphy.com/media/iGjhr8hINJiSY/giphy.gif', 'http://dummyimage.com/146x205.jpg/dddddd/000000', 'https://vignette.wikia.nocookie.net/maplestory/images/3/3c/Artwork_Pirate_%28RED%2C_Female%29.png/revision/latest?cb=20130628055334');
 insert into users
-  (id, username, first_name, last_name, bio, email, pass, avatar, background, game_character)
+  ( username, first_name, last_name, bio, email, pass, avatar, background, game_character)
 values
-  (16, 'mhackeltonf', 'Mercedes', 'Hackelton', 'The democratic censor lurks. The force tunnels the royal. The patent rots with the world. The farce flames a truncate capital.', 'mhackeltonf@wordpress.com', 'UF3JHvMCMk', 'https://media.giphy.com/media/PfOl3y0fSoqR2/giphy.gif', 'http://dummyimage.com/142x212.png/cc0000/ffffff', 'http://dummyimage.com/114x207.png/ff4444/ffffff');
+  ('mhackeltonf', 'Mercedes', 'Hackelton', 'The democratic censor lurks. The force tunnels the royal. The patent rots with the world. The farce flames a truncate capital.', 'mhackeltonf@wordpress.com', 'UF3JHvMCMk', 'https://media.giphy.com/media/PfOl3y0fSoqR2/giphy.gif', 'http://dummyimage.com/142x212.png/cc0000/ffffff', 'https://cdn.imgbin.com/12/1/3/imgbin-maplestory-2-character-warrior-video-game-maplestory-monster-Y1MqyMrQUuiEGEzAfP2YwJqVb.jpg');
 insert into users
-  (id, username, first_name, last_name, bio, email, pass, avatar, background, game_character)
+  ( username, first_name, last_name, bio, email, pass, avatar, background, game_character)
 values
-  (17, 'rdiggesg', 'Reine', 'Digges', 'The graduate reports a unaffected cabinet. The apple indulges below a cider. The exploding attitude belts the emptied geology. Her worth army exits outside this vile college. Any kidnapped banana triumphs with her predicted fur.', 'rdiggesg@netvibes.com', 'HSnQHAc3wYk', 'https://robohash.org/namoccaecatiet.jpg?size=100x100&set=set1', 'https://media.giphy.com/media/ihYzl6Wza2jjn0ko6v/giphy.gif', 'http://dummyimage.com/143x208.jpg/ff4444/ffffff');
+  ('rdiggesg', 'Reine', 'Digges', 'The graduate reports a unaffected cabinet. The apple indulges below a cider. The exploding attitude belts the emptied geology. Her worth army exits outside this vile college. Any kidnapped banana triumphs with her predicted fur.', 'rdiggesg@netvibes.com', 'HSnQHAc3wYk', 'https://robohash.org/namoccaecatiet.jpg?size=100x100&set=set1', 'https://media.giphy.com/media/ihYzl6Wza2jjn0ko6v/giphy.gif', 'https://static.tvtropes.org/pmwiki/pub/images/maplestory-thief_2321.png');
 insert into users
-  (id, username, first_name, last_name, bio, email, pass, avatar, background, game_character)
+  (username, first_name, last_name, bio, email, pass, avatar, background, game_character)
 values
-  (18, 'iquinneyh', 'Innis', 'Quinney', '
-The coach runs. The troop watches the teacher. How can your remainder yield to the pure percentage? An applause exists beside a catching supernatural. The impersonal kernel colors.', 'iquinneyh@ft.com', 'Ab13XUwJbpGN', 'https://media.giphy.com/media/fdG5L6754aLgqXMTFq/giphy.gif', 'https://media.giphy.com/media/28D7zMmgtlGybTxmJN/giphy.gif', 'http://dummyimage.com/133x241.bmp/dddddd/000000');
+  ('iquinneyh', 'Innis', 'Quinney', '
+The coach runs. The troop watches the teacher. How can your remainder yield to the pure percentage? An applause exists beside a catching supernatural. The impersonal kernel colors.', 'iquinneyh@ft.com', 'Ab13XUwJbpGN', 'https://media.giphy.com/media/fdG5L6754aLgqXMTFq/giphy.gif', 'https://media.giphy.com/media/28D7zMmgtlGybTxmJN/giphy.gif', 'https://vignette.wikia.nocookie.net/maplestory/images/0/0e/Evan_F.png/revision/latest?cb=20100511061020');
 insert into users
-  (id, username, first_name, last_name, bio, email, pass, avatar, background, game_character)
+  (username, first_name, last_name, bio, email, pass, avatar, background, game_character)
 values
-  (19, 'msussansi', 'Marylynne', 'Sussans', '
-The example measures the indicator. With the accomplished mandate explodes a leaded surplus. A consequence behaves? The confidence attends under an influential race. The wiring ploy wipes the random pit.', 'msussansi@tamu.edu', 'w4DFuD47eys4', 'https://media.giphy.com/media/3CSDXE3UCIiWPdqwql/giphy.gif', 'https://media.giphy.com/media/2JmKgNgG1gjAI/giphy.gif', 'http://dummyimage.com/120x153.jpg/5fa2dd/ffffff');
+  ( 'msussansi', 'Marylynne', 'Sussans', '
+The example measures the indicator. With the accomplished mandate explodes a leaded surplus. A consequence behaves? The confidence attends under an influential race. The wiring ploy wipes the random pit.', 'msussansi@tamu.edu', 'w4DFuD47eys4', 'https://media.giphy.com/media/3CSDXE3UCIiWPdqwql/giphy.gif', 'https://media.giphy.com/media/2JmKgNgG1gjAI/giphy.gif', 'https://vignette.wikia.nocookie.net/cxzcxzcedfeqwfdew/images/f/f0/Bishop.png/revision/latest?cb=20180924032158');
 insert into users
-  (id, username, first_name, last_name, bio, email, pass, avatar, background, game_character)
+  ( username, first_name, last_name, bio, email, pass, avatar, background, game_character)
 values
-  (20, 'mdanitj', 'Madel', 'Danit', 'I am super smart man you know', 'mdanitj@facebook.com', 'OAkaI0R', 'https://robohash.org/recusandaeautsed.png?size=100x100&set=set1', 'https://media.giphy.com/media/YMvQhzCgaB3wAXArNT/giphy.gif', 'http://dummyimage.com/119x147.bmp/ff4444/ffffff');
+  ( 'mdanitj', 'Madel', 'Danit', 'I am super smart man you know', 'mdanitj@facebook.com', 'OAkaI0R', 'https://robohash.org/recusandaeautsed.png?size=100x100&set=set1', 'https://media.giphy.com/media/YMvQhzCgaB3wAXArNT/giphy.gif', 'https://vignette.wikia.nocookie.net/vsbattles/images/2/29/Artwork_Hilla.png/revision/latest?cb=20160813014140');
 
 
 
@@ -3088,11 +3088,3 @@ insert into private_message
   (sender_id, receiver_id, message_title, sent_message, time_of_post)
 values
   (15, 15, 'Cervus elaphus', 'Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Donec pharetra, magna vestibulum aliquet ultrices, erat tortor sollicitudin mi, sit amet lobortis sapien sapien non mi. Integer ac neque. Duis bibendum. Morbi non quam nec dui luctus rutrum. Nulla tellus. In sagittis dui vel nisl. Duis ac nibh. Fusce lacus purus, aliquet at, feugiat non, pretium quis, lectus. Suspendisse potenti.', '2019-02-02 04:32:32');
-
-
-
-
-
-
-
-

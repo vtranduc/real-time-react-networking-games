@@ -1,4 +1,3 @@
-
 DROP TABLE IF EXISTS users
 CASCADE;
 DROP TABLE IF EXISTS soccer_player
@@ -20,12 +19,12 @@ CREATE TABLE users
   username VARCHAR NOT NULL,
   first_name VARCHAR(255) NOT NULL,
   last_name VARCHAR(255) NOT NULL,
-  bio TEXT NOT NULL,
+  bio TEXT ,
   email VARCHAR(255) NOT NULL,
   pass VARCHAR(255) NOT NULL,
-  avatar TEXT NOT NULL,
-  background TEXT NOT NULL,
-  game_character TEXT NOT NULL
+  avatar TEXT,
+  background TEXT,
+  game_character TEXT
 
 );
 -- 
