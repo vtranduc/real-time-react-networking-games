@@ -61,21 +61,14 @@ function NavBar({
 									<li>Home</li>
 								</Link>
 								<Link
-									to="/aboutus"
-									onClick={() => {
-										// setPageName("About Me and My Love Viet");
-									}}
-								>
-									<li>About</li>
-								</Link>
-								<Link
 									to="/lobby"
 									onClick={() => {
 										// setPageName("Games Lobby");
 									}}
 								>
-									<li>Lobby</li>
+									Game Lobby
 								</Link>
+
 								<Link
 									to="/Login"
 									onClick={() => {
@@ -94,12 +87,12 @@ function NavBar({
 								</Link>
 
 								<Link
-									to="/chatworld"
+									to="/aboutus"
 									onClick={() => {
-										// setPageName("Games Lobby");
+										// setPageName("About Me and My Love Viet");
 									}}
 								>
-									Chat World
+									<li>About</li>
 								</Link>
 							</ul>
 						</div>
@@ -153,14 +146,6 @@ function NavBar({
 									<li>Home</li>
 								</Link>
 								<Link
-									to="/aboutus"
-									onClick={() => {
-										setPageName("About Me and My Love Viet");
-									}}
-								>
-									<li>About</li>
-								</Link>
-								<Link
 									to="/lobby"
 									onClick={() => {
 										setPageName("Games Lobby");
@@ -168,14 +153,7 @@ function NavBar({
 								>
 									<li>Game Lobby</li>
 								</Link>
-								<Link
-									to="/chatworld"
-									onClick={() => {
-										// setPageName("Games Lobby");
-									}}
-								>
-									Chat World
-								</Link>
+
 								<Link
 									to="/"
 									onClick={() => {
@@ -186,6 +164,14 @@ function NavBar({
 									}}
 								>
 									<li>Logout</li>
+								</Link>
+								<Link
+									to="/aboutus"
+									onClick={() => {
+										setPageName("About Me and My Love Viet");
+									}}
+								>
+									<li>About</li>
 								</Link>
 							</ul>
 						</div>
