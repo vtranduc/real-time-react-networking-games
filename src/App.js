@@ -23,7 +23,12 @@ import Cookies from "universal-cookie";
 import Pmbox from "./components/pmbox/Pmbox";
 import TestPm from "./components/TestPm";
 
+import { addResponseMessage } from "react-chat-widget";
+
 const serverPORT = 3001;
+
+let viewer;
+let target;
 
 function App() {
   //--------------------global states----------------------
@@ -37,6 +42,7 @@ function App() {
     trigger: false,
     username: null
   });
+  const [pm, setPm] = useState(null);
   //-------------------------------------------------------
   // let socket;
   // console.log("initializing app");
@@ -70,10 +76,12 @@ function App() {
                 username: response.data[0].username,
                 avatar: response.data[0].avatar
               });
+              socket.emit("whoIsOnlinePlayer", cookies.get("profile"));
             } else {
               console.log("did not find the user!");
               cookies.remove("profile");
               socket.emit("requestGuestProfile");
+              socket.emit("whoIsOnlinePlayer", null);
             }
           });
       } else {
@@ -93,12 +101,32 @@ function App() {
       };
       socket.on("catchGuestProfile", handleCatchGuestProfile);
     }
+    const handleCatchPmFromAUser = function(data) {
+      console.log("caught the response", data, pm);
+      if (viewer === data.target && target === data.viewer) {
+        addResponseMessage(data.msg);
+      }
+    };
+    if (socket) {
+      socket.on("catchPmFromAuser", handleCatchPmFromAUser);
+    }
     return () => {
-      if (socket && handleCatchGuestProfile) {
-        socket.removeListener("catchGuestProfile", handleCatchGuestProfile);
+      if (socket) {
+        socket.removeListener("catchPmFromAuser", handleCatchPmFromAUser);
+        if (handleCatchGuestProfile) {
+          socket.removeListener("catchGuestProfile", handleCatchGuestProfile);
+        }
       }
     };
   }, [socket]);
+
+  useEffect(() => {
+    // console.log("change in pm state");
+    if (pm) {
+      viewer = pm.viewer;
+      target = pm.target;
+    }
+  }, [pm]);
 
   return (
     <Router>
@@ -112,7 +140,7 @@ function App() {
         setToOtherUser={setToOtherUser}
         Profile={Profile}
       />
-
+      {pm && <Pmbox pm={pm} socket={socket}></Pmbox>}
       <Switch>
         <Route path="/" exact component={Home} />
         {/* <Route
@@ -215,6 +243,7 @@ function App() {
               <Profile
                 profileInfo={profileInfo}
                 setProfileInfo={setProfileInfo}
+                setPm={setPm}
                 httpServer={httpServer}
                 loginStatus={loginStatus}
                 socket={socket}

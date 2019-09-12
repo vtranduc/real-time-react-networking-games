@@ -20,7 +20,7 @@ import Fade from "@material-ui/core/Fade";
 import getLastItemFromURL from "../helpers/getLastItemFromURL";
 import CustomizePopover from "./customizePopover/CustomizePopover";
 import TextField from "@material-ui/core/TextField";
-import Pmbox from "./pmbox/Pmbox";
+// import Pmbox from "./pmbox/Pmbox";
 
 const useStyles = makeStyles(theme => ({
   typography: {
@@ -36,7 +36,8 @@ function Profile({
   socket,
   toOtherUser,
   setToOtherUser,
-  match
+  match,
+  setPm
 }) {
   // const [postList, setPostList] = useState([]);
   //axios call to get user messages
@@ -100,7 +101,8 @@ function Profile({
   // friendship is one of: "established", "received", "sending", "none", "self"
   // follow is boolean
   // both are null
-  const [pmMode, setPmMode] = useState(false);
+  // const [pmMode, setPmMode] = useState(false);
+  const [inbox, setInbox] = useState(null);
 
   useEffect(() => {
     // console.log("profileInfo: ", profileInfo);
@@ -119,6 +121,11 @@ function Profile({
       });
     };
     socket.on("profileReload", handleProfileReload);
+    const handleRetrieveInbox = function(data) {
+      // console.log("got back the data", data);
+      setInbox(data);
+    };
+    socket.on("retrieveInbox", handleRetrieveInbox);
     const handleBackFromUserToAnother = function() {
       // console.log("SWITCHED NINTENDO!");
       setToOtherUser({
@@ -130,13 +137,14 @@ function Profile({
     return () => {
       window.removeEventListener("popstate", handleBackFromUserToAnother);
       socket.removeListener("profileReload", handleProfileReload);
+      socket.removeListener("retrieveInbox", handleRetrieveInbox);
     };
   }, []);
 
   useEffect(() => {
     // console.log("changed trigger");
     if (toOtherUser.trigger) {
-      setPmMode(false);
+      // setPmMode(false);
       setToOtherUser({ ...toOtherUser, trigger: false });
       axios
         .post(`${httpServer}retrieveuserprofile`, {
@@ -186,6 +194,13 @@ function Profile({
             //         .includes(profileInfo.username)
             //     : null
             // });
+
+            if (res.data.friendship === "self") {
+              // console.log("Your own profile");
+              socket.emit("userRetrieveInbox", profileInfo.username);
+            } else {
+              // console.log("creep");
+            }
 
             setRelationship({
               friendship: loginStatus ? res.data.friendship : null,
@@ -527,9 +542,14 @@ function Profile({
                       color="primary"
                       onClick={() => {
                         console.log("Handle pm HERE");
-                        setPmMode(true);
+                        // setPmMode(true); //=====================
+
                         if (loginStatus) {
                           console.log("Prepare the message plkease");
+                          setPm({
+                            target: profileData.username,
+                            viewer: profileInfo.username
+                          });
                         } else {
                           alert("You must log in to use this feature!");
                         }
@@ -561,6 +581,57 @@ function Profile({
                   </div>
                   {/* </div> */}
                 </div>
+
+                {inbox && relationship && relationship.friendship === "self" && (
+                  <Paper
+                    className="big3"
+                    style={{ overflow: "auto", height: "70vh" }}
+                  >
+                    <h3 style={{ display: "flex", justifyContent: "center" }}>
+                      Recently messaged you
+                    </h3>
+                    <List>
+                      {inbox.map(post => {
+                        // console.log("nah");
+                        return (
+                          <ListItem key={`theInboxFrom${post.username}`}>
+                            <Link
+                              to={`/user/${post.username}`}
+                              onClick={() => {
+                                setToOtherUser({
+                                  trigger: true,
+                                  username: post.username
+                                });
+                              }}
+                            >
+                              <div
+                                style={{
+                                  width: "7vh",
+                                  height: "7vh",
+                                  position: "relative",
+                                  overflow: "hidden",
+                                  borderRadius: "50%",
+                                  margin: "1em"
+                                }}
+                              >
+                                <img
+                                  style={{
+                                    display: "inline",
+                                    margin: "0 auto",
+                                    height: "100%",
+                                    width: "auto"
+                                  }}
+                                  src={post.avatar}
+                                ></img>
+                              </div>
+                            </Link>
+                            <p>Received on {post.time_of_post}</p>
+                          </ListItem>
+                        );
+                      })}
+                    </List>
+                  </Paper>
+                )}
 
                 {/* -------------FRIENDS------------------------------------------------- */}
 
@@ -786,16 +857,62 @@ function Profile({
                                 src={following.avatar}
                               ></img>
                             </div>
-                            {/* <img
-                              style={{ borderRadius: "50%", height: "100%" }}
-                              src={following.avatar}
-                            ></img> */}
                           </Link>
                         </ListItem>
                       );
                     })}
                   </List>
                 </Paper>
+                {/* {inbox && (
+                  <Paper
+                    className="big3"
+                    style={{ overflow: "auto", height: "70vh" }}
+                  >
+                    <h3 style={{ display: "flex", justifyContent: "center" }}>
+                      Your inbox
+                    </h3>
+                    <List>
+                      {inbox.map(post => {
+                        // console.log("nah");
+                        return (
+                          <ListItem key={`theInboxFrom${post.username}`}>
+                            <Link
+                              to={`/user/${post.username}`}
+                              onClick={() => {
+                                setToOtherUser({
+                                  trigger: true,
+                                  username: post.username
+                                });
+                              }}
+                            >
+                              <div
+                                style={{
+                                  width: "7vh",
+                                  height: "7vh",
+                                  position: "relative",
+                                  overflow: "hidden",
+                                  borderRadius: "50%",
+                                  margin: "1em"
+                                }}
+                              >
+                                <img
+                                  style={{
+                                    display: "inline",
+                                    margin: "0 auto",
+                                    height: "100%",
+                                    width: "auto"
+                                  }}
+                                  src={post.avatar}
+                                ></img>
+                              </div>
+                            </Link>
+                            <p>Received on {post.time_of_post}</p>
+                          </ListItem>
+                        );
+                      })}
+                    </List>
+                  </Paper>
+                )} */}
               </div>
               <div className="right">
                 <form id="form-post">
@@ -973,7 +1090,7 @@ function Profile({
           ) : (
             <h3>The user does not exist!</h3>
           )}
-          {pmMode && (
+          {/* {pmMode && (
             <div>
               <Pmbox
                 viewer={profileInfo.username}
@@ -981,7 +1098,7 @@ function Profile({
                 socket={socket}
               ></Pmbox>
             </div>
-          )}
+          )} */}
         </div>
       ) : (
         //-----------------------------------------

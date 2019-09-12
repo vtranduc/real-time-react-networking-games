@@ -299,7 +299,10 @@ io.on("connection", socket => {
     if (onlinePlayers[socket.id]) {
       delete onlinePlayers[socket.id];
     }
-    // delete onlinePlayers[socket.id];
+  });
+  socket.on("whoIsOnlinePlayer", encryptedCookie => {
+    console.log("username ASSIGNING: ", encryptedCookie);
+    onlinePlayers[socket.id].username = cookieDecrypt(encryptedCookie);
   });
   //-----------------LOGGING------------------------------------
   // socket.on("setUpGuestProfile", () => {
@@ -339,7 +342,7 @@ io.on("connection", socket => {
   eggCatchGame(socket, io.sockets, io.sockets.adapter.rooms, gameData.eggCatch);
   lobby(socket, io.sockets, gameData, io);
   userProfileServerSocket(socket, io.sockets, io, pool);
-  privateMessage(socket, io.sockets, io, pool);
+  privateMessage(socket, io.sockets, io, pool, onlinePlayers);
 });
 
 // const getGuestId = function(socketId, defaultAvatars) {
