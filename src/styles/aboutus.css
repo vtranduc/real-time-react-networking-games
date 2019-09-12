@@ -65,13 +65,13 @@
 	min-height: 500px;
 }
 .pimg22 {
-	background-image: url("/assets/aboutus/lichking.jpg");
+	background-image: url("/assets/aboutus/profile3.jpg");
 	background-attachment: fixed;
 
 	min-height: 400px;
 }
 .pimg32 {
-	background-image: url("/assets/aboutus/kimiwa.jpg");
+	background-image: url("/assets/aboutus/profile4.jpg");
 	background-attachment: fixed;
 	background-position-x: -200px;
 	min-height: 400px;
@@ -137,23 +137,23 @@
 	scroll = normal */
 }
 .pimg11 {
-	background-image: url("/assets/aboutus/jj.jpg");
+	background-image: url("/assets/aboutus/profile2.jpg");
 	min-height: 500px;
 }
 .pimg21 {
-	background-image: url("/assets/aboutus/illidan.jpg");
+	background-image: url("/assets/aboutus/profile3.jpg");
 	background-attachment: fixed;
 
 	min-height: 400px;
 }
 .pimg31 {
-	background-image: url("/assets/aboutus/pokemon2.jpg");
+	background-image: url("/assets/aboutus/illidan.jpg");
 	background-attachment: fixed;
 
 	min-height: 400px;
 }
 .pimg41 {
-	background-image: url("/assets/aboutus/pokemon.jpg");
+	background-image: url("/assets/aboutus/profile4.jpg");
 	background-attachment: fixed;
 	min-height: 400px;
 }
