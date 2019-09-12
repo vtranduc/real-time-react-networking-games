@@ -114,7 +114,12 @@ export default function RockPaperScissors({ socket, profileInfo }) {
 
   useEffect(() => {
     if (chatMode.inQueue) {
-      socket.emit("rpsReceiveMsg", { room: room, msg: chatMode.msg });
+      socket.emit("rpsReceiveMsg", {
+        room: room,
+        msg: chatMode.msg,
+        username: profileInfo.username,
+        avatar: profileInfo.avatar
+      });
       setChatMode({ ...chatMode, inQueue: false, msg: "" });
     }
   }, [chatMode.inQueue]);
@@ -143,7 +148,7 @@ export default function RockPaperScissors({ socket, profileInfo }) {
           marginRight: "3vw",
           marginLeft: "3vw",
           marginBottom: "2vh",
-          height: "70vh",
+          height: "75vh",
           marginTop: "3vh",
           overflow: "auto"
         }}
@@ -176,8 +181,32 @@ export default function RockPaperScissors({ socket, profileInfo }) {
             {rpsData && (
               <List style={{ overflow: "auto", height: "100%" }}>
                 {rpsData.chats.map(chat => {
+                  console.log("my chat is here: ", chat);
                   return (
                     <ListItem key={chat.id}>
+                      <div
+                        // className="imageCropper"
+                        style={{
+                          width: "6vh",
+                          height: "6vh",
+                          position: "relative",
+                          overflow: "hidden",
+                          borderRadius: "50%",
+                          marginRight: "1em",
+                          marginLeft: "1em"
+                        }}
+                      >
+                        <img
+                          // className="croppedImage"  //====================TWILIO=======================
+                          style={{
+                            display: "inline",
+                            margin: "0 auto",
+                            height: "100%",
+                            width: "auto"
+                          }}
+                          src={chat.avatar}
+                        ></img>
+                      </div>
                       <Chip
                         label={chat.user}
                         style={{ marginRight: "1em" }}

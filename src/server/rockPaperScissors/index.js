@@ -64,8 +64,9 @@ const rockPaperScissorsGame = function(socket, sockets, rps, io) {
     if (rps[data.room]) {
       rps[data.room].chats.unshift({
         id: `rps${data.room}${socket.id}${rps[data.room].chats.length + 1}`,
-        user: socket.id,
-        msg: data.msg
+        user: data.username,
+        msg: data.msg,
+        avatar: data.avatar
       });
       sockets.to(data.room).emit("rpsAddBubble", {
         gameData: rpsGetStat(rps[data.room]),

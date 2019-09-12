@@ -261,7 +261,7 @@ function App() {
           exact
           render={() => {
             return socket ? (
-              <Soccer socket={socket} room={room} />
+              <Soccer socket={socket} room={room} profileInfo={profileInfo} />
             ) : (
               <h3>Waiting for socket</h3>
             );

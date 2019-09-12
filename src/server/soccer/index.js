@@ -66,8 +66,9 @@ const soccerGame = function(socket, sockets, rooms, soccerData, io) {
     if (soccerData[data.room]) {
       soccerData[data.room].chats.unshift({
         key: `soccer${data.room}${soccerData[data.room].chats.length + 1}`,
-        user: socket.id,
-        msg: data.msg
+        user: data.username,
+        msg: data.msg,
+        avatar: data.avatar
       });
       sockets.to(data.room).emit("soccerGetChat", soccerData[data.room].chats);
     } else {
