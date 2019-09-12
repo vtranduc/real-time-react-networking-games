@@ -19,14 +19,14 @@ const userProfileServerSocket = require("./user/serverSocket");
 //--------------------------------
 
 const {
-  getMessage,
-  getUserData,
-  postMessage,
-  getUserProfile,
-  createUser,
-  getFollowers,
-  getFollows,
-  getFriendList
+	getMessage,
+	getUserData,
+	postMessage,
+	getUserProfile,
+	createUser,
+	getFollowers,
+	getFollows,
+	getFriendList
 } = require("../../db/queries/allQueries");
 // app.get("/", (req, res) => {
 //   res.send("<h1>Hellow World</h1>");
@@ -43,32 +43,32 @@ app.set("trust proxy", 1); // trust first proxy
 const { Pool } = require("pg");
 //const dbParams = require("../lib/db.js");
 const pool = new Pool({
-  user: "postgres",
-  host: "localhost",
-  database: "gamefinal",
-  password: 123
+	user: "JJ",
+	host: "localhost",
+	database: "gamefinal",
+	password: 123
 });
 pool.connect();
 
 const getAllUsers = function() {
-  return pool
-    .query(
-      `SELECT id, username,first_name ,  avatar
+	return pool
+		.query(
+			`SELECT id, username,first_name ,  avatar
   FROM users`
-    )
-    .then(res => res.rows);
+		)
+		.then(res => res.rows);
 };
 const getUser = function(email, password) {
-  return pool
-    .query({
-      text: `SELECT id, username, first_name, avatar 
+	return pool
+		.query({
+			text: `SELECT id, username, first_name, avatar 
     FROM users 
     WHERE email = $1 AND pass = $2`,
-      values: [email, password]
-    })
-    .then(res => {
-      return res.rows;
-    });
+			values: [email, password]
+		})
+		.then(res => {
+			return res.rows;
+		});
 };
 
 //===================================
@@ -107,28 +107,28 @@ profileServerData(app, pool);
 // });
 
 app.post("/loggedInStatus", (req, res) => {
-  console.log("checking the cookie now");
-  // console.log("bomb: ", );
+	console.log("checking the cookie now");
+	// console.log("bomb: ", );
 
-  const username = cookieDecrypt(req.body.cookie);
+	const username = cookieDecrypt(req.body.cookie);
 
-  pool
-    .query({
-      text: `SELECT id, username, first_name, avatar 
+	pool
+		.query({
+			text: `SELECT id, username, first_name, avatar 
     FROM users 
     WHERE username = $1`,
-      values: [username]
-    })
-    .then(result => {
-      res.send(result.rows);
-    });
+			values: [username]
+		})
+		.then(result => {
+			res.send(result.rows);
+		});
 
-  // getUserProfile(username).then(result => {
-  //   res.send(result);
-  // });
+	// getUserProfile(username).then(result => {
+	//   res.send(result);
+	// });
 
-  // const someData = { dummy: "hello JAy cookie" };
-  // res.send(someData);
+	// const someData = { dummy: "hello JAy cookie" };
+	// res.send(someData);
 });
 
 //===================================
@@ -144,21 +144,19 @@ app.post("/loggedInStatus", (req, res) => {
 //----------------------------------------------------
 //-------------------router requests-------------------------
 app.get("/users", (req, res) => {
-  getAllUsers().then(result => {
-    return res.json(result);
-  });
+	getAllUsers().then(result => {
+		return res.json(result);
+	});
 });
 
 app.get("/getuser/:username", (req, res) => {
-  getUserProfile(req.params.username).then(result => {
-    res.send(result);
-  });
+	getUserProfile(req.params.username).then(result => {
+		res.send(result);
+	});
 });
 
 app.post("/login", (req, res) => {
-  // console.log("000000000000000000000000000000000000000000");
-  // console.log("FORM VALUES:", req.body);
-  // -----------------------------------
+
   getUser(req.body.email, req.body.password)
     .then(result => {
       console.log(result);
@@ -172,27 +170,28 @@ app.post("/login", (req, res) => {
     .catch(err => {
       console.log(err);
     });
+
 });
 
 // app.get()
 
 app.post("/register", (req, res) => {
-  createUser(
-    req.body.username,
-    req.body.firstName,
-    req.body.lastName,
-    req.body.email,
-    req.body.password,
-    req.body.avatar
-  );
+	createUser(
+		req.body.username,
+		req.body.firstName,
+		req.body.lastName,
+		req.body.email,
+		req.body.password,
+		req.body.avatar
+	);
 });
 
 // app.get("/jj", (req, res) => {});
 
 app.get("/:id", (req, res) => {
-  console.log(req.params);
-  const { id } = req.params;
-  res.send(id);
+	console.log(req.params);
+	const { id } = req.params;
+	res.send(id);
 });
 
 //-----------------------------------------------------------------------
@@ -200,7 +199,7 @@ app.get("/:id", (req, res) => {
 //------------API ROUTEs-------------------------------
 
 server.listen(PORT, () => {
-  console.log(`listening on Port ${PORT}`);
+	console.log(`listening on Port ${PORT}`);
 });
 
 // const defaultPlayerDataTest = {
@@ -214,22 +213,23 @@ const onlinePlayers = {};
 //------------------------------------------------------------------------
 
 defaultAvatars = [
-  // "https://avatarfiles.alphacoders.com/987/98744.gif",
-  "https://avatarfiles.alphacoders.com/527/52773.jpg",
-  "https://avatarfiles.alphacoders.com/715/71560.jpg",
-  "https://avatarfiles.alphacoders.com/106/10638.gif",
-  "https://avatarfiles.alphacoders.com/893/89303.gif",
-  "https://avatarfiles.alphacoders.com/822/82242.png",
-  "https://avatarfiles.alphacoders.com/633/63329.png",
-  "https://i.imgur.com/EsVWBJz.png",
-  "https://66.media.tumblr.com/98af64c609d1d3484f0f1ab7d464d200/tumblr_onzhhzWMbE1seeoy9o2_250.png",
-  "https://66.media.tumblr.com/16cea447c9af76216f54c4e0668b9dba/tumblr_pjsogf4hfM1w722h2o5_500.png",
-  "https://pbs.twimg.com/profile_images/571597459281829888/bjGTj5B9_400x400.png",
-  "https://cdn.discordapp.com/attachments/299832570693156874/619578961688789003/Eli1.png",
-  "https://avatarfiles.alphacoders.com/148/148267.png"
+	// "https://avatarfiles.alphacoders.com/987/98744.gif",
+	"https://avatarfiles.alphacoders.com/527/52773.jpg",
+	"https://avatarfiles.alphacoders.com/715/71560.jpg",
+	"https://avatarfiles.alphacoders.com/106/10638.gif",
+	"https://avatarfiles.alphacoders.com/893/89303.gif",
+	"https://avatarfiles.alphacoders.com/822/82242.png",
+	"https://avatarfiles.alphacoders.com/633/63329.png",
+	"https://i.imgur.com/EsVWBJz.png",
+	"https://66.media.tumblr.com/98af64c609d1d3484f0f1ab7d464d200/tumblr_onzhhzWMbE1seeoy9o2_250.png",
+	"https://66.media.tumblr.com/16cea447c9af76216f54c4e0668b9dba/tumblr_pjsogf4hfM1w722h2o5_500.png",
+	"https://pbs.twimg.com/profile_images/571597459281829888/bjGTj5B9_400x400.png",
+	"https://cdn.discordapp.com/attachments/299832570693156874/619578961688789003/Eli1.png",
+	"https://avatarfiles.alphacoders.com/148/148267.png"
 ];
 
 const gameData = {
+
   soccer: {
     lobby: {
       soccerRoom1: {
@@ -286,11 +286,13 @@ const gameData = {
   rockPaperScissors: {
     lobby: {}
   }
+
 };
 
 //------------------------------------------------------------------------
 
 io.on("connection", socket => {
+
   console.log("A user has been connected: ", socket.id);
   onlinePlayers[socket.id] = { username: null };
   console.log(onlinePlayers);
@@ -357,6 +359,7 @@ io.on("connection", socket => {
   lobby(socket, io.sockets, gameData, io, onlinePlayers);
   userProfileServerSocket(socket, io.sockets, io, pool);
   privateMessage(socket, io.sockets, io, pool, onlinePlayers);
+
 });
 
 // const getGuestId = function(socketId, defaultAvatars) {
