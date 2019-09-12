@@ -11,11 +11,10 @@ let room = "worldGameRoom";
 
 // let testVar = false;
 
-export default function World({ socket }) {
+export default function World({ socket, count, setCount }) {
 	let players = {};
 	let posTracker = {};
 	let platforms;
-	let randomNumber = Math.floor(Math.random() * 2);
 	// let texts = {};
 	let w, a, s, d;
 	//=START=============================================
@@ -196,6 +195,8 @@ export default function World({ socket }) {
 			this.add.image(1120, 600, "sideladder2");
 			this.add.image(840, 600, "sideladder");
 			socket.emit("worldRequestPlayers", { room, startingPoint });
+
+			// const handleWorldLoadPlayers = function(socketList) {};
 
 			socket.on("worldLoadPlayers", socketList => {
 				//this loads all players including the client itself into the game
@@ -384,10 +385,12 @@ export default function World({ socket }) {
 		game = new Phaser.Game(config);
 
 		return function cleanup() {
+			console.log("destroy the entire game");
 			socket.emit("worldDestroyPlayer", { room });
 			socket.removeListener("worldUpdatePlayerPosition");
 			socket.removeListener("worldLoadPlayers");
 			socket.removeListener("worldRequestPlayers");
+			socket.removeListener("worldInsertPlayer");
 			socket.removeListener("worldShowBubble", handleReceiveBubble);
 			game.destroy();
 			console.log("game destroy");

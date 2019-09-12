@@ -20,6 +20,7 @@ import Fade from "@material-ui/core/Fade";
 import getLastItemFromURL from "../helpers/getLastItemFromURL";
 import CustomizePopover from "./customizePopover/CustomizePopover";
 import TextField from "@material-ui/core/TextField";
+import Pmbox from "./pmbox/Pmbox";
 
 const useStyles = makeStyles(theme => ({
   typography: {
@@ -98,11 +99,13 @@ function Profile({
   // friendship is one of: "established", "received", "sending", "none", "self"
   // follow is boolean
   // both are null
+  const [pmMode, setPmMode] = useState(false);
 
   useEffect(() => {
     setToOtherUser({ trigger: true, username: match.params.username });
     const handleProfileReload = function() {
       // console.log("triggering reload chain reaction!");
+
       setToOtherUser({
         trigger: true,
         username: getLastItemFromURL(window.location.href)
@@ -130,6 +133,7 @@ function Profile({
   useEffect(() => {
     console.log("changed trigger");
     if (toOtherUser.trigger) {
+      setPmMode(false);
       setToOtherUser({ ...toOtherUser, trigger: false });
       axios
         .post(`${httpServer}retrieveuserprofile`, {
@@ -145,12 +149,15 @@ function Profile({
               background: res.data.background,
               followings: res.data.followings,
               followers: res.data.followers,
-              friends: [
-                ...new Set([
-                  ...res.data.friends.receivers,
-                  ...res.data.friends.senders
-                ])
-              ]
+              friends: combineArraysWithoutOverlap(
+                res.data.friends.receivers,
+                res.data.friends.senders
+              )
+              // ...new Set([
+              //   ...res.data.friends.receivers,
+              //   ...res.data.friends.senders
+              // ])
+              // ]
             };
 
             // console.log(
@@ -509,6 +516,22 @@ function Profile({
                         Follow
                       </Button>
                     )}
+
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      onClick={() => {
+                        console.log("Handle pm HERE");
+                        setPmMode(true);
+                        if (loginStatus) {
+                          console.log("Prepare the message plkease");
+                        } else {
+                          alert("You must log in to use this feature!");
+                        }
+                      }}
+                    >
+                      Send message
+                    </Button>
                     {/* <Button
                       variant="contained"
                       color="secondary"
@@ -945,6 +968,15 @@ function Profile({
           ) : (
             <h3>The user does not exist!</h3>
           )}
+          {pmMode && (
+            <div>
+              <Pmbox
+                viewer={profileInfo.username}
+                target={profileData.username}
+                socket={socket}
+              ></Pmbox>
+            </div>
+          )}
         </div>
       ) : (
         //-----------------------------------------
@@ -956,3 +988,13 @@ function Profile({
 }
 
 export default Profile;
+
+const combineArraysWithoutOverlap = function(arr1, arr2) {
+  let output = arr1;
+  for (let e of arr2) {
+    if (!output.map(eSub => eSub.username).includes(e.username)) {
+      output.push(e);
+    }
+  }
+  return output;
+};

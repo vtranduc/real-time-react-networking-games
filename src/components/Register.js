@@ -61,7 +61,10 @@
 import React, { useState } from "react";
 import "../styles/register.css";
 import axios from "axios";
+import { Redirect } from "react-router-dom";
 function Register({ httpServer }) {
+	const [redirectStatus, setRedirectStatus] = useState(false);
+
 	const [user, setUser] = useState({
 		firstName: "",
 		lastName: "",
@@ -90,6 +93,8 @@ function Register({ httpServer }) {
 				})
 				.then(response => {
 					if (response.data.length) {
+						setRedirectStatus(user.username);
+						//console.log("something here");
 					}
 				});
 		}
@@ -163,6 +168,7 @@ function Register({ httpServer }) {
 	}
 	return (
 		<div className="limiter">
+			{redirectStatus && <Redirect to={`/user/${redirectStatus}`} />}
 			<div className="container-login100">
 				<div className="wrap-login100 p-t-85 p-b-20" id="joieiscute">
 					<span className="login100-form-title p-b-70">Welcome</span>
@@ -170,7 +176,8 @@ function Register({ httpServer }) {
 					<form onSubmit={handleSubmit}>
 						<div
 							className="wrap-input100 validate-input m-t-85 m-b-35"
-							data-validate="Enter username">
+							data-validate="Enter username"
+						>
 							<input
 								className="input100"
 								type="text"
@@ -180,12 +187,14 @@ function Register({ httpServer }) {
 							/>
 							<span
 								className="focus-input100"
-								data-placeholder="First Name"></span>
+								data-placeholder="First Name"
+							></span>
 						</div>
 
 						<div
 							className="wrap-input100 validate-input m-b-50"
-							data-validate="Enter password">
+							data-validate="Enter password"
+						>
 							<input
 								className="input100"
 								type="text"
@@ -195,12 +204,14 @@ function Register({ httpServer }) {
 							/>
 							<span
 								className="focus-input100"
-								data-placeholder="Last Name"></span>
+								data-placeholder="Last Name"
+							></span>
 						</div>
 
 						<div
 							className="wrap-input100 validate-input m-b-50"
-							data-validate="Enter password">
+							data-validate="Enter password"
+						>
 							<input
 								className="input100"
 								type="email"
@@ -213,7 +224,8 @@ function Register({ httpServer }) {
 
 						<div
 							className="wrap-input100 validate-input m-b-50"
-							data-validate="Enter password">
+							data-validate="Enter password"
+						>
 							<input
 								className="input100"
 								type="text"
@@ -223,11 +235,13 @@ function Register({ httpServer }) {
 							/>
 							<span
 								className="focus-input100"
-								data-placeholder="Username"></span>
+								data-placeholder="Username"
+							></span>
 						</div>
 						<div
 							className="wrap-input100 validate-input m-b-50"
-							data-validate="Enter password">
+							data-validate="Enter password"
+						>
 							<input
 								className="input100"
 								type="password"
@@ -237,11 +251,13 @@ function Register({ httpServer }) {
 							/>
 							<span
 								className="focus-input100"
-								data-placeholder="Password"></span>
+								data-placeholder="Password"
+							></span>
 						</div>
 						<div
 							className="wrap-input100 validate-input m-b-50"
-							data-validate="Enter password">
+							data-validate="Enter password"
+						>
 							<input
 								className="input100"
 								type="password"
@@ -251,7 +267,8 @@ function Register({ httpServer }) {
 							/>
 							<span
 								className="focus-input100"
-								data-placeholder="Confirm Password"></span>
+								data-placeholder="Confirm Password"
+							></span>
 						</div>
 
 						<div className="container-login100-form-btn">

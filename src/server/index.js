@@ -8,6 +8,8 @@ const eggCatchGame = require("./eggCatch/index");
 const world = require("./world/index");
 const rockPaperScissorsGame = require("./rockPaperScissors/index");
 const lobby = require("./lobby/index");
+const privateMessage = require("./privateMessage/index");
+
 //--------------------------------
 
 //----App configuration-----------
@@ -154,6 +156,7 @@ app.get("/getuser/:username", (req, res) => {
 });
 
 app.post("/login", (req, res) => {
+  console.log("000000000000000000000000000000000000000000");
   console.log("FORM VALUES:", req.body);
   // -----------------------------------
   getUser(req.body.email, req.body.password)
@@ -289,8 +292,13 @@ const gameData = {
 
 io.on("connection", socket => {
   console.log("A user has been connected: ", socket.id);
+  onlinePlayers[socket.id] = { username: null };
+  console.log(onlinePlayers);
   socket.on("disconnect", () => {
     console.log("a user has been disconnected", socket.id);
+    if (onlinePlayers[socket.id]) {
+      delete onlinePlayers[socket.id];
+    }
     // delete onlinePlayers[socket.id];
   });
   //-----------------LOGGING------------------------------------
@@ -331,6 +339,7 @@ io.on("connection", socket => {
   eggCatchGame(socket, io.sockets, io.sockets.adapter.rooms, gameData.eggCatch);
   lobby(socket, io.sockets, gameData, io);
   userProfileServerSocket(socket, io.sockets, io, pool);
+  privateMessage(socket, io.sockets, io, pool);
 });
 
 // const getGuestId = function(socketId, defaultAvatars) {
