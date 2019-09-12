@@ -180,6 +180,7 @@ function NavBar({
                   to="/"
                   onClick={() => {
                     cookies.remove("profile");
+                    socket.emit("whoIsOnlinePlayer", null);
                     setPageName("Home");
                     socket.emit("requestGuestProfile");
                     setLoginStatus(false);

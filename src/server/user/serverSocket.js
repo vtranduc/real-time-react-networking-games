@@ -276,8 +276,79 @@ const userProfileServerSocket = function(socket, sockets, io, pool) {
       });
   });
 
-  socket.on("userDeletePost", data => {
-    console.log("deletion on server");
+  socket.on("userDeletePost", id => {
+    // console.log("deletion on server", id);
+    pool
+      .query({ text: `DELETE FROM user_posts WHERE id = $1`, values: [id] })
+      .then(() => {
+        io.to(socket.id).emit("profileReload");
+      });
+  });
+
+  socket.on("userRetrieveInbox", username => {
+    // console.log("come on now", username);
+    let timeStampHolder;
+    getIdFromUsername(username)
+      .then(res1 => {
+        return pool.query({
+          text: `SELECT sender_id, time_of_post FROM private_message WHERE receiver_id = $1 ORDER BY time_of_post DESC`,
+          values: [res1]
+        });
+      })
+      .then(res2 => res2.rows)
+      .then(res3 => {
+        // console.log("ready to send back data?", res3);
+        // let str = `(`;
+        // for (let i = 0; i < res3.length; i++) {
+        //   str += `$${i + 1},`;
+        // }
+        // console.log("my strrrr", str);
+        // console.log(
+        //   "hey shinchan",
+        //   res3[0].time_of_post === res3[0].time_of_post
+        // );
+        let recent_posters = [];
+        for (let element of res3) {
+          if (
+            !recent_posters.map(e => e.sender_id).includes(element.sender_id)
+          ) {
+            recent_posters.push(element);
+          }
+        }
+        // console.log("stressful now", recent_posters);
+        // timeStampHolder = recent_posters.map(e => e.time_of_post);
+        timeStampHolder = recent_posters;
+        let str = `(`;
+        for (let i = 0; i < recent_posters.length; i++) {
+          str += `$${i + 1},`;
+        }
+        // console.log("str", str, recent_posters.length);
+        str = str.slice(0, str.length - 1) + ")";
+        // console.log("so", str);
+        return pool.query({
+          text: `SELECT id, username, avatar FROM users WHERE id IN ${str}`,
+          values: recent_posters.map(e => e.sender_id)
+        });
+      })
+      .then(res4 => res4.rows)
+      .then(res5 => {
+        // console.log("this is: ", res5);
+        // console.log("nd", timeStampHolder);
+        // return res5.map((e, i) => {
+        //   return { ...e, time_of_post: timeStampHolder[i] };
+        // });
+        return timeStampHolder.map(element => {
+          return {
+            time_of_post: element.time_of_post,
+            username: res5.find(e => e.id === element.sender_id).username,
+            avatar: res5.find(e => e.id === element.sender_id).avatar
+          };
+        });
+      })
+      .then(res6 => {
+        // console.log("fdasd", res6);
+        io.to(socket.id).emit("retrieveInbox", res6);
+      });
   });
 };
 

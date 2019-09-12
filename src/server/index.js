@@ -156,22 +156,21 @@ app.get("/getuser/:username", (req, res) => {
 });
 
 app.post("/login", (req, res) => {
-	console.log("000000000000000000000000000000000000000000");
-	console.log("FORM VALUES:", req.body);
-	// -----------------------------------
-	getUser(req.body.email, req.body.password)
-		.then(result => {
-			console.log(result);
-			if (result.length) {
-				result[0].cookie = cookieEncrypt(result[0].username);
-				res.send(result);
-			} else {
-				res.send([]);
-			}
-		})
-		.catch(err => {
-			console.log(err);
-		});
+
+  getUser(req.body.email, req.body.password)
+    .then(result => {
+      console.log(result);
+      if (result.length) {
+        result[0].cookie = cookieEncrypt(result[0].username);
+        res.send(result);
+      } else {
+        res.send([]);
+      }
+    })
+    .catch(err => {
+      console.log(err);
+    });
+
 });
 
 // app.get()
@@ -230,116 +229,137 @@ defaultAvatars = [
 ];
 
 const gameData = {
-	soccer: {
-		lobby: {
-			soccerRoom1: {
-				status: "",
-				players: {},
-				chats: [
-					{
-						key: ";czvxzc",
-						user: "Good duke",
-						msg: "Hello all",
-						avatar:
-							defaultAvatars[Math.floor(Math.random() * defaultAvatars.length)]
-					},
-					{
-						key: ";bvxcb",
-						user: "Bad duke",
-						msg: "Hello all",
-						avatar:
-							defaultAvatars[Math.floor(Math.random() * defaultAvatars.length)]
-					},
-					{
-						key: "sfsaf,.dsj",
-						user: "No one",
-						msg: "Hello none",
-						avatar:
-							defaultAvatars[Math.floor(Math.random() * defaultAvatars.length)]
-					}
-				]
-			},
-			soccerRoom2: {
-				status: "aaa",
-				players: {},
-				chats: [
-					{
-						key: ";pfdzzzzzzzzsAsaj",
-						user: "Jayjay",
-						msg: "I wanna eat",
-						avatar:
-							defaultAvatars[Math.floor(Math.random() * defaultAvatars.length)]
-					},
-					{
-						key: ";pfdsbbaj",
-						user: "Sarah",
-						msg: "Ok!",
-						avatar:
-							defaultAvatars[Math.floor(Math.random() * defaultAvatars.length)]
-					}
-				]
-			}
-		}
-	},
-	eggCatch: { lobby: {} },
-	world: { lobby: {} },
-	rockPaperScissors: {
-		lobby: {}
-	}
+
+  soccer: {
+    lobby: {
+      soccerRoom1: {
+        status: "",
+        players: {},
+        chats: [
+          {
+            key: ";czvxzc",
+            user: "Good duke",
+            msg: "Hello all",
+            avatar:
+              defaultAvatars[Math.floor(Math.random() * defaultAvatars.length)]
+          },
+          {
+            key: ";bvxcb",
+            user: "Bad duke",
+            msg: "Hello all",
+            avatar:
+              defaultAvatars[Math.floor(Math.random() * defaultAvatars.length)]
+          },
+          {
+            key: "sfsaf,.dsj",
+            user: "No one",
+            msg: "Hello none",
+            avatar:
+              defaultAvatars[Math.floor(Math.random() * defaultAvatars.length)]
+          }
+        ]
+      },
+      soccerRoom2: {
+        status: "aaa",
+        players: {},
+        chats: [
+          {
+            key: ";pfdzzzzzzzzsAsaj",
+            user: "Jayjay",
+            msg: "I wanna eat",
+            avatar:
+              defaultAvatars[Math.floor(Math.random() * defaultAvatars.length)]
+          },
+          {
+            key: ";pfdsbbaj",
+            user: "Sarah",
+            msg: "Ok!",
+            avatar:
+              defaultAvatars[Math.floor(Math.random() * defaultAvatars.length)]
+          }
+        ]
+      }
+    }
+  },
+  // eggCatch: { lobby: {} },
+  world: { lobby: {} },
+  rockPaperScissors: {
+    lobby: {}
+  }
+
 };
 
 //------------------------------------------------------------------------
 
 io.on("connection", socket => {
-	console.log("A user has been connected: ", socket.id);
-	onlinePlayers[socket.id] = { username: null };
-	console.log(onlinePlayers);
-	socket.on("disconnect", () => {
-		console.log("a user has been disconnected", socket.id);
-		if (onlinePlayers[socket.id]) {
-			delete onlinePlayers[socket.id];
-		}
-		// delete onlinePlayers[socket.id];
-	});
-	//-----------------LOGGING------------------------------------
-	// socket.on("setUpGuestProfile", () => {
-	//   console.log("ADDING A GUEST HERE!!!");
-	//   onlinePlayers[socket.id] = getGuestId(socket.id, defaultAvatars);
-	// });
-	// socket.on("login", data => {
-	//   console.log("adding people HERE!", data);
-	//   onlinePlayers[socket.id] = { username: data.username, avatar: data.avatar };
-	//   // console.log("onlinePlayers", onlinePlayers);
-	//   // socket.handshake.session.userData = data;
-	//   // socket.handshake.session.save();
-	// });
 
-	socket.on("requestGuestProfile", () => {
-		// console.log("SET UP GUEST ON THE SERVER");
-		io.to(socket.id).emit("catchGuestProfile", {
-			username: `Guest_${socket.id.slice(0, 3)}`,
-			avatar: defaultAvatars[Math.floor(Math.random() * defaultAvatars.length)]
-		});
-	});
+  console.log("A user has been connected: ", socket.id);
+  onlinePlayers[socket.id] = { username: null };
+  console.log(onlinePlayers);
+  socket.on("disconnect", () => {
+    console.log("a user has been disconnected", socket.id);
+    if (onlinePlayers[socket.id]) {
+      delete onlinePlayers[socket.id];
+    }
+  });
+  socket.on("whoIsOnlinePlayer", encryptedCookie => {
+    console.log("username ASSIGNING: ", encryptedCookie);
+    onlinePlayers[socket.id].username = cookieDecrypt(encryptedCookie);
+  });
+  //-----------------LOGGING------------------------------------
+  // socket.on("setUpGuestProfile", () => {
+  //   console.log("ADDING A GUEST HERE!!!");
+  //   onlinePlayers[socket.id] = getGuestId(socket.id, defaultAvatars);
+  // });
+  // socket.on("login", data => {
+  //   console.log("adding people HERE!", data);
+  //   onlinePlayers[socket.id] = { username: data.username, avatar: data.avatar };
+  //   // console.log("onlinePlayers", onlinePlayers);
+  //   // socket.handshake.session.userData = data;
+  //   // socket.handshake.session.save();
+  // });
 
-	// Have not implemented yet!------------------------
-	// socket.on("logout", function(userdata) {
-	//   if (socket.handshake.session.userdata) {
-	//     delete socket.handshake.session.userdata;
-	//     socket.handshake.session.save();
-	//   }
-	// });
+  socket.on("requestGuestProfile", () => {
+    // console.log("SET UP GUEST ON THE SERVER");
+    io.to(socket.id).emit("catchGuestProfile", {
+      username: `Guest_${socket.id.slice(0, 3)}`,
+      avatar: defaultAvatars[Math.floor(Math.random() * defaultAvatars.length)]
+    });
+  });
 
-	// https://www.npmjs.com/package/express-socket.io-session
+  // Have not implemented yet!------------------------
+  // socket.on("logout", function(userdata) {
+  //   if (socket.handshake.session.userdata) {
+  //     delete socket.handshake.session.userdata;
+  //     socket.handshake.session.save();
+  //   }
+  // });
 
-	//--------------------------------------------------------------
-	world(io, socket, io.sockets, io.sockets.adapter.rooms, gameData.world);
-	soccerGame(socket, io.sockets, io.sockets.adapter.rooms, gameData.soccer, io);
-	rockPaperScissorsGame(socket, io.sockets, gameData.rockPaperScissors, io);
-	eggCatchGame(socket, io.sockets, io.sockets.adapter.rooms, gameData.eggCatch);
-	lobby(socket, io.sockets, gameData, io);
-	userProfileServerSocket(socket, io.sockets, io, pool);
-	privateMessage(socket, io.sockets, io, pool);
+  // https://www.npmjs.com/package/express-socket.io-session
+
+  //--------------------------------------------------------------
+  world(
+    io,
+    socket,
+    io.sockets,
+    io.sockets.adapter.rooms,
+    gameData.world,
+    onlinePlayers
+  );
+  soccerGame(
+    socket,
+    io.sockets,
+    io.sockets.adapter.rooms,
+    gameData.soccer,
+    io,
+    onlinePlayers
+  );
+  rockPaperScissorsGame(socket, io.sockets, gameData.rockPaperScissors, io);
+  // eggCatchGame(socket, io.sockets, io.sockets.adapter.rooms, gameData.eggCatch);
+  lobby(socket, io.sockets, gameData, io, onlinePlayers);
+  userProfileServerSocket(socket, io.sockets, io, pool);
+  privateMessage(socket, io.sockets, io, pool, onlinePlayers);
+
 });
 
 // const getGuestId = function(socketId, defaultAvatars) {

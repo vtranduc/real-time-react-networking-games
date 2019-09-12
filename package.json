@@ -18,6 +18,7 @@
 		"react-chat-widget": "^2.1.4-1",
 		"react-dom": "^16.9.0",
 		"react-mdl": "^1.11.0",
+		"react-notifications": "^1.4.3",
 		"react-router-dom": "^5.0.1",
 		"react-scripts": "3.1.1",
 		"socket.io": "^2.2.0",

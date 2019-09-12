@@ -38,12 +38,13 @@ function Login({
           // });
 
           //---------------------------------------------------------------
-          console.log("Setting the cookie!");
-          cookies.set("profile", response.data[0].username, {
-            path: "/"
-          });
-          console.log("show me response!: ", response.data);
-          console.log("Have set the cookie", cookies.get("profile"));
+          // console.log("Setting the cookie!");
+          // cookies.set("profile", response.data[0].username, {
+          //   path: "/"
+          // });
+
+          // console.log("show me response!: ", response.data);
+          // console.log("Have set the cookie", cookies.get("profile"));
           // console.log("cookies should be setting now");
           //this should be set to a cookies session instead
 
@@ -58,6 +59,7 @@ function Login({
           cookies.set("profile", response.data[0].cookie, {
             path: "/"
           });
+          socket.emit("whoIsOnlinePlayer", response.data[0].cookie);
           setProfileInfo({
             username: response.data[0].username,
             avatar: response.data[0].avatar,
