@@ -1,124 +1,124 @@
 .about {
-	width: 50%;
-	height: 100%;
-	overflow-y: "auto";
+  width: 50%;
+  height: 100%;
+  overflow-y: "auto";
 }
 
 #split {
-	display: flex;
-	justify-content: space-evenly;
+  display: flex;
+  justify-content: space-evenly;
 
-	height: calc(100vh - 82px);
+  height: calc(100vh - 82px);
 }
 #background {
-	background-color: #282e34;
+  background-color: #282e34;
 }
 
 .home2 {
-	height: 100%;
-	margin: 0;
-	font-size: 16px;
-	font-family: "Lato", sans-serif;
-	font-weight: 400;
-	line-height: 1.8em;
-	color: grey;
-	height: 100%;
-	overflow-y: auto;
-	padding-top: 5%;
-	padding-left: 7%;
-	padding-right: 3.5%;
-	border-radius: 20%;
+  height: 100%;
+  margin: 0;
+  font-size: 16px;
+  font-family: "Lato", sans-serif;
+  font-weight: 400;
+  line-height: 1.8em;
+  color: grey;
+  height: 100%;
+  overflow-y: auto;
+  padding-top: 5%;
+  padding-left: 7%;
+  padding-right: 3.5%;
+  border-radius: 20%;
 }
 .home3 {
-	height: 100%;
-	margin: 0;
-	font-size: 16px;
-	font-family: "Lato", sans-serif;
-	font-weight: 400;
-	line-height: 1.8em;
-	color: grey;
-	height: 100%;
-	overflow-y: auto;
-	padding-top: 5%;
-	padding-right: 7%;
-	padding-left: 3.5%;
-	border-radius: 20%;
+  height: 100%;
+  margin: 0;
+  font-size: 16px;
+  font-family: "Lato", sans-serif;
+  font-weight: 400;
+  line-height: 1.8em;
+  color: grey;
+  height: 100%;
+  overflow-y: auto;
+  padding-top: 5%;
+  padding-right: 7%;
+  padding-left: 3.5%;
+  border-radius: 20%;
 }
 .pimg12,
 .pimg22,
 .pimg32,
 .pimg42,
 .pimg52 {
-	position: relative;
-	border: solid white 2px;
-	background-position: center;
-	background-size: cover;
-	background-repeat: no-repeat;
-	border-radius: 15%;
+  position: relative;
+  border: solid white 2px;
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  border-radius: 15%;
 
-	/* fixed = parallax
+  /* fixed = parallax
 	scroll = normal */
 }
 .pimg12 {
-	background-image: url("/assets/aboutus/cutie.jpg");
+  background-image: url("/assets/aboutus/cutie.jpg");
 
-	min-height: 500px;
+  min-height: 500px;
 }
 .pimg22 {
-	background-image: url("/assets/aboutus/profile3.jpg");
-	background-attachment: fixed;
+  background-image: url("/assets/aboutus/profile3.jpg");
+  background-attachment: fixed;
 
-	min-height: 400px;
+  min-height: 400px;
 }
 .pimg32 {
-	background-image: url("/assets/aboutus/profile4.jpg");
-	background-attachment: fixed;
-	background-position-x: -200px;
-	min-height: 400px;
+  background-image: url("/assets/aboutus/kimiwa.jpg");
+  background-attachment: fixed;
+  background-position-x: -200px;
+  min-height: 400px;
 }
 .pimg42 {
-	background-image: url("/assets/aboutus/profile4.jpg");
-	background-attachment: fixed;
-	min-height: 400px;
+  background-image: url("/assets/aboutus/profile4.jpg");
+  background-attachment: fixed;
+  min-height: 400px;
 }
 .pimg52 {
-	background-image: url("/assets/aboutus/kimiwa.jpg");
-	background-attachment: fixed;
-	min-height: 400px;
+  background-image: url("/assets/aboutus/kimiwa.jpg");
+  background-attachment: fixed;
+  min-height: 400px;
 }
 
 .section2 {
-	text-align: center;
-	padding: 50px 80px;
-	min-height: 200px;
-	border-radius: 20%;
-	border: solid black 8px;
+  text-align: center;
+  padding: 50px 80px;
+  min-height: 200px;
+  border-radius: 20%;
+  border: solid black 8px;
 }
 .section-light2 {
-	background-color: #f4f4f4;
-	color: dimgray;
+  background-color: #f4f4f4;
+  color: dimgray;
 }
 .section-dark2 {
-	background-color: grey;
+  background-color: grey;
 
-	color: #ddd;
+  color: #ddd;
 }
 
 .ptext2 {
-	position: absolute;
-	top: 50%;
-	width: 100%;
-	text-align: center;
-	font-size: 27px;
-	letter-spacing: 8px;
-	text-transform: uppercase;
+  position: absolute;
+  top: 50%;
+  width: 100%;
+  text-align: center;
+  font-size: 27px;
+  letter-spacing: 8px;
+  text-transform: uppercase;
 }
 .route-link2 {
-	color: rgb(226, 226, 226);
-	text-decoration: none;
-	letter-spacing: 5px;
-	font-weight: bold;
-	font-size: 14px;
+  color: rgb(226, 226, 226);
+  text-decoration: none;
+  letter-spacing: 5px;
+  font-weight: bold;
+  font-size: 14px;
 }
 
 .pimg11,
@@ -126,39 +126,39 @@
 .pimg31,
 .pimg41,
 .pimg51 {
-	position: relative;
-	border: white solid 2px;
-	background-position: center;
-	background-size: cover;
-	background-repeat: no-repeat;
-	border-radius: 15%;
+  position: relative;
+  border: white solid 2px;
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  border-radius: 15%;
 
-	/* fixed = parallax
+  /* fixed = parallax
 	scroll = normal */
 }
 .pimg11 {
-	background-image: url("/assets/aboutus/profile2.jpg");
-	min-height: 500px;
+  background-image: url("/assets/aboutus/profile2.jpg");
+  min-height: 500px;
 }
 .pimg21 {
-	background-image: url("/assets/aboutus/profile3.jpg");
-	background-attachment: fixed;
+  background-image: url("/assets/aboutus/profile3.jpg");
+  background-attachment: fixed;
 
-	min-height: 400px;
+  min-height: 400px;
 }
 .pimg31 {
-	background-image: url("/assets/aboutus/illidan.jpg");
-	background-attachment: fixed;
+  background-image: url("/assets/aboutus/illidan.jpg");
+  background-attachment: fixed;
 
-	min-height: 400px;
+  min-height: 400px;
 }
 .pimg41 {
-	background-image: url("/assets/aboutus/profile4.jpg");
-	background-attachment: fixed;
-	min-height: 400px;
+  background-image: url("/assets/aboutus/profile4.jpg");
+  background-attachment: fixed;
+  min-height: 400px;
 }
 .pimg51 {
-	background-image: url("/assets/aboutus/profile.jpg");
-	background-attachment: fixed;
-	min-height: 400px;
+  background-image: url("/assets/aboutus/profile.jpg");
+  background-attachment: fixed;
+  min-height: 400px;
 }

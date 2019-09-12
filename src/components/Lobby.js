@@ -234,36 +234,39 @@ export default function Lobby({
               <h3 className="room-header">Games</h3>
               <List>
                 {Object.keys(lobbyData).map(game => {
-                  return (
-                    <ListItem
-                      selected={game === selectedGame}
-                      key={`lobby${game}`}
-                      onClick={e => {
-                        if (
-                          selectedGame &&
-                          selectedRoom &&
-                          Object.keys(
-                            lobbyData[selectedGame][selectedRoom].players
-                          ).length === 1 &&
-                          lobbyData[selectedGame][selectedRoom].status ===
-                            "closed"
-                        ) {
-                          alert("Room's passcode will be removed!");
-                        }
-                        if (selectedRoom) {
-                          socket.emit("lobbyJoinLeaveRoom", null);
-                        }
-                        setSelectedGame(e.target.innerText);
-                        setSelectedRoom(null);
-                        setCreateRoomMode(false);
-                        setPasscodeMode(false);
-                        // setEntry({ ...entry, msg: "" });
-                      }}
-                      button
-                    >
-                      {game}
-                    </ListItem>
-                  );
+                  console.log("a=======================", lobbyData);
+                  if (game !== "world") {
+                    return (
+                      <ListItem
+                        selected={game === selectedGame}
+                        key={`lobby${game}`}
+                        onClick={e => {
+                          if (
+                            selectedGame &&
+                            selectedRoom &&
+                            Object.keys(
+                              lobbyData[selectedGame][selectedRoom].players
+                            ).length === 1 &&
+                            lobbyData[selectedGame][selectedRoom].status ===
+                              "closed"
+                          ) {
+                            alert("Room's passcode will be removed!");
+                          }
+                          if (selectedRoom) {
+                            socket.emit("lobbyJoinLeaveRoom", null);
+                          }
+                          setSelectedGame(e.target.innerText);
+                          setSelectedRoom(null);
+                          setCreateRoomMode(false);
+                          setPasscodeMode(false);
+                          // setEntry({ ...entry, msg: "" });
+                        }}
+                        button
+                      >
+                        {game}
+                      </ListItem>
+                    );
+                  }
                 })}
               </List>
             </div>
