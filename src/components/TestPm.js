@@ -5,7 +5,7 @@ export default function TestPm({ socket }) {
   return (
     <>
       <h1>This is a chat message</h1>
-      <Pmbox viewer={"msussansi"} target={"jniesea"} socket={socket}></Pmbox>
+      <Pmbox viewer={"oblunn4"} target={"cdohms3"} socket={socket}></Pmbox>
     </>
   );
 }

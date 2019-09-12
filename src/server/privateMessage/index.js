@@ -46,14 +46,14 @@ const privateMessage = function(socket, sockets, io, pool) {
       getIdFromUsername(data.target)
     ])
       .then(res1 => {
-        console.log("res1: ", res1);
+        // console.log("res1: ", res1);
         return pool.query({
           text: `INSERT INTO private_message(sender_id, receiver_id, sent_message) VALUES($1, $2, $3)`,
           values: [res1[0], res1[1], data.msg]
         });
       })
       .then(() => {
-        console.log("successful insert?");
+        console.log("UPDATE TO THE RECIPIENT NEXT");
       });
   });
 };

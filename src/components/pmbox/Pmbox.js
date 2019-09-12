@@ -67,6 +67,7 @@ export default function Pmbox({ viewer, target, socket }) {
           titleAvatar={targetProfile.avatar}
           profileAvatar={targetProfile.avatar}
           subtitle={`Welcome to chat, ${viewer}`}
+          // showCloseButton={true}
           handleNewUserMessage={msg => {
             // console.log("kanaetai", msg);
             socket.emit("pmHandleNewUserMessage", { viewer, target, msg });
