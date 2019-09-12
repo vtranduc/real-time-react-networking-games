@@ -64,8 +64,8 @@ function Home() {
 			<div className="pimg4">
 				<div className="ptext">
 					<span className="border">
-						<Link className="route-link" to="/lobby">
-							<h1>Lobby</h1>
+						<Link className="route-link" to="/Chat World">
+							<h1>Chat World</h1>
 						</Link>
 					</span>
 				</div>
