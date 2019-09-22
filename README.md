@@ -33,7 +33,7 @@ Phaser Game - Comet Race: A single player game created with Phaser game engine
 
 Multiplayer game - Divine Soccer: Game created with HTML, CSS, JavaScript, and React
 
-\*\* Unfortunately, as the phaser game engine is run on the client side, it is difficult to determine character movement and interactions. We needed to have the game logic to be determined on the server side so that there should be only 'one source of truth'. So, instead of user Phaser game engine, we created a game engine ourselves specifically made on the server side. All physics interactiions, hitboxes, and collision detection is custom created to make this game. Bascially a game made from scratch.
+\*\* Unfortunately, as the phaser game engine is run on the client side, it is difficult to determine character movement and interactions. We needed to have the game logic to be determined on the server side so thdat there should be only 'one source of truth'. So, instead of user Phaser game engine, we created a game engine ourselves specifically made on the server side. All physics interactiions, hitboxes, and collision detection is custom created to make this game. Bascially a game made from scratch.
 
 - user is able to connect to a desired room, and within that room able to play with other users a soccer game
 - user is able to kick, redirect the ball and score into opponents goals.
@@ -54,6 +54,8 @@ Multiplayer Chat World - Chat World: A virtual reality chat room where all users
 - users can walk around this game world map
 - users can customize their own avatar
 - users can chat with other users as their avatar
+
+!["Demo"]("C:\Users\Pikachuuuuu\lighthouse\presentation\public\assets\about\Showcase.gif")
 
 ### `npm install`
 
