@@ -55,7 +55,7 @@ Multiplayer Chat World - Chat World: A virtual reality chat room where all users
 - users can customize their own avatar
 - users can chat with other users as their avatar
 
-!["Demo"]("C:\Users\Pikachuuuuu\lighthouse\presentation\public\assets\about\Showcase.gif")
+!["Demo"]("https://github.com/vtranduc/real-time-react-networking-games/blob/master/public/assets/about/Showcase.gif")
 
 ### `npm install`
 
