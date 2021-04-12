@@ -1,27 +1,27 @@
 const { Pool } = require("pg");
 //const dbParams = require("../lib/db.js");
 const pool = new Pool({
-  user: "postgres",
-  host: "localhost",
-  database: "gamefinal",
-  password: 123
+  user: process.env.DB_USER || "postgres",
+  host: process.env.DB_HOST || "localhost",
+  database: process.env.DB_DATABASE || "gamefinal",
+  password: process.env.DB_PASSWORD || 123,
 });
 pool.connect();
 
 // const getIdFromUsername
 
-const getUserProfile = function(username) {
+const getUserProfile = function (username) {
   return pool
     .query({
       text: `SELECT id, username, avatar, bio, background
 	FROM users WHERE username = $1`,
 
-      values: [username]
+      values: [username],
     })
-    .then(res => res.rows[0]);
+    .then((res) => res.rows[0]);
 };
 
-const createUser = function(
+const createUser = function (
   username,
   firstName,
   lastName,
@@ -32,53 +32,53 @@ const createUser = function(
   pool.query({
     text: `INSERT INTO users(username, first_name, last_name, email, pass, avatar)
 VALUES($1, $2, $3, $4,$5, $6 )`,
-    values: [username, firstName, lastName, email, password, avatar]
+    values: [username, firstName, lastName, email, password, avatar],
   });
 };
 
-const getUserData = function(email, password) {
+const getUserData = function (email, password) {
   return pool
     .query({
       text: `SELECT * 
         FROM users 
         WHERE email = $1 AND pass = $2`,
-      values: [email, password]
+      values: [email, password],
     })
-    .then(res => res.rows[0])
-    .catch(err => {
+    .then((res) => res.rows[0])
+    .catch((err) => {
       ``;
       console.log(err);
     });
 };
-const getUsernameFromId = function(id) {
+const getUsernameFromId = function (id) {
   return pool
     .query({
       text: `SELECT username
 	FROM users 
 	WHERE id = $1`,
-      values: [id]
+      values: [id],
     })
-    .then(res => res.rows[0].username)
-    .catch(err => {
+    .then((res) => res.rows[0].username)
+    .catch((err) => {
       console.log(err);
     });
 };
 
-const getIdFromUsername = function(username) {
+const getIdFromUsername = function (username) {
   return pool
     .query({
       text: `SELECT id FROM users WHERE username = $1`,
-      values: [username]
+      values: [username],
     })
-    .then(res => res.rows[0].id)
-    .catch(err => {
+    .then((res) => res.rows[0].id)
+    .catch((err) => {
       console.log(err);
     });
 };
 
 //post message
 
-const postMessage = function(
+const postMessage = function (
   senderUsername,
   receiverUsername,
   message_title,
@@ -89,10 +89,10 @@ const postMessage = function(
       text: `SELECT username, id
     FROM users 
     WHERE username = $1 OR username = $2`, // The problem with this is the order might be messed up
-      values: [senderUsername, receiverUsername]
+      values: [senderUsername, receiverUsername],
     })
-    .then(res => res.rows)
-    .then(res => {
+    .then((res) => res.rows)
+    .then((res) => {
       let data = {};
 
       data[res[0].username] = res[0].id;
@@ -105,14 +105,14 @@ const postMessage = function(
           data[senderUsername],
           data[receiverUsername],
           message_title,
-          message
-        ]
+          message,
+        ],
       });
     })
     .then(() => {
       console.log("no errors");
     })
-    .catch(err => {
+    .catch((err) => {
       console.log(err);
     });
 };
@@ -160,16 +160,16 @@ const postMessage = function(
 //   });
 // };
 
-const getFriendList = function(username) {
-  return getIdFromUsername(username).then(response => {
+const getFriendList = function (username) {
+  return getIdFromUsername(username).then((response) => {
     // console.log("HI ALLLLLLLLLLLLLL-----------------", response);
     return pool
       .query({
         // text: `SELECT friendship.receiver_id, users.avatar FROM users JOIN friendship ON users.id = friendship.user_id WHERE user_id = $1`,
         text: `SELECT username, avatar FROM users JOIN friendship ON user_id = users.id WHERE (user_id = $1 OR receiver_id = $1)`,
-        values: [response]
+        values: [response],
       })
-      .then(res => {
+      .then((res) => {
         console.log("AINSE ALL QUERIES");
         return res.rows;
       });
@@ -187,23 +187,23 @@ const getFriendList = function(username) {
 
 // ====================1=========================
 
-const getFollowerList = function(username) {
+const getFollowerList = function (username) {
   // WARNING: This is gonna give error if username does NOT exist!
   return pool
     .query({
       text: `SELECT id FROM users WHERE username = $1`,
-      values: [username]
+      values: [username],
     })
-    .then(res1 => res1.rows[0].id)
-    .then(res2 => {
+    .then((res1) => res1.rows[0].id)
+    .then((res2) => {
       // console.log(res2, "is res2===============");
 
       return pool.query({
         text: `SELECT user_id FROM follow WHERE follow_id = $1`,
-        values: [res2]
+        values: [res2],
       });
     })
-    .then(res3 => {
+    .then((res3) => {
       // console.log(res3.rows, "is res3--------------------");
       if (res3.rows && res3.rows.length >= 1) {
         let str = `(`;
@@ -221,18 +221,18 @@ const getFollowerList = function(username) {
         return null;
       }
     })
-    .then(res4 => {
+    .then((res4) => {
       // console.log(res4, "is res4----------------");
       if (res4) {
         return pool.query({
           text: `SELECT username, avatar FROM users WHERE id in ${res4.dollars}`,
-          values: res4.values
+          values: res4.values,
         });
       } else {
         return null;
       }
     })
-    .then(res5 => {
+    .then((res5) => {
       if (res5) {
         // console.log("What is this???", res5.rows);
         return res5.rows;
@@ -244,23 +244,23 @@ const getFollowerList = function(username) {
 
 // ====================2=========================
 
-const getFollowingList = function(username) {
+const getFollowingList = function (username) {
   // WARNING: This is gonna give error if username does NOT exist!
   return pool
     .query({
       text: `SELECT id FROM users WHERE username = $1`,
-      values: [username]
+      values: [username],
     })
-    .then(res1 => res1.rows[0].id)
-    .then(res2 => {
+    .then((res1) => res1.rows[0].id)
+    .then((res2) => {
       // console.log(res2, "is res2===============");
 
       return pool.query({
         text: `SELECT follow_id FROM follow WHERE user_id = $1`,
-        values: [res2]
+        values: [res2],
       });
     })
-    .then(res3 => {
+    .then((res3) => {
       // console.log(res3.rows, "is res3--------------------");
       if (res3.rows && res3.rows.length >= 1) {
         let str = `(`;
@@ -278,18 +278,18 @@ const getFollowingList = function(username) {
         return null;
       }
     })
-    .then(res4 => {
+    .then((res4) => {
       // console.log(res4, "is res4----------------");
       if (res4) {
         return pool.query({
           text: `SELECT username, avatar FROM users WHERE id in ${res4.dollars}`,
-          values: res4.values
+          values: res4.values,
         });
       } else {
         return null;
       }
     })
-    .then(res5 => {
+    .then((res5) => {
       if (res5) {
         // console.log("What is this???", res5.rows);
         return res5.rows;
@@ -301,23 +301,23 @@ const getFollowingList = function(username) {
 
 // ====================3=========================
 
-const getFriendSenderList = function(username) {
+const getFriendSenderList = function (username) {
   // WARNING: This is gonna give error if username does NOT exist!
   return pool
     .query({
       text: `SELECT id FROM users WHERE username = $1`,
-      values: [username]
+      values: [username],
     })
-    .then(res1 => res1.rows[0].id)
-    .then(res2 => {
+    .then((res1) => res1.rows[0].id)
+    .then((res2) => {
       // console.log(res2, "is res2===============");
 
       return pool.query({
         text: `SELECT user_id FROM friendship WHERE receiver_id = $1 AND request_status = true`,
-        values: [res2]
+        values: [res2],
       });
     })
-    .then(res3 => {
+    .then((res3) => {
       // console.log(res3.rows, "is res3--------------------");
       if (res3.rows && res3.rows.length >= 1) {
         let str = `(`;
@@ -335,18 +335,18 @@ const getFriendSenderList = function(username) {
         return null;
       }
     })
-    .then(res4 => {
+    .then((res4) => {
       // console.log(res4, "is res4----------------");
       if (res4) {
         return pool.query({
           text: `SELECT username, avatar FROM users WHERE id in ${res4.dollars}`,
-          values: res4.values
+          values: res4.values,
         });
       } else {
         return null;
       }
     })
-    .then(res5 => {
+    .then((res5) => {
       if (res5) {
         return res5.rows;
       } else {
@@ -357,23 +357,23 @@ const getFriendSenderList = function(username) {
 
 // ====================4=========================
 
-const getFriendReceiverList = function(username) {
+const getFriendReceiverList = function (username) {
   // WARNING: This is gonna give error if username does NOT exist!
   return pool
     .query({
       text: `SELECT id FROM users WHERE username = $1`,
-      values: [username]
+      values: [username],
     })
-    .then(res1 => res1.rows[0].id)
-    .then(res2 => {
+    .then((res1) => res1.rows[0].id)
+    .then((res2) => {
       // console.log(res2, "is res2===============");
 
       return pool.query({
         text: `SELECT receiver_id FROM friendship WHERE user_id = $1 AND request_status = true`,
-        values: [res2]
+        values: [res2],
       });
     })
-    .then(res3 => {
+    .then((res3) => {
       // console.log(res3.rows, "is res3--------------------");
       if (res3.rows && res3.rows.length >= 1) {
         let str = `(`;
@@ -391,18 +391,18 @@ const getFriendReceiverList = function(username) {
         return null;
       }
     })
-    .then(res4 => {
+    .then((res4) => {
       // console.log(res4, "is res4----------------");
       if (res4) {
         return pool.query({
           text: `SELECT username, avatar FROM users WHERE id in ${res4.dollars}`,
-          values: res4.values
+          values: res4.values,
         });
       } else {
         return null;
       }
     })
-    .then(res5 => {
+    .then((res5) => {
       if (res5) {
         return res5.rows;
       } else {
@@ -420,17 +420,17 @@ const getFriendReceiverList = function(username) {
 // ==============END===================================================
 // ==============END===================================================
 
-const getMessage = function(receiverUsername) {
-  return getIdFromUsername(receiverUsername).then(res => {
+const getMessage = function (receiverUsername) {
+  return getIdFromUsername(receiverUsername).then((res) => {
     return pool
       .query({
         text: `SELECT user_posts.id, users.username, users.avatar, user_posts.sent_message, 
         user_posts.message_title, user_posts.time_of_post FROM users JOIN 
         user_posts ON user_posts.sender_id = users.id WHERE user_posts.receiver_id = $1 ORDER BY user_posts.time_of_post ASC`,
-        values: [res]
+        values: [res],
       })
-      .then(res => res.rows)
-      .catch(err => {
+      .then((res) => res.rows)
+      .catch((err) => {
         console.log("FAILED HEREEEEEEEEEEEE", err);
       });
   });
@@ -455,7 +455,7 @@ module.exports = {
   getFriendSenderList,
   getFollowingList,
   getFollowerList,
-  getIdFromUsername
+  getIdFromUsername,
 };
 
 // const getMessages = (user, chatroom) => {

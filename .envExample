@@ -1,0 +1,4 @@
+DB_USER=postgres
+DB_HOST=localhost
+DB_DATABASE=gamefinal
+DB_PASSWORD=123

@@ -61,6 +61,37 @@ Multiplayer Chat World - Chat World: A virtual reality chat room where all users
 
 Install all dependencies and start the server!
 
+### Set-up database in PostgreSql (Required for server's proper functioning)
+
+The server will require database to run properly. Put your psql database info into .env file (See .envExample) then seed /db/schema/combined.sql and then /db/seeds/combined_seedsFinal.sql
+
+If you are unfamiliar with PostgreSql, you can follow example steps below for installation and setting up database in Ubuntu (It uses the default values so you won't need to add .env if you use those same values).
+
+If you encounter the error, please troubleshoot as you go.
+
+- sudo apt update
+- sudo apt install postgresql postgresql-contrib
+- sudo -i -u postgres
+- psql
+- \*If it complains server is not started, exit psql and run this then enter again: sudo service postgresql start
+- \password postgres (Will prompt to input new password)
+- 123
+- 123 (verification)
+- \q
+- exit (Now on main terminal)
+- sudo -u postgres createdb gamefinal
+- sudo -i -u postgres (Enter psql mode again)
+- psql
+- \c gamefinal (You now enter gamefinal database)
+- \i {path to this repo}/db/schema/FinalCombined.sql
+- \i {path to this repo}/db/seeds/combined_seedsFinal.sql
+- \q
+- exit (Returns to main terminal)
+
+### `npm run server`
+
+This runs the server on port 3001.
+
 ### `npm start`
 
 Runs the app in the development mode.<br>
