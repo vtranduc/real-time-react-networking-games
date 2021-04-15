@@ -10,6 +10,7 @@ const world = require("./world/index");
 const rockPaperScissorsGame = require("./rockPaperScissors/index");
 const lobby = require("./lobby/index");
 const privateMessage = require("./privateMessage/index");
+const pool = require("../../db/pool");
 
 //--------------------------------
 
@@ -40,16 +41,6 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(cors({ origin: "http://localhost:3000", credentials: true }));
 app.set("trust proxy", 1); // trust first proxy
-
-const { Pool } = require("pg");
-//const dbParams = require("../lib/db.js");
-const pool = new Pool({
-  user: process.env.DB_USER || "postgres",
-  host: process.env.DB_HOST || "localhost",
-  database: process.env.DB_DATABASE || "gamefinal",
-  password: process.env.DB_PASSWORD || 123,
-});
-pool.connect();
 
 const getAllUsers = function () {
   return pool

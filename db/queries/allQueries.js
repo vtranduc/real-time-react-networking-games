@@ -1,14 +1,4 @@
-const { Pool } = require("pg");
-//const dbParams = require("../lib/db.js");
-const pool = new Pool({
-  user: process.env.DB_USER || "postgres",
-  host: process.env.DB_HOST || "localhost",
-  database: process.env.DB_DATABASE || "gamefinal",
-  password: process.env.DB_PASSWORD || 123,
-});
-pool.connect();
-
-// const getIdFromUsername
+const pool = require("../pool");
 
 const getUserProfile = function (username) {
   return pool
